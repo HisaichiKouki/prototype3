@@ -265,11 +265,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (player.dashAttack)
 		{
-
 		}
 		if (player.triangulAttack)
 		{
-
+			
 		}
 
 
