@@ -21,7 +21,7 @@ Vector2 vectorNormalize(Vector2 pos1, Vector2 pos2)
     return Vector2(xy.x/length,xy.y/length);
 }
 
-float Length(Vector2 pos1, Vector2 pos2)
+float floatLength(Vector2 pos1, Vector2 pos2)
 {
     Vector2 xy = vectorLength(pos1, pos2);
     return sqrtf(xy.x * xy.x + xy.y * xy.y);

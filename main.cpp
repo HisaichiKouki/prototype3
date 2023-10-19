@@ -25,6 +25,7 @@ typedef struct Player
 	bool aim;
 	int count;
 	int aimTimer;
+	float anchorRadius;
 }Player;
 
 float clump(float a, float min, float max);
@@ -43,7 +44,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.moveSpeed = 20;
 	player.pos.x = 0;
 	player.pos.y = 0;
-
+	player.anchorRadius = 10;
 	int joystickX = 0;
 	int joystickY = 0;
 	Novice::SetJoystickDeadZone(0, 0, 0);
@@ -54,10 +55,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float dedZone = 35;
 
 	Vector2 scroll{};
-	
+
 	float fildRadius = 2000;
 	Vector2 fildToPlayer{};
+	float centerToPlayerLength = 0;
 
+	float miniMap = 10;//ミニマップの倍率 20で20分の１　10で10分の1　数字が小さくなるほど大きく表示
+	float miniMapPlayerSize = 1;//ミニマップに表示されるプレイヤー関係のサイズ　1が等倍　数字が大きくなるほど大きく表示
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -169,8 +173,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		player.pos.x += player.velocity.x;
 		player.pos.y += player.velocity.y;
 
-		
+		if (player.pos.x != 0 || player.pos.y != 0) {
+			fildToPlayer.x = (fildRadius - player.radius.x) * vectorNormalize(player.pos, { 0,0 }).x;
+			fildToPlayer.y = (fildRadius - player.radius.y) * vectorNormalize(player.pos, { 0,0 }).y;
 
+			centerToPlayerLength = floatLength(player.pos, { 0,0 });
+		}
+		if (centerToPlayerLength >= fildRadius - player.radius.x)
+		{
+			player.pos.x = fildToPlayer.x;
+			player.pos.y = fildToPlayer.y;
+		}
 
 		scroll.x = (-player.pos.x + 960);
 		scroll.y = (-player.pos.y + 540);
@@ -212,11 +225,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::DrawEllipse(int(scroll.x), int(scroll.y), (int)fildRadius, (int)fildRadius, 0, GREEN, kFillModeWireFrame);
 		for (int i = 0; i < 3; i++)
 		{
-			Novice::DrawEllipse(int(player.prepos[i].x + scroll.x), int(player.prepos[i].y + scroll.y), 10, 10, 0, RED, kFillModeSolid);
+			if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x + scroll.x), int(player.prepos[i].y + scroll.y), int(player.anchorRadius), int(player.anchorRadius), 0, RED, kFillModeSolid);
 		}
 		Novice::DrawBox(int(-50 + scroll.x), int(-50 + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);//スポーン地点
 		Novice::DrawLine(int(player.pos.x + scroll.x), int(player.pos.y + scroll.y), int(player.pos.x + scroll.x + player.direction.x * 100), int(player.pos.y + scroll.y + player.direction.y * 100), WHITE);
 		Novice::DrawEllipse(int(player.pos.x + scroll.x), int(player.pos.y + scroll.y), int(player.radius.x), int(player.radius.y), 0, GREEN, kFillModeSolid);//プレイヤー
+
+
+		//ミニマップ
+		Novice::DrawEllipse(int(30 + fildRadius / miniMap), int(1050 - fildRadius / miniMap), int(fildRadius / miniMap), int(fildRadius / miniMap), 0, GREEN, kFillModeWireFrame);
+		for (int i = 0; i < 3; i++)
+		{//玉
+			if (player.prepos[i].x != 0)Novice::DrawEllipse(int((30 + fildRadius / miniMap) + player.prepos[i].x / miniMap), int(int(1050 - fildRadius / miniMap) + player.prepos[i].y / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), 0, RED, kFillModeSolid);
+		}
+		//範囲
+		if (player.aimTimer > 0)Novice::DrawTriangle(int((30 + fildRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1050 - fildRadius / miniMap) + player.prepos[0].y / miniMap), int((30 + fildRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1050 - fildRadius / miniMap) + player.prepos[1].y / miniMap), int((30 + fildRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1050 - fildRadius / miniMap) + player.prepos[2].y / miniMap), RED, kFillModeSolid);
+		//プレイヤー
+		Novice::DrawEllipse(int((30 + fildRadius / miniMap) + player.pos.x / miniMap), int(int(1050 - fildRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, WHITE, kFillModeSolid);
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       
