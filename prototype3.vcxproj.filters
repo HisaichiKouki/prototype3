@@ -39,6 +39,7 @@
       <Filter>KamataEngine\Source</Filter>
     </ClCompile>
     <ClCompile Include="VectorPlus.cpp" />
+    <ClCompile Include="Functions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -113,5 +114,6 @@
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
     <ClInclude Include="VectorPlus.h" />
+    <ClInclude Include="Functions.h" />
   </ItemGroup>
 </Project>
