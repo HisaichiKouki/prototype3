@@ -169,10 +169,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		player.pos.x += player.velocity.x;
 		player.pos.y += player.velocity.y;
 
-		if (player.pos.x!=0||player.pos.y!=0)
-		{
-
-		}
+		
 
 
 		scroll.x = (-player.pos.x + 960);
@@ -212,7 +209,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::DrawEllipse(100, 100, (int)dedZone, (int)dedZone, 0, GREEN, kFillModeWireFrame);//デッドゾーン
 
 
-		Novice::DrawEllipse(int(scroll.x), int(scroll.y), 2000, 2000, 0, GREEN, kFillModeWireFrame);
+		Novice::DrawEllipse(int(scroll.x), int(scroll.y), (int)fildRadius, (int)fildRadius, 0, GREEN, kFillModeWireFrame);
 		for (int i = 0; i < 3; i++)
 		{
 			Novice::DrawEllipse(int(player.prepos[i].x + scroll.x), int(player.prepos[i].y + scroll.y), 10, 10, 0, RED, kFillModeSolid);
