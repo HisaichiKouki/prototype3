@@ -14,6 +14,15 @@
     <Filter Include="KamataEngine\Adapter">
       <UniqueIdentifier>{c6468eb4-788b-4a83-b207-a5f4804e56c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{cb39a299-2cd1-4bc1-bfea-3e8ecb66f82a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Class">
+      <UniqueIdentifier>{a739a174-206f-45f4-bc36-d330408c6411}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{0fd2d1ae-4672-425d-b5a7-e455f9bb1f4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -40,6 +49,18 @@
     </ClCompile>
     <ClCompile Include="VectorPlus.cpp" />
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="Source\AttackArea.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\OriginObject.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Various.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -114,6 +135,26 @@
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
     <ClInclude Include="VectorPlus.h" />
-    <ClInclude Include="Functions.h" />
+    <ClInclude Include="Header\AttackArea.h">
+      <Filter>Headers\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Enemy.h">
+      <Filter>Headers\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Headers\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Various.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\OriginObject.h">
+      <Filter>Headers\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Struct.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

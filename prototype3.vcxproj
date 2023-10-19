@@ -117,6 +117,10 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source\AttackArea.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\OriginObject.cpp" />
+    <ClCompile Include="Source\Various.cpp" />
     <ClCompile Include="VectorPlus.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +152,12 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="Headers.h" />
+    <ClInclude Include="Header\AttackArea.h" />
+    <ClInclude Include="Header\Enemy.h" />
+    <ClInclude Include="Header\OriginObject.h" />
+    <ClInclude Include="Header\Struct.h" />
+    <ClInclude Include="Header\Various.h" />
     <ClInclude Include="VectorPlus.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

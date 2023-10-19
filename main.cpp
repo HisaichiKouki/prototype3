@@ -1,40 +1,8 @@
 #include <Novice.h>
-#include "Vector2.h"
-#include "VectorPlus.h"
+#include "Headers.h"
 #include <corecrt_math.h>
-#include "Functions.h"
 
 const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
-typedef struct Player
-{
-	Vector2 pos;
-	Vector2 direction;
-	Vector2 velocity;
-	Vector2 radius;
-
-	Vector2 joystick;
-
-	Vector2 prepos[3];//三角形の点
-	Vector2 screenPos;
-
-	float shotSpeed;//ダッシュ時の速度
-	float moveSpeed;//スティック移動の速度
-	bool trigerA;//Aボタンを押したか
-	float velocityRatio;//速度の割合。1が等倍で0.5fが半分0で速度0
-	bool aim;//Aボタンを押した時のアクション
-	int count;//点を何個出したかカウント
-	int aimTimer;//三角形を作った後の時間
-	float anchorRadius;//点の半径
-
-	int flickTimer;//はじき判定フレ
-	bool flick;//はじきフラグ
-	float flickLength;//フリックで端まで行ったか確認するため
-	int flickCT;//フリックした直後に減速しないように
-
-	bool dashAttack;//フリックでフラグをたてたい
-	bool triangulAttack;//三角形の攻撃
-
-}Player;
 
 float clump(float a, float min, float max);
 
@@ -45,7 +13,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
 
-	Player player{};
+	PlayerData player{};
 	player.radius = { 30,30 };
 	player.shotSpeed = 60;
 	player.moveSpeed = 20;
