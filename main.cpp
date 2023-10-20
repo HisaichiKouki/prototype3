@@ -52,6 +52,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 白地テクスチャ
 	const int kWhiteTexture = Novice::LoadTexture("white1x1.png");
 
+
+	// 敵の生存フラグを宣言・定義
+	bool isEnemyDead = false;
+
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
@@ -110,8 +114,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//三角形を出した後の攻撃時間
 		if (player.aimTimer > 0)
-		{
-			player.triangulAttack = true;//三角形攻撃を有効に
+		{			
 			player.aimTimer--;
 		}
 		else if (player.aimTimer <= 0)
@@ -149,6 +152,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					player.count = 0;
 					player.aim = false;
 					player.aimTimer = 30;//攻撃時間を代入
+					player.triangulAttack = true;//三角形攻撃を有効に
 
 				}
 			}
@@ -253,8 +257,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (player.triangulAttack)
 		{
-			// 敵の生存フラグを宣言・定義
-			bool isEnemyDead = false;
+		
 			// 敵の生存フラグを当たり判定によって更新
 			isEnemyDead = attAreaObj.TriangleCollision(enemyPos);
 		}
@@ -361,15 +364,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::DrawBox(1720, 0, 100, 100, 0, BLUE, kFillModeSolid);
 		}
 
-		Functions.DrawQuadPlus(
-			static_cast<int>(enemyPos.x + scroll.x), static_cast<int>(enemyPos.y + scroll.y),
-			30, 30,
-			1.0f, 1.0f,
-			0.0f,
-			0,0,1,1,
-			kWhiteTexture,
-			0xffff00ff
-		);
+		if (!isEnemyDead)
+		{
+			Functions.DrawQuadPlus(
+				static_cast<int>(enemyPos.x + scroll.x), static_cast<int>(enemyPos.y + scroll.y),
+				30, 30,
+				1.0f, 1.0f,
+				0.0f,
+				0, 0, 1, 1,
+				kWhiteTexture,
+				0xffff00ff
+			);
+		}
+		
 
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
