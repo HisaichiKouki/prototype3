@@ -240,7 +240,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 
-
 	// クラス変数の宣言
 	Func Functions;
 	AttackAreaObject attAreaObj;
