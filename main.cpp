@@ -26,7 +26,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int preJoyStickY = 0;
 	Novice::SetJoystickDeadZone(0, 0, 0);
 
-
 	Vector2 xy{};
 	float length = 0;
 	float dedZone = 35;//こっちがほんとのデッドゾーン
@@ -42,9 +41,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int fieldTexture = Novice::LoadTexture("./Resources/images/field_1.png");
 
-
+	// クラス変数の宣言
 	Func Functions;
+	AttackAreaObject attAreaObj;
+	EnemyObject enemyObj;
 
+	// 敵の座標を仮に宣言・定義
+	Vector2 enemyPos = { 0,0 };
+
+	// 白地テクスチャ
+	const int kWhiteTexture = Novice::LoadTexture("white1x1.png");
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -130,6 +136,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				//点がプレイヤーの位置に番号順で設置される
 				player.prepos[player.count] = player.pos;
+				//点の座標を番号順に記録
+				attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
 				//プレイヤーの速度を等倍に
 				player.velocityRatio = 1;
 				player.aim = true;
@@ -224,6 +232,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		///スティック入力ここまで
 
+		/// キー入力（デバッグ) ここから
+
+		if (keys[DIK_SPACE] && !preKeys[DIK_SPACE])
+		{
+			Functions.ToggleDebugMode();
+		}
+
+		/// キー入力（デバッグ）ここまで
+
 		//ポジション移動
 		player.pos.x += player.velocity.x;
 		player.pos.y += player.velocity.y;
@@ -236,7 +253,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (player.triangulAttack)
 		{
-			
+			// 敵の生存フラグを宣言・定義
+			bool isEnemyDead = false;
+			// 敵の生存フラグを当たり判定によって更新
+			isEnemyDead = attAreaObj.TriangleCollision(enemyPos);
 		}
 
 
@@ -340,6 +360,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			Novice::DrawBox(1720, 0, 100, 100, 0, BLUE, kFillModeSolid);
 		}
+
+		Functions.DrawQuadPlus(
+			static_cast<int>(enemyPos.x + scroll.x), static_cast<int>(enemyPos.y + scroll.y),
+			30, 30,
+			1.0f, 1.0f,
+			0.0f,
+			0,0,1,1,
+			kWhiteTexture,
+			0xffff00ff
+		);
+
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       
