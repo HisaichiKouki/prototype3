@@ -42,12 +42,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float miniMapPlayerSize = 2;//ミニマップに表示されるプレイヤー関係のサイズ　1が等倍　数字が大きくなるほど大きく表示
 
 	int fieldTexture = Novice::LoadTexture("./Resources/images/field_1.png");
-
+	int enemyTexture= Novice::LoadTexture("./Resources/images/enemy_1.png");
 
 	float enemyRadius = 50;//敵全体の半径
-#pragma region enemy1
+#pragma region enemy1//小さい三角形
 
-	testEnemy1 enemy1{};//小さい三角形
+	testEnemy1 enemy1{};
 	enemy1.parentIsAlive = false;
 	enemy1.centorPos = { 0,0 };
 	enemy1.radius = enemyRadius;
@@ -55,17 +55,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy1.posReset[1] = { enemy1.centorPos.x - (enemy1.radius * 1.5f),enemy1.centorPos.y + (enemy1.radius * 1.5f) };
 	enemy1.posReset[2] = { enemy1.centorPos.x + (enemy1.radius * 1.5f),enemy1.centorPos.y + (enemy1.radius * 1.5f) };
 #pragma endregion
-#pragma region enemy2
+#pragma region enemy2//シシカク
 
-	testEnemy2 enemy2{};//シシカク
+	testEnemy2 enemy2{};
 	enemy2.radius = enemyRadius;
 	const int kEnemy2Num = 16;
 	enemy2.velocity[0] = { 0,-3 };
 	enemy2.velocity[1] = { 3,0 };
 	enemy2.velocity[2] = { 0,3 };
 	enemy2.velocity[3] = { -3,0 };
-
-	//enemy2.posReset[0][14] = {enemy2.centorPos.x - 2 * enemy2.radius * 3 ,enemy2.centorPos.y + 3 * enemy2.radius * 3};
 
 	enemy2.posReset[0][0] = { enemy2.centorPos[0].x - enemy2.radius * 4.5f ,enemy2.centorPos[0].y - enemy2.radius * 7.5f };
 	enemy2.posReset[0][1] = { enemy2.centorPos[0].x - enemy2.radius * 1.5f ,enemy2.centorPos[0].y - enemy2.radius * 7.5f };
@@ -95,9 +93,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 	}
 #pragma endregion
-#pragma region enemy3
+#pragma region enemy3//横一列
 
-	testEnemy3 enemy3{};//横一列
+	testEnemy3 enemy3{};
 	enemy3.radius = enemyRadius;
 
 	enemy3.posReset[0] = { enemy3.centorPos.x - enemy3.radius * 4.5f ,enemy3.centorPos.y };
@@ -105,9 +103,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy3.posReset[2] = { enemy3.centorPos.x + enemy3.radius * 1.5f ,enemy3.centorPos.y };
 	enemy3.posReset[3] = { enemy3.centorPos.x + enemy3.radius * 4.5f ,enemy3.centorPos.y };
 #pragma endregion
-#pragma region enemy4
+#pragma region enemy4//縦一列
 
-	testEnemy3 enemy4{};//縦一列
+	testEnemy3 enemy4{};
 	enemy4.radius = enemyRadius;
 
 	enemy4.posReset[0] = { enemy4.centorPos.x,enemy4.centorPos.y - enemy4.radius * 4.5f };
@@ -115,9 +113,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy4.posReset[2] = { enemy4.centorPos.x,enemy4.centorPos.y + enemy4.radius * 1.5f };
 	enemy4.posReset[3] = { enemy4.centorPos.x,enemy4.centorPos.y + enemy4.radius * 4.5f };
 #pragma endregion
-#pragma region enemy5
+#pragma region enemy5//左斜め上
 
-	testEnemy3 enemy5{};//左斜め上
+	testEnemy3 enemy5{};
 	enemy5.radius = enemyRadius;
 
 	enemy5.posReset[0] = { enemy5.centorPos.x - enemy5.radius * 4.5f * 0.7f,enemy5.centorPos.y - enemy5.radius * 4.5f * 0.7f };
@@ -125,9 +123,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy5.posReset[2] = { enemy5.centorPos.x + enemy5.radius * 1.5f * 0.7f,enemy5.centorPos.y + enemy5.radius * 1.5f * 0.7f };
 	enemy5.posReset[3] = { enemy5.centorPos.x + enemy5.radius * 4.5f * 0.7f,enemy5.centorPos.y + enemy5.radius * 4.5f * 0.7f };
 #pragma endregion
-#pragma region enemy6
+#pragma region enemy6//右斜め上
 
-	testEnemy3 enemy6{};//右斜め上
+	testEnemy3 enemy6{};
 	enemy6.radius = enemyRadius;
 
 	enemy6.posReset[0] = { enemy6.centorPos.x + enemy6.radius * 4.5f * 0.7f,enemy6.centorPos.y - enemy6.radius * 4.5f * 0.7f };
@@ -135,8 +133,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy6.posReset[2] = { enemy6.centorPos.x - enemy6.radius * 1.5f * 0.7f,enemy6.centorPos.y + enemy6.radius * 1.5f * 0.7f };
 	enemy6.posReset[3] = { enemy6.centorPos.x - enemy6.radius * 4.5f * 0.7f,enemy6.centorPos.y + enemy6.radius * 4.5f * 0.7f };
 #pragma endregion
-#pragma region enemy7
-	testEnemy4 enemy7{};//八方向
+#pragma region enemy7//八方向
+	testEnemy4 enemy7{};
 	enemy7.radius = enemyRadius;
 	float enemy7PosRadius = 1800;
 	float enemy7PosSpeed = 4;
@@ -537,7 +535,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 		//スティックのポジションがデッドゾーンの中の時
-		if (preJoyStickX<dedZone * 60 && preJoyStickX > -dedZone * 60 && preJoyStickY<dedZone * 60 && preJoyStickY > -dedZone * 60)
+		if (preJoyStickX<dedZone * 50 && preJoyStickX > -dedZone * 50 && preJoyStickY<dedZone * 50 && preJoyStickY > -dedZone * 50)
 		{
 			//フリック判定フレをリセット
 			if (!player.flick && player.flickCT == 0)player.flickTimer = 2;
@@ -742,6 +740,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 		//ここで攻撃処理をしたいと考えてる
 
+#pragma region playerAttack
+		//ダッシュ攻撃
 		if (player.dashAttack)
 		{
 			if (enemy1.parentIsAlive)
@@ -814,6 +814,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
+
+		//三角攻撃
 		if (player.triangulAttack)
 		{
 
@@ -892,9 +894,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
-
+#pragma endregion
 
 		//敵のダメージ処理
+#pragma region enemyDamage
 		if (enemy1.parentIsAlive)
 		{
 			for (int i = 0; i < 3; i++)
@@ -929,13 +932,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							&& enemy2.dedTimer[j][4] <= 0&& enemy2.dedTimer[j][5] <= 0 && enemy2.dedTimer[j][6] <= 0 && enemy2.dedTimer[j][7] <= 0 
 							&& enemy2.dedTimer[j][8] <= 0 && enemy2.dedTimer[j][9] <= 0&& enemy2.dedTimer[j][10] <= 0 && enemy2.dedTimer[j][11] <= 0 
 							&& enemy2.dedTimer[j][12] <= 0 && enemy2.dedTimer[j][13] <= 0 && enemy2.dedTimer[j][14] <= 0&& enemy2.dedTimer[j][15] <= 0
-							)//&& enemy2.dedTimer[16] <= 0 && enemy2.dedTimer[17] <= 0 && enemy2.dedTimer[18] <= 0 && enemy2.dedTimer[19] <= 0
+							)
 						{
 							enemy2.parentIsAlive[j] = false;
-
 						}
-						if (enemy2.parentIsAlive[0] == false && enemy2.parentIsAlive[1] == false && enemy2.parentIsAlive[2] == false && enemy2.parentIsAlive[3] == false)
-							
+						if (enemy2.parentIsAlive[0] == false && enemy2.parentIsAlive[1] == false && enemy2.parentIsAlive[2] == false && enemy2.parentIsAlive[3] == false)			
 						{
 							enemy2.hostIsAlive = false;
 						}
@@ -1051,6 +1052,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
+
+#pragma region
 		//フィールドの外に出ないように
 		//ここはいじらなくてOK
 		if (player.pos.x != 0 || player.pos.y != 0) {
@@ -1218,11 +1221,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy1.childIsAlive[i])
 			{
-				if (!enemy1.isDed[i])Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, 0xff00ffff, kFillModeSolid);
-				if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)
-				{
-					Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, BLUE, kFillModeSolid);
-				}
+				if (!enemy1.isDed[i])Functions.DrawQuadPlus(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius * 2), int(enemy1.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+
+				if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius * 2), int(enemy1.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+
 			}
 
 			//Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), "enemy1.isDed[%d]=%d", i, enemy1.isDed[i]);
@@ -1238,11 +1240,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy2.childIsAlive[j][i])
 					{
-						if (!enemy2.isDed[j][i])Novice::DrawEllipse(int(enemy2.relativePos[j][i].x + scroll.x), int(enemy2.relativePos[j][i].y + scroll.y), int(enemy2.radius), int(enemy2.radius), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)
-						{
-							Novice::DrawEllipse(int(enemy2.relativePos[j][i].x + scroll.x), int(enemy2.relativePos[j][i].y + scroll.y), int(enemy2.radius), int(enemy2.radius), 0, BLUE, kFillModeSolid);
-						}
+						if (!enemy2.isDed[j][i])Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x + scroll.x), int(enemy2.relativePos[j][i].y + scroll.y), int(enemy2.radius * 2), int(enemy2.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x + scroll.x), int(enemy2.relativePos[j][i].y + scroll.y), int(enemy2.radius * 2), int(enemy2.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
 					}
 					//Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), "enemy2.isDed[%d]=%d", i, enemy2.isDed[i]);
 					//Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y + 20), "enemy2.dedTimer[%d]=%d", i, enemy2.dedTimer[i]);
@@ -1256,11 +1255,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy3.childIsAlive[i])
 			{
-				if (!enemy3.isDed[i])Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, 0xff00ffff, kFillModeSolid);
-				if (enemy3.isDed[i] && enemy3.dedTimer[i] > 0)
-				{
-					Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, BLUE, kFillModeSolid);
-				}
+				if (!enemy3.isDed[i])Functions.DrawQuadPlus(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius * 2), int(enemy3.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+				if (enemy3.isDed[i] && enemy3.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius * 2), int(enemy3.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
 			}
 			//Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), "enemy3.isDed[%d]=%d", i, enemy3.isDed[i]);
 			//Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y + 20), "enemy3.dedTimer[%d]=%d", i, enemy3.dedTimer[i]);
@@ -1271,11 +1267,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy4.childIsAlive[i])
 			{
-				if (!enemy4.isDed[i])Novice::DrawEllipse(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius), int(enemy4.radius), 0, 0xff00ffff, kFillModeSolid);
-				if (enemy4.isDed[i] && enemy4.dedTimer[i] > 0)
-				{
-					Novice::DrawEllipse(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius), int(enemy4.radius), 0, BLUE, kFillModeSolid);
-				}
+				if (!enemy4.isDed[i])Functions.DrawQuadPlus(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius * 2), int(enemy4.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+				if (enemy4.isDed[i] && enemy4.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius * 2), int(enemy4.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
 			}
 			//Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), "enemy4.isDed[%d]=%d", i, enemy4.isDed[i]);
 			//Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y + 20), "enemy4.dedTimer[%d]=%d", i, enemy4.dedTimer[i]);
@@ -1286,11 +1279,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy5.childIsAlive[i])
 			{
-				if (!enemy5.isDed[i])Novice::DrawEllipse(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius), int(enemy5.radius), 0, 0xff00ffff, kFillModeSolid);
-				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)
-				{
-					Novice::DrawEllipse(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius), int(enemy5.radius), 0, BLUE, kFillModeSolid);
-				}
+				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius * 2), int(enemy5.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius * 2), int(enemy5.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
 			}
 			//Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), "enemy5.isDed[%d]=%d", i, enemy5.isDed[i]);
 			//Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y + 20), "enemy5.dedTimer[%d]=%d", i, enemy5.dedTimer[i]);
@@ -1301,11 +1291,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy6.childIsAlive[i])
 			{
-				if (!enemy6.isDed[i])Novice::DrawEllipse(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius), int(enemy6.radius), 0, 0xff00ffff, kFillModeSolid);
-				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)
-				{
-					Novice::DrawEllipse(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius), int(enemy6.radius), 0, BLUE, kFillModeSolid);
-				}
+				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius * 2), int(enemy6.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius * 2), int(enemy6.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
 			}
 			//Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), "enemy6.isDed[%d]=%d", i, enemy6.isDed[i]);
 			//Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y + 20), "enemy6.dedTimer[%d]=%d", i, enemy6.dedTimer[i]);
@@ -1319,11 +1306,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				if (enemy7.childIsAlive[j][i])
 				{
-					if (!enemy7.isDed[j][i])Novice::DrawEllipse(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), int(enemy7.radius), int(enemy7.radius), 0, 0xff00ffff, kFillModeSolid);
-					if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)
-					{
-						Novice::DrawEllipse(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), int(enemy7.radius), int(enemy7.radius), 0, BLUE, kFillModeSolid);
-					}
+					if (!enemy7.isDed[j][i])Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), int(enemy7.radius * 2), int(enemy7.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+					if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), int(enemy7.radius * 2), int(enemy7.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
 				}
 				//Novice::ScreenPrintf(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), "enemy7.isDed[%d][%d]=%d", j, i, enemy7.isDed[i]);
 				//Novice::ScreenPrintf(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y + 20), "enemy7.dedTimer[%d][%d]=%d", j, i, enemy7.dedTimer[i]);
@@ -1338,11 +1322,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				if (enemy8.childIsAlive[j][i])
 				{
-					if (!enemy8.isDed[j][i])Novice::DrawEllipse(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), int(enemy8.radius), int(enemy8.radius), 0, 0xff00ffff, kFillModeSolid);
-					if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)
-					{
-						Novice::DrawEllipse(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), int(enemy8.radius), int(enemy8.radius), 0, BLUE, kFillModeSolid);
-					}
+					if (!enemy8.isDed[j][i])Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), int(enemy8.radius * 2), int(enemy8.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+					if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), int(enemy8.radius * 2), int(enemy8.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+
 				}
 				//Novice::ScreenPrintf(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), "enemy8.isDed[%d][%d]=%d", j, i, enemy8.isDed[i]);
 				//Novice::ScreenPrintf(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y + 20), "enemy8.dedTimer[%d][%d]=%d", j, i, enemy8.dedTimer[i]);
