@@ -1,6 +1,7 @@
 #include <Novice.h>
 #include "Headers.h"
 #include <corecrt_math.h>
+#include "MatrixCalc.h"
 
 const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
 
