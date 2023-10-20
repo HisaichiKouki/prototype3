@@ -81,7 +81,7 @@ struct testEnemy2//四角に配置される敵
 	Vector2 posReset[16];
 };
 
-struct testEnemy3//直線にはいちされる敵
+struct testEnemy3//１列に配置される敵
 {
 	Vector2 centorPos;
 	Vector2 relativePos[4];
@@ -93,3 +93,16 @@ struct testEnemy3//直線にはいちされる敵
 	Vector2 posReset[4];
 
 };
+struct testEnemy4//縦１列に配置される敵
+{
+	Vector2 centorPos;
+	Vector2 relativePos[4];
+	Vector2 velocity;
+	float radius;
+	bool isAlive;
+	bool isDed[4];
+	int dedTimer[4];
+	Vector2 posReset[4];
+
+};
+
