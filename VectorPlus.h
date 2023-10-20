@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector2.h"
+#include "./Header/Struct.h"
 
 Vector2 vectorLength(Vector2 pos1, Vector2 pos2);
 

@@ -1,40 +1,8 @@
 #include <Novice.h>
-#include "Vector2.h"
-#include "VectorPlus.h"
+#include "Headers.h"
 #include <corecrt_math.h>
-#include "Functions.h"
 
 const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
-typedef struct Player
-{
-	Vector2 pos;
-	Vector2 direction;
-	Vector2 velocity;
-	Vector2 radius;
-
-	Vector2 joystick;
-
-	Vector2 prepos[3];//三角形の点
-	Vector2 screenPos;
-
-	float shotSpeed;//ダッシュ時の速度
-	float moveSpeed;//スティック移動の速度
-	bool trigerA;//Aボタンを押したか
-	float velocityRatio;//速度の割合。1が等倍で0.5fが半分0で速度0
-	bool aim;//Aボタンを押した時のアクション
-	int count;//点を何個出したかカウント
-	int aimTimer;//三角形を作った後の時間
-	float anchorRadius;//点の半径
-
-	int flickTimer;//はじき判定フレ
-	bool flick;//はじきフラグ
-	float flickLength;//フリックで端まで行ったか確認するため
-	int flickCT;//フリックした直後に減速しないように
-
-	bool dashAttack;//フリックでフラグをたてたい
-	bool triangulAttack;//三角形の攻撃
-
-}Player;
 
 float clump(float a, float min, float max);
 
@@ -45,7 +13,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
 
-	Player player{};
+	PlayerData player{};
 	player.radius = { 30,30 };
 	player.shotSpeed = 60;
 	player.moveSpeed = 20;
@@ -57,7 +25,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int preJoyStickX = 0;
 	int preJoyStickY = 0;
 	Novice::SetJoystickDeadZone(0, 0, 0);
-
 
 	Vector2 xy{};
 	float length = 0;
@@ -74,9 +41,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int fieldTexture = Novice::LoadTexture("./Resources/images/field_1.png");
 
-
+	// クラス変数の宣言
 	Func Functions;
+	AttackAreaObject attAreaObj;
+	EnemyObject enemyObj;
 
+	// 敵の座標を仮に宣言・定義
+	Vector2 enemyPos = { 0,0 };
+
+	// 白地テクスチャ
+	const int kWhiteTexture = Novice::LoadTexture("white1x1.png");
+
+
+	// 敵の生存フラグを宣言・定義
+	bool isEnemyDead = false;
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -136,8 +114,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//三角形を出した後の攻撃時間
 		if (player.aimTimer > 0)
-		{
-			player.triangulAttack = true;//三角形攻撃を有効に
+		{			
 			player.aimTimer--;
 		}
 		else if (player.aimTimer <= 0)
@@ -163,6 +140,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				
 				//点がプレイヤーの位置に番号順で設置される
 				player.prepos[player.count] = player.pos;
+				//点の座標を番号順に記録
+				attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
 				//プレイヤーの速度を等倍に
 				player.velocityRatio = 1;
 				player.aim = true;
@@ -174,6 +153,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					player.count = 0;
 					player.aim = false;
 					player.aimTimer = 30;//攻撃時間を代入
+					player.triangulAttack = true;//三角形攻撃を有効に
 
 				}
 			}
@@ -257,6 +237,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		///スティック入力ここまで
 
+		/// キー入力（デバッグ) ここから
+
+		if (keys[DIK_SPACE] && !preKeys[DIK_SPACE])
+		{
+			Functions.ToggleDebugMode();
+		}
+
+		/// キー入力（デバッグ）ここまで
+
 		//ポジション移動
 		player.pos.x += player.velocity.x;
 		player.pos.y += player.velocity.y;
@@ -266,11 +255,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (player.dashAttack)
 		{
-
 		}
 		if (player.triangulAttack)
 		{
-
+		
+			// 敵の生存フラグを当たり判定によって更新
+			isEnemyDead = attAreaObj.TriangleCollision(enemyPos);
 		}
 
 
@@ -374,6 +364,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			Novice::DrawBox(1720, 0, 100, 100, 0, BLUE, kFillModeSolid);
 		}
+
+		if (!isEnemyDead)
+		{
+			Functions.DrawQuadPlus(
+				static_cast<int>(enemyPos.x + scroll.x), static_cast<int>(enemyPos.y + scroll.y),
+				30, 30,
+				1.0f, 1.0f,
+				0.0f,
+				0, 0, 1, 1,
+				kWhiteTexture,
+				0xffff00ff
+			);
+		}
+		
+
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       
