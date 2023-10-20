@@ -448,10 +448,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(int(enemy1.centorPos.x + scroll.x), int(enemy1.centorPos.y + scroll.y), "enemy1.isAlive=%d", enemy1.isAlive);
 		for (int i = 0; i < 3; i++)
 		{
-			if (!enemy1.isDed[i])Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, BLUE, kFillModeSolid);
+			if (!enemy1.isDed[i])Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, 0xff00ffff, kFillModeSolid);
 			if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)
 			{
-				Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, 0xff00ffff, kFillModeSolid);
+				Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, BLUE, kFillModeSolid);
 			}
 			Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), "enemy1.isDed[%d]=%d", i, enemy1.isDed[i]);
 			Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y + 20), "enemy1.dedTimer[%d]=%d", i, enemy1.dedTimer[i]);

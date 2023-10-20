@@ -61,6 +61,7 @@
     <ClCompile Include="Source\Various.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixCalc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -156,5 +157,6 @@
     <ClInclude Include="Header\Struct.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="MatrixCalc.h" />
   </ItemGroup>
 </Project>
