@@ -38,22 +38,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector2 fieldToPlayer{};//フィールドの中心からプレイヤーまでのxy距離
 	float centerToPlayerLength = 0;//フィールドの中心からプレイヤーまでのLength
 
-	float miniMap = 10;//ミニマップの倍率 20で20分の１　10で10分の1　数字が小さくなるほど大きく表示
-	float miniMapPlayerSize = 3;//ミニマップに表示されるプレイヤー関係のサイズ　1が等倍　数字が大きくなるほど大きく表示
+	float miniMap = 8;//ミニマップの倍率 20で20分の１　10で10分の1　数字が小さくなるほど大きく表示
+	float miniMapPlayerSize = 2;//ミニマップに表示されるプレイヤー関係のサイズ　1が等倍　数字が大きくなるほど大きく表示
 
 	int fieldTexture = Novice::LoadTexture("./Resources/images/field_1.png");
 
 
 	float enemyRadius = 50;//敵全体の半径
+#pragma region enemy1
 
 	testEnemy1 enemy1{};
-	enemy1.isAlive = false;
+	enemy1.parentIsAlive = false;
 	enemy1.centorPos = { 0,0 };
 	enemy1.radius = enemyRadius;
-	enemy1.posReset[0] = { enemy1.centorPos.x,enemy1.centorPos.y - (enemy1.radius * 2) };
-	enemy1.posReset[1] = { enemy1.centorPos.x - (enemy1.radius * 2),enemy1.centorPos.y + (enemy1.radius * 2) };
-	enemy1.posReset[2] = { enemy1.centorPos.x + (enemy1.radius * 2),enemy1.centorPos.y + (enemy1.radius * 2) };
-
+	enemy1.posReset[0] = { enemy1.centorPos.x,enemy1.centorPos.y - (enemy1.radius * 3) };
+	enemy1.posReset[1] = { enemy1.centorPos.x - (enemy1.radius * 3),enemy1.centorPos.y + (enemy1.radius * 3) };
+	enemy1.posReset[2] = { enemy1.centorPos.x + (enemy1.radius * 3),enemy1.centorPos.y + (enemy1.radius * 3) };
+#pragma endregion
+#pragma region enemy2
 
 	testEnemy2 enemy2{};
 	enemy2.radius = enemyRadius;
@@ -81,7 +83,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy2.posReset[13] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y + enemy2.radius * 1.5f };
 	enemy2.posReset[14] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y - enemy2.radius * 1.5f };
 	enemy2.posReset[15] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y - enemy2.radius * 4.5f };
-
+#pragma endregion
+#pragma region enemy3
 
 	testEnemy3 enemy3{};//横一列
 	enemy3.radius = enemyRadius;
@@ -90,6 +93,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy3.posReset[1] = { enemy3.centorPos.x - enemy3.radius * 1.5f ,enemy3.centorPos.y };
 	enemy3.posReset[2] = { enemy3.centorPos.x + enemy3.radius * 1.5f ,enemy3.centorPos.y };
 	enemy3.posReset[3] = { enemy3.centorPos.x + enemy3.radius * 4.5f ,enemy3.centorPos.y };
+#pragma endregion
+#pragma region enemy4
 
 	testEnemy3 enemy4{};//縦一列
 	enemy4.radius = enemyRadius;
@@ -98,6 +103,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy4.posReset[1] = { enemy4.centorPos.x,enemy4.centorPos.y - enemy4.radius * 1.5f };
 	enemy4.posReset[2] = { enemy4.centorPos.x,enemy4.centorPos.y + enemy4.radius * 1.5f };
 	enemy4.posReset[3] = { enemy4.centorPos.x,enemy4.centorPos.y + enemy4.radius * 4.5f };
+#pragma endregion
+#pragma region enemy5
 
 	testEnemy3 enemy5{};//左斜め上
 	enemy5.radius = enemyRadius;
@@ -106,6 +113,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy5.posReset[1] = { enemy5.centorPos.x - enemy5.radius * 1.5f * 0.7f,enemy5.centorPos.y - enemy5.radius * 1.5f * 0.7f };
 	enemy5.posReset[2] = { enemy5.centorPos.x + enemy5.radius * 1.5f * 0.7f,enemy5.centorPos.y + enemy5.radius * 1.5f * 0.7f };
 	enemy5.posReset[3] = { enemy5.centorPos.x + enemy5.radius * 4.5f * 0.7f,enemy5.centorPos.y + enemy5.radius * 4.5f * 0.7f };
+#pragma endregion
+#pragma region enemy6
 
 	testEnemy3 enemy6{};//右斜め上
 	enemy6.radius = enemyRadius;
@@ -114,16 +123,81 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy6.posReset[1] = { enemy6.centorPos.x + enemy6.radius * 1.5f * 0.7f,enemy6.centorPos.y - enemy6.radius * 1.5f * 0.7f };
 	enemy6.posReset[2] = { enemy6.centorPos.x - enemy6.radius * 1.5f * 0.7f,enemy6.centorPos.y + enemy6.radius * 1.5f * 0.7f };
 	enemy6.posReset[3] = { enemy6.centorPos.x - enemy6.radius * 4.5f * 0.7f,enemy6.centorPos.y + enemy6.radius * 4.5f * 0.7f };
+#pragma endregion
+#pragma region enemy7
+	testEnemy4 enemy7;
+	enemy7.radius = enemyRadius;
+	float enemy7PosRadius = 1800;
+	float enemy7PosSpeed = 4;
+	enemy7.velocity[0] = { 0,enemy7PosSpeed };
+	enemy7.velocity[1] = { -enemy7PosSpeed,0 };
+	enemy7.velocity[2] = { 0,-enemy7PosSpeed };
+	enemy7.velocity[3] = { enemy7PosSpeed,0 };
 
+	enemy7.velocity[4] = { -enemy7PosSpeed * 0.7f,enemy7PosSpeed * 0.7f };
+	enemy7.velocity[5] = { -enemy7PosSpeed * 0.7f,-enemy7PosSpeed * 0.7f };
+	enemy7.velocity[6] = { enemy7PosSpeed * 0.7f,-enemy7PosSpeed * 0.7f };
+	enemy7.velocity[7] = { enemy7PosSpeed * 0.7f,enemy7PosSpeed * 0.7f };
 
-	for (int i = 0; i < 3; i++)
-	{
-		enemy1.dedTimer[i] = 30;
-	}
-	for (int i = 0; i < kEnemy2Num; i++)
-	{
-		enemy2.dedTimer[i] = 30;
-	}
+	enemy7.centorPos[0] = { 0,-enemy7PosRadius };//上
+	enemy7.centorPos[1] = { enemy7PosRadius,0 };//右
+	enemy7.centorPos[2] = { 0,+enemy7PosRadius };//下
+	enemy7.centorPos[3] = { -enemy7PosRadius,0 };//左
+
+	enemy7.centorPos[4] = { enemy7PosRadius * 0.7f,-enemy7PosRadius * 0.7f };//右上
+	enemy7.centorPos[5] = { enemy7PosRadius * 0.7f,enemy7PosRadius * 0.7f };//右下
+	enemy7.centorPos[6] = { -enemy7PosRadius * 0.7f,enemy7PosRadius * 0.7f };//左下
+	enemy7.centorPos[7] = { -enemy7PosRadius * 0.7f,-enemy7PosRadius * 0.7f };//左上
+
+	//上
+	enemy7.posReset[0][0] = { enemy7.centorPos[0].x,enemy7.centorPos[0].y - enemy7.radius * 4.5f };
+	enemy7.posReset[0][1] = { enemy7.centorPos[0].x,enemy7.centorPos[0].y - enemy7.radius * 1.5f };
+	enemy7.posReset[0][2] = { enemy7.centorPos[0].x,enemy7.centorPos[0].y + enemy7.radius * 1.5f };
+	enemy7.posReset[0][3] = { enemy7.centorPos[0].x,enemy7.centorPos[0].y + enemy7.radius * 4.5f };
+
+	//右
+	enemy7.posReset[1][0] = { enemy7.centorPos[1].x - enemy7.radius * 4.5f ,enemy7.centorPos[1].y };
+	enemy7.posReset[1][1] = { enemy7.centorPos[1].x - enemy7.radius * 1.5f ,enemy7.centorPos[1].y };
+	enemy7.posReset[1][2] = { enemy7.centorPos[1].x + enemy7.radius * 1.5f ,enemy7.centorPos[1].y };
+	enemy7.posReset[1][3] = { enemy7.centorPos[1].x + enemy7.radius * 4.5f ,enemy7.centorPos[1].y };
+
+	//下
+	enemy7.posReset[2][0] = { enemy7.centorPos[2].x,enemy7.centorPos[2].y - enemy7.radius * 4.5f };
+	enemy7.posReset[2][1] = { enemy7.centorPos[2].x,enemy7.centorPos[2].y - enemy7.radius * 1.5f };
+	enemy7.posReset[2][2] = { enemy7.centorPos[2].x,enemy7.centorPos[2].y + enemy7.radius * 1.5f };
+	enemy7.posReset[2][3] = { enemy7.centorPos[2].x,enemy7.centorPos[2].y + enemy7.radius * 4.5f };
+
+	//左
+	enemy7.posReset[3][0] = { enemy7.centorPos[3].x - enemy7.radius * 4.5f ,enemy7.centorPos[3].y };
+	enemy7.posReset[3][1] = { enemy7.centorPos[3].x - enemy7.radius * 1.5f ,enemy7.centorPos[3].y };
+	enemy7.posReset[3][2] = { enemy7.centorPos[3].x + enemy7.radius * 1.5f ,enemy7.centorPos[3].y };
+	enemy7.posReset[3][3] = { enemy7.centorPos[3].x + enemy7.radius * 4.5f ,enemy7.centorPos[3].y };
+
+	//右上
+	enemy7.posReset[4][0] = { enemy7.centorPos[4].x + enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[4].y - enemy7.radius * 4.5f * 0.7f };
+	enemy7.posReset[4][1] = { enemy7.centorPos[4].x + enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[4].y - enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[4][2] = { enemy7.centorPos[4].x - enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[4].y + enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[4][3] = { enemy7.centorPos[4].x - enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[4].y + enemy7.radius * 4.5f * 0.7f };
+
+	//右下
+	enemy7.posReset[5][0] = { enemy7.centorPos[5].x - enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[5].y - enemy7.radius * 4.5f * 0.7f };
+	enemy7.posReset[5][1] = { enemy7.centorPos[5].x - enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[5].y - enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[5][2] = { enemy7.centorPos[5].x + enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[5].y + enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[5][3] = { enemy7.centorPos[5].x + enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[5].y + enemy7.radius * 4.5f * 0.7f };
+
+	//左下
+	enemy7.posReset[6][0] = { enemy7.centorPos[6].x + enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[6].y - enemy7.radius * 4.5f * 0.7f };
+	enemy7.posReset[6][1] = { enemy7.centorPos[6].x + enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[6].y - enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[6][2] = { enemy7.centorPos[6].x - enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[6].y + enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[6][3] = { enemy7.centorPos[6].x - enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[6].y + enemy7.radius * 4.5f * 0.7f };
+
+	//左上
+	enemy7.posReset[7][0] = { enemy7.centorPos[7].x - enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[7].y - enemy7.radius * 4.5f * 0.7f };
+	enemy7.posReset[7][1] = { enemy7.centorPos[7].x - enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[7].y - enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[7][2] = { enemy7.centorPos[7].x + enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[7].y + enemy7.radius * 1.5f * 0.7f };
+	enemy7.posReset[7][3] = { enemy7.centorPos[7].x + enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[7].y + enemy7.radius * 4.5f * 0.7f };
+#pragma endregion
+
 	// クラス変数の宣言
 	Func Functions;
 	AttackAreaObject attAreaObj;
@@ -157,15 +231,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///       
 
 
-
+#pragma region enemySpawn
 		if (keys[DIK_R])
 		{
 			if (keys[DIK_1])
 			{
-				enemy1.isAlive = true;
+				enemy1.parentIsAlive = true;
 				enemy1.centorPos = { 0,0 };
 				for (int i = 0; i < 3; i++)
 				{
+					enemy1.childIsAlive[i] = true;
 					enemy1.relativePos[i] = { enemy1.posReset[i].x + enemy1.centorPos.x,enemy1.posReset[i].y + enemy1.centorPos.y };
 					enemy1.dedTimer[i] = 30;
 					enemy1.isDed[i] = false;
@@ -173,10 +248,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (keys[DIK_2])
 			{
-				enemy2.isAlive = true;
+				enemy2.parentIsAlive = true;
 				enemy2.centorPos = { 500,0 };
 				for (int i = 0; i < kEnemy2Num; i++)
 				{
+					enemy2.childIsAlive[i] = true;
 					enemy2.relativePos[i] = { enemy2.posReset[i].x + enemy2.centorPos.x,enemy2.posReset[i].y + enemy2.centorPos.y };
 					enemy2.dedTimer[i] = 30;
 					enemy2.isDed[i] = false;
@@ -185,10 +261,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (keys[DIK_3])
 			{
-				enemy3.isAlive = true;
+				enemy3.parentIsAlive = true;
 				enemy3.centorPos = { 0,0 };
 				for (int i = 0; i < 4; i++)
 				{
+					enemy3.childIsAlive[i] = true;
 					enemy3.relativePos[i] = { enemy3.posReset[i].x + enemy3.centorPos.x,enemy3.posReset[i].y + enemy3.centorPos.y };
 					enemy3.dedTimer[i] = 30;
 					enemy3.isDed[i] = false;
@@ -197,10 +274,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (keys[DIK_4])
 			{
-				enemy4.isAlive = true;
+				enemy4.parentIsAlive = true;
 				enemy4.centorPos = { 0,0 };
 				for (int i = 0; i < 4; i++)
 				{
+					enemy4.childIsAlive[i] = true;
 					enemy4.relativePos[i] = { enemy4.posReset[i].x + enemy4.centorPos.x,enemy4.posReset[i].y + enemy4.centorPos.y };
 					enemy4.dedTimer[i] = 30;
 					enemy4.isDed[i] = false;
@@ -209,10 +287,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (keys[DIK_5])
 			{
-				enemy5.isAlive = true;
+				enemy5.parentIsAlive = true;
 				enemy5.centorPos = { 0,0 };
 				for (int i = 0; i < 4; i++)
 				{
+					enemy5.childIsAlive[i] = true;
 					enemy5.relativePos[i] = { enemy5.posReset[i].x + enemy5.centorPos.x,enemy5.posReset[i].y + enemy5.centorPos.y };
 					enemy5.dedTimer[i] = 30;
 					enemy5.isDed[i] = false;
@@ -221,18 +300,36 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (keys[DIK_6])
 			{
-				enemy6.isAlive = true;
+				enemy6.parentIsAlive = true;
 				enemy6.centorPos = { 0,0 };
 				for (int i = 0; i < 4; i++)
 				{
+					enemy6.childIsAlive[i] = true;
 					enemy6.relativePos[i] = { enemy6.posReset[i].x + enemy6.centorPos.x,enemy6.posReset[i].y + enemy6.centorPos.y };
 					enemy6.dedTimer[i] = 30;
 					enemy6.isDed[i] = false;
 				}
 
 			}
-		}
+			else if (keys[DIK_7])
+			{
 
+				for (int j = 0; j < 8; j++)
+				{
+					enemy7.parentIsAlive[j] = true;
+					for (int i = 0; i < 4; i++)
+					{
+						enemy7.childIsAlive[j][i] = true;
+						enemy7.relativePos[j][i] = { enemy7.posReset[j][i].x ,enemy7.posReset[j][i].y };
+						enemy7.dedTimer[j][i] = 30;
+						enemy7.isDed[j][i] = false;
+					}
+
+				}
+				enemy7.hostIsAlive = true;
+			}
+		}
+#pragma endregion
 
 #pragma region player
 		//前フレのジョイスティック情報を保存
@@ -420,100 +517,174 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		player.pos.x += player.velocity.x;
 		player.pos.y += player.velocity.y;
 
-		//敵移動
-		if (enemy1.isAlive)
+		//敵の移動
+#pragma region enemyMove
+		if (enemy1.parentIsAlive)
 		{
 			enemy1.centorPos.x++;
 			for (int i = 0; i < 3; i++)
 			{
-				enemy1.relativePos[i].x++;
+				enemy1.childIsAlive[i] = EllipseCollision({ 0,0 }, fieldRadius, enemy1.relativePos[i], enemy1.radius);
+				if (!enemy1.isDed[i] && enemy1.childIsAlive[i])enemy1.relativePos[i].x += 4;
+			}
+			if (!enemy1.childIsAlive[0] && !enemy1.childIsAlive[1] && !enemy1.childIsAlive[2])
+			{
+				enemy1.parentIsAlive = false;
 			}
 		}
-		if (enemy2.isAlive)
+		if (enemy2.parentIsAlive)
 		{
 			enemy2.centorPos.x++;
 			for (int i = 0; i < kEnemy2Num; i++)
 			{
-				enemy2.relativePos[i].x++;
+				enemy2.childIsAlive[i] = EllipseCollision({ 0,0 }, fieldRadius, enemy2.relativePos[i], enemy2.radius);
+				if (!enemy2.isDed[i] && enemy2.childIsAlive[i])enemy2.relativePos[i].x++;
 			}
+			if (!enemy2.childIsAlive[0] && !enemy2.childIsAlive[1] && !enemy2.childIsAlive[2] && !enemy2.childIsAlive[3]
+				&& !enemy2.childIsAlive[4] && !enemy2.childIsAlive[5] && !enemy2.childIsAlive[6] && !enemy2.childIsAlive[7]
+				&& !enemy2.childIsAlive[8] && !enemy2.childIsAlive[9] && !enemy2.childIsAlive[10] && !enemy2.childIsAlive[11]
+				&& !enemy2.childIsAlive[12] && !enemy2.childIsAlive[13] && !enemy2.childIsAlive[14] && !enemy2.childIsAlive[15])
+			{
+				enemy2.parentIsAlive = false;
+			}
+
 		}
 
-		if (enemy3.isAlive)
+		if (enemy3.parentIsAlive)
 		{
 			enemy3.centorPos.x++;
 			for (int i = 0; i < 4; i++)
 			{
-				enemy3.relativePos[i].x++;
+				enemy3.childIsAlive[i] = EllipseCollision({ 0,0 }, fieldRadius, enemy3.relativePos[i], enemy3.radius);
+				if (!enemy3.isDed[i] && enemy3.childIsAlive[i])enemy3.relativePos[i].x++;
+			}
+			if (!enemy3.childIsAlive[0] && !enemy3.childIsAlive[1] && !enemy3.childIsAlive[2] && !enemy3.childIsAlive[3])
+			{
+				enemy3.parentIsAlive = false;
 			}
 		}
-		if (enemy4.isAlive)
+		if (enemy4.parentIsAlive)
 		{
 			enemy4.centorPos.x++;
 			for (int i = 0; i < 4; i++)
 			{
-				enemy4.relativePos[i].x++;
+				enemy4.childIsAlive[i] = EllipseCollision({ 0,0 }, fieldRadius, enemy4.relativePos[i], enemy4.radius);
+				if (!enemy4.isDed[i] && enemy4.childIsAlive[i])enemy4.relativePos[i].x++;
+			}
+			if (!enemy4.childIsAlive[0] && !enemy4.childIsAlive[1] && !enemy4.childIsAlive[2] && !enemy4.childIsAlive[3])
+			{
+				enemy4.parentIsAlive = false;
 			}
 		}
-		if (enemy5.isAlive)
+		if (enemy5.parentIsAlive)
 		{
 			enemy5.centorPos.x++;
 			for (int i = 0; i < 4; i++)
 			{
-				enemy5.relativePos[i].x++;
+				enemy5.childIsAlive[i] = EllipseCollision({ 0,0 }, fieldRadius, enemy5.relativePos[i], enemy5.radius);
+				if (!enemy5.isDed[i] && enemy5.childIsAlive[i])enemy5.relativePos[i].x++;
+			}
+			if (!enemy5.childIsAlive[0] && !enemy5.childIsAlive[1] && !enemy5.childIsAlive[2] && !enemy5.childIsAlive[3])
+			{
+				enemy5.parentIsAlive = false;
 			}
 		}
-		if (enemy6.isAlive)
+		if (enemy6.parentIsAlive)
 		{
 			enemy6.centorPos.x++;
 			for (int i = 0; i < 4; i++)
 			{
-				enemy6.relativePos[i].x++;
+				enemy6.childIsAlive[i] = EllipseCollision({ 0,0 }, fieldRadius, enemy6.relativePos[i], enemy6.radius);
+				if (!enemy6.isDed[i] && enemy6.childIsAlive[i])enemy6.relativePos[i].x++;
+			}
+			if (!enemy6.childIsAlive[0] && !enemy6.childIsAlive[1] && !enemy6.childIsAlive[2] && !enemy6.childIsAlive[3])
+			{
+				enemy6.parentIsAlive = false;
 			}
 		}
+		if (enemy7.hostIsAlive)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (enemy7.parentIsAlive[j])
+				{
+					enemy7.centorPos[j].x += enemy7.velocity[j].x;
+					enemy7.centorPos[j].y += enemy7.velocity[j].y;
+
+					for (int i = 0; i < 4; i++)
+					{
+						enemy7.childIsAlive[j][i] = EllipseCollision({ 0,0 }, fieldRadius, enemy7.relativePos[j][i], enemy7.radius);
+
+						if (!enemy7.isDed[j][i] && enemy7.childIsAlive[j][i])
+						{
+							enemy7.relativePos[j][i].x += enemy7.velocity[j].x;
+							enemy7.relativePos[j][i].y += enemy7.velocity[j].y;
+						}
+					}
+					if (!enemy7.childIsAlive[j][0] && !enemy7.childIsAlive[j][1] && !enemy7.childIsAlive[j][2] && !enemy7.childIsAlive[j][3])
+					{
+						enemy7.parentIsAlive[j] = false;
+					}
+				}
+			}
+			if (enemy7.parentIsAlive[0] == false && enemy7.parentIsAlive[1] == false && enemy7.parentIsAlive[2] == false && enemy7.parentIsAlive[3] == false && enemy7.parentIsAlive[4] == false && enemy7.parentIsAlive[5] == false && enemy7.parentIsAlive[6] == false && enemy7.parentIsAlive[7] == false)enemy7.hostIsAlive = false;
+		}
+
+#pragma endregion
 		//ここで攻撃処理をしたいと考えてる
 
 		if (player.dashAttack)
 		{
-			if (enemy1.isAlive)
+			if (enemy1.parentIsAlive)
 			{
 				for (int i = 0; i < 3; i++)
 				{
 					if (!enemy1.isDed[i])enemy1.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy1.relativePos[i], enemy1.radius);
 				}
 			}
-			if (enemy2.isAlive)
+			if (enemy2.parentIsAlive)
 			{
 				for (int i = 0; i < kEnemy2Num; i++)
 				{
 					if (!enemy2.isDed[i])enemy2.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy2.relativePos[i], enemy2.radius);
 				}
 			}
-			if (enemy3.isAlive)
+			if (enemy3.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy3.isDed[i])enemy3.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy3.relativePos[i], enemy3.radius);
 				}
 			}
-			if (enemy4.isAlive)
+			if (enemy4.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy4.isDed[i])enemy4.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy4.relativePos[i], enemy4.radius);
 				}
 			}
-			if (enemy5.isAlive)
+			if (enemy5.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy5.isDed[i])enemy5.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy5.relativePos[i], enemy5.radius);
 				}
 			}
-			if (enemy6.isAlive)
+			if (enemy6.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy6.isDed[i])enemy6.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy6.relativePos[i], enemy6.radius);
+				}
+			}
+			for (int j = 0; j < 8; j++)
+			{
+				if (enemy7.parentIsAlive[j])
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						if (!enemy7.isDed[j][i])enemy7.isDed[j][i] = EllipseCollision(player.pos, player.radius.x, enemy7.relativePos[j][i], enemy7.radius);
+					}
 				}
 			}
 		}
@@ -524,75 +695,87 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			isEnemyDead = attAreaObj.TriangleCollision(enemyPos);
 
 
-			if (enemy1.isAlive)
+			if (enemy1.parentIsAlive)
 			{
 				for (int i = 0; i < 3; i++)
 				{
 					if (!enemy1.isDed[i])enemy1.isDed[i] = attAreaObj.TriangleCollision(enemy1.relativePos[i]);
 				}
 			}
-			if (enemy2.isAlive)
+			if (enemy2.parentIsAlive)
 			{
 				for (int i = 0; i < kEnemy2Num; i++)
 				{
 					if (!enemy2.isDed[i])enemy2.isDed[i] = attAreaObj.TriangleCollision(enemy2.relativePos[i]);
 				}
 			}
-			if (enemy3.isAlive)
+			if (enemy3.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy3.isDed[i])enemy3.isDed[i] = attAreaObj.TriangleCollision(enemy3.relativePos[i]);
 				}
 			}
-			if (enemy4.isAlive)
+			if (enemy4.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy4.isDed[i])enemy4.isDed[i] = attAreaObj.TriangleCollision(enemy4.relativePos[i]);
 				}
 			}
-			if (enemy5.isAlive)
+			if (enemy5.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy5.isDed[i])enemy5.isDed[i] = attAreaObj.TriangleCollision(enemy5.relativePos[i]);
 				}
 			}
-			if (enemy6.isAlive)
+			if (enemy6.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy6.isDed[i])enemy6.isDed[i] = attAreaObj.TriangleCollision(enemy6.relativePos[i]);
 				}
 			}
+			for (int j = 0; j < 8; j++)
+			{
+				if (enemy7.parentIsAlive[j])
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						if (!enemy7.isDed[j][i])enemy7.isDed[j][i] = attAreaObj.TriangleCollision(enemy7.relativePos[j][i]);
+					}
+				}
+			}
 		}
 
 
-		//敵の処理
-		if (enemy1.isAlive)
+		//敵のダメージ処理
+		if (enemy1.parentIsAlive)
 		{
 			for (int i = 0; i < 3; i++)
 			{
 				if (enemy1.isDed[i])
 				{
-					if (enemy1.dedTimer[i] > 0)enemy1.dedTimer[i]--;
+					if (enemy1.dedTimer[i] > 0) enemy1.dedTimer[i]--;
+					if (enemy1.dedTimer[i] <= 0)enemy1.childIsAlive[i] = false;
 				}
 				if (enemy1.dedTimer[0] <= 0
 					&& enemy1.dedTimer[1] <= 0
 					&& enemy1.dedTimer[2] <= 0)
 				{
-					enemy1.isAlive = false;
+					enemy1.parentIsAlive = false;
 				}
 			}
 		}
-		if (enemy2.isAlive)
+		if (enemy2.parentIsAlive)
 		{
 			for (int i = 0; i < kEnemy2Num; i++)
 			{
 				if (enemy2.isDed[i])
 				{
 					if (enemy2.dedTimer[i] > 0)enemy2.dedTimer[i]--;
+					if (enemy2.dedTimer[i] <= 0)enemy2.childIsAlive[i] = false;
 				}
 				if (enemy2.dedTimer[0] <= 0 && enemy2.dedTimer[1] <= 0 && enemy2.dedTimer[2] <= 0 && enemy2.dedTimer[3] <= 0 && enemy2.dedTimer[4] <= 0
 					&& enemy2.dedTimer[5] <= 0 && enemy2.dedTimer[6] <= 0 && enemy2.dedTimer[7] <= 0 && enemy2.dedTimer[8] <= 0 && enemy2.dedTimer[9] <= 0
@@ -600,65 +783,92 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					&& enemy2.dedTimer[15] <= 0
 					)//&& enemy2.dedTimer[16] <= 0 && enemy2.dedTimer[17] <= 0 && enemy2.dedTimer[18] <= 0 && enemy2.dedTimer[19] <= 0
 				{
-					enemy2.isAlive = false;
+					enemy2.parentIsAlive = false;
 
 				}
 			}
 
 		}
-		if (enemy3.isAlive)
+		if (enemy3.parentIsAlive)
 		{
 			for (int i = 0; i < 4; i++)
 			{
 				if (enemy3.isDed[i])
 				{
 					if (enemy3.dedTimer[i] > 0)enemy3.dedTimer[i]--;
+					if (enemy3.dedTimer[i] <= 0)enemy3.childIsAlive[i] = false;
 				}
 				if (enemy3.dedTimer[0] <= 0 && enemy3.dedTimer[1] <= 0 && enemy3.dedTimer[2] <= 0 && enemy3.dedTimer[3] <= 0)
 				{
-					enemy3.isAlive = false;
+					enemy3.parentIsAlive = false;
 				}
 			}
 		}
-		if (enemy4.isAlive)
+		if (enemy4.parentIsAlive)
 		{
 			for (int i = 0; i < 4; i++)
 			{
 				if (enemy4.isDed[i])
 				{
 					if (enemy4.dedTimer[i] > 0)enemy4.dedTimer[i]--;
+					if (enemy4.dedTimer[i] <= 0)enemy4.childIsAlive[i] = false;
 				}
 				if (enemy4.dedTimer[0] <= 0 && enemy4.dedTimer[1] <= 0 && enemy4.dedTimer[2] <= 0 && enemy4.dedTimer[3] <= 0)
 				{
-					enemy4.isAlive = false;
+					enemy4.parentIsAlive = false;
 				}
 			}
 		}
-		if (enemy5.isAlive)
+		if (enemy5.parentIsAlive)
 		{
 			for (int i = 0; i < 4; i++)
 			{
 				if (enemy5.isDed[i])
 				{
 					if (enemy5.dedTimer[i] > 0)enemy5.dedTimer[i]--;
+					if (enemy5.dedTimer[i] <= 0)enemy5.childIsAlive[i] = false;
 				}
 				if (enemy5.dedTimer[0] <= 0 && enemy5.dedTimer[1] <= 0 && enemy5.dedTimer[2] <= 0 && enemy5.dedTimer[3] <= 0)
 				{
-					enemy5.isAlive = false;
+					enemy5.parentIsAlive = false;
 				}
 			}
 		}
-		if (enemy6.isAlive)
+		if (enemy6.parentIsAlive)
 		{
 			for (int i = 0; i < 4; i++)
 			{
 				if (enemy6.isDed[i])
 				{
 					if (enemy6.dedTimer[i] > 0)enemy6.dedTimer[i]--;
+					if (enemy6.dedTimer[i] <= 0)enemy6.childIsAlive[i] = false;
 				}
 				if (enemy6.dedTimer[0] <= 0 && enemy6.dedTimer[1] <= 0 && enemy6.dedTimer[2] <= 0 && enemy6.dedTimer[3] <= 0)
 				{
-					enemy6.isAlive = false;
+					enemy6.parentIsAlive = false;
+				}
+			}
+		}
+		for (int j = 0; j < 8; j++)
+		{
+			if (enemy7.parentIsAlive[j])
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy7.isDed[j][i])
+					{
+						if (enemy7.dedTimer[j][i] > 0)enemy7.dedTimer[j][i]--;
+						if (enemy7.dedTimer[j][i] <= 0)enemy7.childIsAlive[j][i] = false;
+					}
+					if (enemy7.dedTimer[j][0] <= 0 && enemy7.dedTimer[j][1] <= 0 && enemy7.dedTimer[j][2] <= 0 && enemy7.dedTimer[j][3] <= 0)
+					{
+						enemy7.parentIsAlive[j] = false;
+					}
+					if (enemy7.parentIsAlive[0] == false && enemy7.parentIsAlive[1] == false && enemy7.parentIsAlive[2] == false && enemy7.parentIsAlive[3] == false
+						&& enemy7.parentIsAlive[4] == false && enemy7.parentIsAlive[5] == false && enemy7.parentIsAlive[6] == false && enemy7.parentIsAlive[7] == false)
+					{
+						enemy7.hostIsAlive = false;
+					}
 				}
 			}
 		}
@@ -749,8 +959,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//ミニマップ範囲
 		if (player.aimTimer > 0)Novice::DrawTriangle(int((30 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((30 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((30 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), RED, kFillModeSolid);
 		//ミニマッププレイヤー
-		Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, WHITE, kFillModeSolid);
+		Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, GREEN, kFillModeSolid);
 
+
+		//ミニマップ８方向エネミー
+		for (int j = 0; j < 8; j++)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (enemy7.childIsAlive[j][i])
+				{
+					if (!enemy7.isDed[j][i])Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
+					if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
+				}
+			}
+		}
 
 		//攻撃有効時間を表示
 		if (player.triangulAttack)
@@ -777,78 +1000,118 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//仮敵描画
-		Novice::ScreenPrintf(int(enemy1.centorPos.x + scroll.x), int(enemy1.centorPos.y + scroll.y), "enemy1.isAlive=%d", enemy1.isAlive);
+		//Novice::ScreenPrintf(int(enemy1.centorPos.x + scroll.x), int(enemy1.centorPos.y + scroll.y), "enemy1.parentIsAlive=%d", enemy1.parentIsAlive);
 		for (int i = 0; i < 3; i++)
 		{
-			if (!enemy1.isDed[i])Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, 0xff00ffff, kFillModeSolid);
-			if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)
+			if (enemy1.childIsAlive[i])
 			{
-				Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, BLUE, kFillModeSolid);
+				if (!enemy1.isDed[i])Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, 0xff00ffff, kFillModeSolid);
+				if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)
+				{
+					Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, BLUE, kFillModeSolid);
+				}
 			}
-			Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), "enemy1.isDed[%d]=%d", i, enemy1.isDed[i]);
-			Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y + 20), "enemy1.dedTimer[%d]=%d", i, enemy1.dedTimer[i]);
+
+			//Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), "enemy1.isDed[%d]=%d", i, enemy1.isDed[i]);
+			//Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y + 20), "enemy1.dedTimer[%d]=%d", i, enemy1.dedTimer[i]);
 		}
 
 
-		Novice::ScreenPrintf(int(enemy2.centorPos.x + scroll.x), int(enemy2.centorPos.y + scroll.y), "enemy2.isAlive=%d", enemy2.isAlive);
+		//Novice::ScreenPrintf(int(enemy2.centorPos.x + scroll.x), int(enemy2.centorPos.y + scroll.y), "enemy2.parentIsAlive=%d", enemy2.parentIsAlive);
 		for (int i = 0; i < kEnemy2Num; i++)
 		{
-			if (!enemy2.isDed[i])Novice::DrawEllipse(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), int(enemy2.radius), int(enemy2.radius), 0, 0xff00ffff, kFillModeSolid);
-			if (enemy2.isDed[i] && enemy2.dedTimer[i] > 0)
+			if (enemy2.childIsAlive[i])
 			{
-				Novice::DrawEllipse(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), int(enemy2.radius), int(enemy2.radius), 0, BLUE, kFillModeSolid);
+				if (!enemy2.isDed[i])Novice::DrawEllipse(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), int(enemy2.radius), int(enemy2.radius), 0, 0xff00ffff, kFillModeSolid);
+				if (enemy2.isDed[i] && enemy2.dedTimer[i] > 0)
+				{
+					Novice::DrawEllipse(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), int(enemy2.radius), int(enemy2.radius), 0, BLUE, kFillModeSolid);
+				}
 			}
-			Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), "enemy2.isDed[%d]=%d", i, enemy2.isDed[i]);
-			Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y + 20), "enemy2.dedTimer[%d]=%d", i, enemy2.dedTimer[i]);
+			//Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), "enemy2.isDed[%d]=%d", i, enemy2.isDed[i]);
+			//Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y + 20), "enemy2.dedTimer[%d]=%d", i, enemy2.dedTimer[i]);
 		}
 
-		Novice::ScreenPrintf(int(enemy3.centorPos.x + scroll.x), int(enemy3.centorPos.y + scroll.y), "enemy3.isAlive=%d", enemy3.isAlive);
+		//Novice::ScreenPrintf(int(enemy3.centorPos.x + scroll.x), int(enemy3.centorPos.y + scroll.y), "enemy3.parentIsAlive=%d", enemy3.parentIsAlive);
 		for (int i = 0; i < 4; i++)
 		{
-			if (!enemy3.isDed[i])Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, 0xff00ffff, kFillModeSolid);
-			if (enemy3.isDed[i] && enemy3.dedTimer[i] > 0)
+			if (enemy3.childIsAlive[i])
 			{
-				Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, BLUE, kFillModeSolid);
+				if (!enemy3.isDed[i])Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, 0xff00ffff, kFillModeSolid);
+				if (enemy3.isDed[i] && enemy3.dedTimer[i] > 0)
+				{
+					Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, BLUE, kFillModeSolid);
+				}
 			}
-			Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), "enemy3.isDed[%d]=%d", i, enemy3.isDed[i]);
-			Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y + 20), "enemy3.dedTimer[%d]=%d", i, enemy3.dedTimer[i]);
+			//Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), "enemy3.isDed[%d]=%d", i, enemy3.isDed[i]);
+			//Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y + 20), "enemy3.dedTimer[%d]=%d", i, enemy3.dedTimer[i]);
 		}
 
-		Novice::ScreenPrintf(int(enemy4.centorPos.x + scroll.x), int(enemy4.centorPos.y + scroll.y), "enemy4.isAlive=%d", enemy4.isAlive);
+		//Novice::ScreenPrintf(int(enemy4.centorPos.x + scroll.x), int(enemy4.centorPos.y + scroll.y), "enemy4.parentIsAlive=%d", enemy4.parentIsAlive);
 		for (int i = 0; i < 4; i++)
 		{
-			if (!enemy4.isDed[i])Novice::DrawEllipse(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius), int(enemy4.radius), 0, 0xff00ffff, kFillModeSolid);
-			if (enemy4.isDed[i] && enemy4.dedTimer[i] > 0)
+			if (enemy4.childIsAlive[i])
 			{
-				Novice::DrawEllipse(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius), int(enemy4.radius), 0, BLUE, kFillModeSolid);
+				if (!enemy4.isDed[i])Novice::DrawEllipse(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius), int(enemy4.radius), 0, 0xff00ffff, kFillModeSolid);
+				if (enemy4.isDed[i] && enemy4.dedTimer[i] > 0)
+				{
+					Novice::DrawEllipse(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius), int(enemy4.radius), 0, BLUE, kFillModeSolid);
+				}
 			}
-			Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), "enemy4.isDed[%d]=%d", i, enemy4.isDed[i]);
-			Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y + 20), "enemy4.dedTimer[%d]=%d", i, enemy4.dedTimer[i]);
+			//Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), "enemy4.isDed[%d]=%d", i, enemy4.isDed[i]);
+			//Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y + 20), "enemy4.dedTimer[%d]=%d", i, enemy4.dedTimer[i]);
 		}
 
-		Novice::ScreenPrintf(int(enemy5.centorPos.x + scroll.x), int(enemy5.centorPos.y + scroll.y), "enemy5.isAlive=%d", enemy5.isAlive);
+		//Novice::ScreenPrintf(int(enemy5.centorPos.x + scroll.x), int(enemy5.centorPos.y + scroll.y), "enemy5.parentIsAlive=%d", enemy5.parentIsAlive);
 		for (int i = 0; i < 4; i++)
 		{
-			if (!enemy5.isDed[i])Novice::DrawEllipse(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius), int(enemy5.radius), 0, 0xff00ffff, kFillModeSolid);
-			if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)
+			if (enemy5.childIsAlive[i])
 			{
-				Novice::DrawEllipse(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius), int(enemy5.radius), 0, BLUE, kFillModeSolid);
+				if (!enemy5.isDed[i])Novice::DrawEllipse(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius), int(enemy5.radius), 0, 0xff00ffff, kFillModeSolid);
+				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)
+				{
+					Novice::DrawEllipse(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius), int(enemy5.radius), 0, BLUE, kFillModeSolid);
+				}
 			}
-			Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), "enemy5.isDed[%d]=%d", i, enemy5.isDed[i]);
-			Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y + 20), "enemy5.dedTimer[%d]=%d", i, enemy5.dedTimer[i]);
+			//Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), "enemy5.isDed[%d]=%d", i, enemy5.isDed[i]);
+			//Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y + 20), "enemy5.dedTimer[%d]=%d", i, enemy5.dedTimer[i]);
 		}
 
-		Novice::ScreenPrintf(int(enemy6.centorPos.x + scroll.x), int(enemy6.centorPos.y + scroll.y), "enemy6.isAlive=%d", enemy6.isAlive);
+		//Novice::ScreenPrintf(int(enemy6.centorPos.x + scroll.x), int(enemy6.centorPos.y + scroll.y), "enemy6.parentIsAlive=%d", enemy6.parentIsAlive);
 		for (int i = 0; i < 4; i++)
 		{
-			if (!enemy6.isDed[i])Novice::DrawEllipse(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius), int(enemy6.radius), 0, 0xff00ffff, kFillModeSolid);
-			if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)
+			if (enemy6.childIsAlive[i])
 			{
-				Novice::DrawEllipse(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius), int(enemy6.radius), 0, BLUE, kFillModeSolid);
+				if (!enemy6.isDed[i])Novice::DrawEllipse(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius), int(enemy6.radius), 0, 0xff00ffff, kFillModeSolid);
+				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)
+				{
+					Novice::DrawEllipse(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius), int(enemy6.radius), 0, BLUE, kFillModeSolid);
+				}
 			}
-			Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), "enemy6.isDed[%d]=%d", i, enemy6.isDed[i]);
-			Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y + 20), "enemy6.dedTimer[%d]=%d", i, enemy6.dedTimer[i]);
+			//Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), "enemy6.isDed[%d]=%d", i, enemy6.isDed[i]);
+			//Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y + 20), "enemy6.dedTimer[%d]=%d", i, enemy6.dedTimer[i]);
 		}
+
+		for (int j = 0; j < 8; j++)
+		{
+
+			//Novice::ScreenPrintf(int(enemy7.centorPos[j].x + scroll.x), int(enemy7.centorPos[j].y + scroll.y), "enemy7[%d].parentIsAlive=%d", j, enemy7.parentIsAlive);
+			for (int i = 0; i < 4; i++)
+			{
+				if (enemy7.childIsAlive[j][i])
+				{
+					if (!enemy7.isDed[j][i])Novice::DrawEllipse(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), int(enemy7.radius), int(enemy7.radius), 0, 0xff00ffff, kFillModeSolid);
+					if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)
+					{
+						Novice::DrawEllipse(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), int(enemy7.radius), int(enemy7.radius), 0, BLUE, kFillModeSolid);
+					}
+				}
+				//Novice::ScreenPrintf(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), "enemy7.isDed[%d][%d]=%d", j, i, enemy7.isDed[i]);
+				//Novice::ScreenPrintf(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y + 20), "enemy7.dedTimer[%d][%d]=%d", j, i, enemy7.dedTimer[i]);
+			}
+
+		}
+		
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       

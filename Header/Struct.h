@@ -49,7 +49,7 @@ struct EnemyData
 	Vector2 position;
 	Vector2 acceleration;
 	Vector2 velocity;
-	bool isAlive;
+	bool parentIsAlive;
 };
 
 struct AttackAreaData
@@ -63,7 +63,8 @@ struct testEnemy1//三角に配置される敵
 	Vector2 relativePos[3];
 	Vector2 velocity;
 	float radius;
-	bool isAlive;
+	bool parentIsAlive;
+	bool childIsAlive[3];
 	bool isDed[3];
 	int dedTimer[3];
 	Vector2 posReset[3];
@@ -75,7 +76,8 @@ struct testEnemy2//四角に配置される敵
 	Vector2 relativePos[16];
 	Vector2 velocity;
 	float radius;
-	bool isAlive;
+	bool parentIsAlive;
+	bool childIsAlive[16];
 	bool isDed[16];
 	int dedTimer[16];
 	Vector2 posReset[16];
@@ -87,22 +89,26 @@ struct testEnemy3//１列に配置される敵
 	Vector2 relativePos[4];
 	Vector2 velocity;
 	float radius;
-	bool isAlive;
+	bool parentIsAlive;
+	bool childIsAlive[4];
 	bool isDed[4];
 	int dedTimer[4];
 	Vector2 posReset[4];
 
 };
-struct testEnemy4//縦１列に配置される敵
+struct testEnemy4//八方向１列に配置される敵
 {
-	Vector2 centorPos;
-	Vector2 relativePos[4];
-	Vector2 velocity;
+	Vector2 centorPos[8];
+	Vector2 relativePos[8][4];
+	Vector2 velocity[8];
 	float radius;
-	bool isAlive;
-	bool isDed[4];
-	int dedTimer[4];
-	Vector2 posReset[4];
+	bool parentIsAlive[8];
+	bool childIsAlive[8][4];
+	bool isDed[8][4];
+	int dedTimer[8][4];
+	Vector2 posReset[8][4];
+	bool hostIsAlive;
 
 };
+
 

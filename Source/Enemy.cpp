@@ -9,7 +9,7 @@ EnemyObject::EnemyObject()
 	enemy.acceleration.y = 0;
 	enemy.velocity.x = 0;
 	enemy.velocity.y = 0;
-	enemy.isAlive = false;
+	enemy.parentIsAlive = false;
 }
 
 EnemyObject::~EnemyObject()
@@ -47,5 +47,5 @@ void EnemyObject::UpdatePosition()
 
 void EnemyObject::SetIsAlive(bool _b)
 {
-	enemy.isAlive = _b;
+	enemy.parentIsAlive = _b;
 }
