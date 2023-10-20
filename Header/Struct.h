@@ -56,3 +56,16 @@ struct AttackAreaData
 {
 	Vector2 position[3];
 };
+
+struct testEnemy//三角に配置される敵
+{
+	Vector2 centorPos;
+	Vector2 relativePos[3];
+	Vector2 velocity;
+	float radius;
+	bool isAlive;
+	bool isDed[3];
+	int dedTimer[3];
+
+
+};

@@ -41,6 +41,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int fieldTexture = Novice::LoadTexture("./Resources/images/field_1.png");
 
+
+	testEnemy enemy1{};
+	enemy1.isAlive = true;
+	enemy1.centorPos = { 0,0 };
+	enemy1.radius = 50;
+	enemy1.relativePos[0] = { enemy1.centorPos.x,enemy1.centorPos.y - (50 + enemy1.radius) };
+	enemy1.relativePos[1] = { enemy1.centorPos.x - (50 + enemy1.radius),enemy1.centorPos.y + (50 + enemy1.radius) };
+	enemy1.relativePos[2] = { enemy1.centorPos.x + (50 + enemy1.radius),enemy1.centorPos.y + (50 + enemy1.radius) };
+
+	for (int i = 0; i < 3; i++)
+	{
+		enemy1.dedTimer[i] = 30;
+	}
 	// クラス変数の宣言
 	Func Functions;
 	AttackAreaObject attAreaObj;
@@ -72,6 +85,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
+
+		//enemy1reset
+		if (keys[DIK_R])
+		{
+			enemy1.isAlive = true;
+			enemy1.centorPos = { 0,0 };
+			for (int i = 0; i < 3; i++)
+			{
+				enemy1.dedTimer[i] = 30;
+				enemy1.isDed[i] = false;
+			}
+
+		}
+
+#pragma region player
 		//前フレのジョイスティック情報を保存
 		preJoyStickX = joystickX;
 		preJoyStickY = joystickY;
@@ -90,7 +118,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フリックを検知したら
 		if (player.flick && player.flickCT == 0)player.flickCT = 20;//CTをつけてすぐ減速しないように
 
-		
+
 		if (player.flickCT > 0)
 		{
 			player.flickCT--;
@@ -114,7 +142,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//三角形を出した後の攻撃時間
 		if (player.aimTimer > 0)
-		{			
+		{
 			player.aimTimer--;
 		}
 		else if (player.aimTimer <= 0)
@@ -132,12 +160,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 		//攻撃終わりにAボタンを押した時
-		if (player.trigerA && player.aimTimer == 0&&!player.dashAttack)
+		if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
 		{
 			//移動入力がされている時
-			if (player.direction.x!=0|| player.direction.y!=0)
+			if (player.direction.x != 0 || player.direction.y != 0)
 			{
-				
+
 				//点がプレイヤーの位置に番号順で設置される
 				player.prepos[player.count] = player.pos;
 				//点の座標を番号順に記録
@@ -158,7 +186,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 
-			
+
 		}
 		//ボタン入力ここまで
 
@@ -194,7 +222,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			player.flickTimer--;
 			//スティックが端に行ったら
-			if (player.flickLength > 32000&&!player.aim&&!player.triangulAttack)
+			if (player.flickLength > 32000 && !player.aim && !player.triangulAttack)
 			{
 				//フリックをTRUEに
 				player.flick = true;
@@ -226,9 +254,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-
 		//フリックも三角形も作っていないとき
-		if (!player.aim && !player.flick&& player.aimTimer<=5)
+		if (!player.aim && !player.flick && player.aimTimer <= 5)
 		{
 			//スティックで移動できるように
 			player.velocity.x = player.direction.x * player.moveSpeed;
@@ -236,7 +263,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		///スティック入力ここまで
-
+#pragma endregion
 		/// キー入力（デバッグ) ここから
 
 		if (keys[DIK_SPACE] && !preKeys[DIK_SPACE])
@@ -250,6 +277,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		player.pos.x += player.velocity.x;
 		player.pos.y += player.velocity.y;
 
+		//敵移動
+		if (enemy1.isAlive)
+		{
+			enemy1.centorPos.x++;
+
+			enemy1.relativePos[0] = { enemy1.centorPos.x,enemy1.centorPos.y - (50 + enemy1.radius) };
+			enemy1.relativePos[1] = { enemy1.centorPos.x - (50 + enemy1.radius),enemy1.centorPos.y + (50 + enemy1.radius) };
+			enemy1.relativePos[2] = { enemy1.centorPos.x + (50 + enemy1.radius),enemy1.centorPos.y + (50 + enemy1.radius) };
+
+		}
 
 		//ここで攻撃処理をしたいと考えてる
 
@@ -258,11 +295,39 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (player.triangulAttack)
 		{
-		
+
 			// 敵の生存フラグを当たり判定によって更新
 			isEnemyDead = attAreaObj.TriangleCollision(enemyPos);
+
+			if (enemy1.isAlive)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					if (!enemy1.isDed[i])enemy1.isDed[i] = attAreaObj.TriangleCollision(enemy1.relativePos[i]);
+
+				}
+			}
+
 		}
 
+
+		//敵の処理
+		if (enemy1.isAlive)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				if (enemy1.isDed[i])
+				{
+					if (enemy1.dedTimer[i] > 0)enemy1.dedTimer[i]--;
+				}
+				if (enemy1.dedTimer[0] <= 0
+					&& enemy1.dedTimer[1] <= 0
+					&& enemy1.dedTimer[2] <= 0)
+				{
+					enemy1.isAlive = false;
+				}
+			}
+		}
 
 
 		//フィールドの外に出ないように
@@ -285,7 +350,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		scroll.y = (-player.pos.y + 540);
 
 
-		
+
 		///                                                            ///
 		/// --------------------↑更新処理ここまで-------------------- ///
 		///                                                            ///
@@ -340,7 +405,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//プレイヤー
 		Novice::DrawEllipse(int(player.pos.x + scroll.x), int(player.pos.y + scroll.y), int(player.radius.x), int(player.radius.y), 0, GREEN, kFillModeSolid);
 		//プレイヤーフリック時
-		if(player.flick)Novice::DrawEllipse(int(player.pos.x + scroll.x), int(player.pos.y + scroll.y), int(player.radius.x), int(player.radius.y), 0, 0x00ffffff, kFillModeSolid);
+		if (player.flick)Novice::DrawEllipse(int(player.pos.x + scroll.x), int(player.pos.y + scroll.y), int(player.radius.x), int(player.radius.y), 0, 0x00ffffff, kFillModeSolid);
 
 
 		//ミニマップ
@@ -377,7 +442,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				0xffff00ff
 			);
 		}
-		
+
+
+		//仮敵描画
+		Novice::ScreenPrintf(int(enemy1.centorPos.x + scroll.x), int(enemy1.centorPos.y + scroll.y), "enemy1.isAlive=%d", enemy1.isAlive);
+		for (int i = 0; i < 3; i++)
+		{
+			if (!enemy1.isDed[i])Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, BLUE, kFillModeSolid);
+			if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)
+			{
+				Novice::DrawEllipse(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius), int(enemy1.radius), 0, 0xff00ffff, kFillModeSolid);
+			}
+			Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), "enemy1.isDed[%d]=%d", i, enemy1.isDed[i]);
+			Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y + 20), "enemy1.dedTimer[%d]=%d", i, enemy1.dedTimer[i]);
+		}
 
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
