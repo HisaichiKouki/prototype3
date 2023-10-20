@@ -30,7 +30,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector2 xy{};
 	float length = 0;
-	float dedZone = 35;//こっちがほんとのデッドゾーン
+	float dedZone = 30;//こっちがほんとのデッドゾーン
 
 	Vector2 scroll{};
 
@@ -197,6 +197,39 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy7.posReset[7][2] = { enemy7.centorPos[7].x + enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[7].y + enemy7.radius * 1.5f * 0.7f };
 	enemy7.posReset[7][3] = { enemy7.centorPos[7].x + enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[7].y + enemy7.radius * 4.5f * 0.7f };
 #pragma endregion
+	testEnemy5 enemy8{};
+	enemy8.radius = enemyRadius;
+	enemy8.velocity[0].x = 4;
+	enemy8.velocity[1].x = -4;
+	enemy8.velocity[2].x = 4;
+	enemy8.velocity[3].x = -4;
+
+
+	enemy8.posReset[0][0] = { enemy8.centorPos[0].x - enemy8.radius * 4.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][1] = { enemy8.centorPos[0].x - enemy8.radius * 1.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][2] = { enemy8.centorPos[0].x + enemy8.radius * 1.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][3] = { enemy8.centorPos[0].x + enemy8.radius * 4.5f ,enemy8.centorPos[0].y };
+
+	enemy8.posReset[0][4] = { enemy8.centorPos[0].x - enemy8.radius * 12.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][5] = { enemy8.centorPos[0].x - enemy8.radius * 15.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][6] = { enemy8.centorPos[0].x - enemy8.radius * 18.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][7] = { enemy8.centorPos[0].x - enemy8.radius * 21.5f ,enemy8.centorPos[0].y };
+
+	enemy8.posReset[0][8] = { enemy8.centorPos[0].x + enemy8.radius * 12.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][9] = { enemy8.centorPos[0].x + enemy8.radius * 15.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][10] = { enemy8.centorPos[0].x + enemy8.radius * 18.5f ,enemy8.centorPos[0].y };
+	enemy8.posReset[0][11] = { enemy8.centorPos[0].x + enemy8.radius * 21.5f ,enemy8.centorPos[0].y };
+
+	for (int j = 1; j < 4; j++)
+	{
+		for (int i = 0; i < 12; i++)
+		{
+			enemy8.posReset[j][i] = enemy8.posReset[0][i];
+		}
+	}
+
+
+
 
 	// クラス変数の宣言
 	Func Functions;
@@ -327,6 +360,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				}
 				enemy7.hostIsAlive = true;
+			}
+			else if (keys[DIK_8])
+			{
+				enemy8.centorPos[0] = { -700,-450 };
+				enemy8.centorPos[1] = { 700,-150 };
+				enemy8.centorPos[2] = { -700,150 };
+				enemy8.centorPos[3] = { 700,450 };
+
+				for (int j = 0; j < 4; j++)
+				{
+					enemy8.parentIsAlive[j] = true;
+					for (int i = 0; i < 12; i++)
+					{
+						enemy8.childIsAlive[j][i] = true;
+						enemy8.relativePos[j][i] = { enemy8.centorPos[j].x + enemy8.posReset[j][i].x ,enemy8.centorPos[j].y + enemy8.posReset[j][i].y };
+						enemy8.dedTimer[j][i] = 30;
+						enemy8.isDed[j][i] = false;
+					}
+				}
+				enemy8.hostIsAlive = true;
 			}
 		}
 #pragma endregion
@@ -629,7 +682,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (enemy7.parentIsAlive[0] == false && enemy7.parentIsAlive[1] == false && enemy7.parentIsAlive[2] == false && enemy7.parentIsAlive[3] == false && enemy7.parentIsAlive[4] == false && enemy7.parentIsAlive[5] == false && enemy7.parentIsAlive[6] == false && enemy7.parentIsAlive[7] == false)enemy7.hostIsAlive = false;
 		}
+		if (enemy8.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (enemy8.parentIsAlive[j])
+				{
+					enemy8.centorPos[j].x += enemy8.velocity[j].x;
 
+					for (int i = 0; i < 12; i++)
+					{
+						enemy8.childIsAlive[j][i] = EllipseCollision({ 0,0 }, fieldRadius, enemy8.relativePos[j][i], enemy8.radius);
+
+						if (!enemy8.isDed[j][i] && enemy8.childIsAlive[j][i])
+						{
+							enemy8.relativePos[j][i].x += enemy8.velocity[j].x;
+							enemy8.relativePos[j][i].y += enemy8.velocity[j].y;
+						}
+					}
+					if (!enemy8.childIsAlive[j][0] && !enemy8.childIsAlive[j][1] && !enemy8.childIsAlive[j][2] && !enemy8.childIsAlive[j][3] && !enemy8.childIsAlive[j][4] && !enemy8.childIsAlive[j][5] && !enemy8.childIsAlive[j][6] && !enemy8.childIsAlive[j][7] && !enemy8.childIsAlive[j][8] && !enemy8.childIsAlive[j][9] && !enemy8.childIsAlive[j][10] && !enemy8.childIsAlive[j][11])
+					{
+						enemy8.parentIsAlive[j] = false;
+					}
+				}
+			}
+			if (enemy8.parentIsAlive[0] == false && enemy8.parentIsAlive[1] == false&& enemy8.parentIsAlive[2] == false && enemy8.parentIsAlive[3] == false)enemy8.hostIsAlive = false;
+		}
 #pragma endregion
 		//ここで攻撃処理をしたいと考えてる
 
@@ -684,6 +762,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					for (int i = 0; i < 4; i++)
 					{
 						if (!enemy7.isDed[j][i])enemy7.isDed[j][i] = EllipseCollision(player.pos, player.radius.x, enemy7.relativePos[j][i], enemy7.radius);
+					}
+				}
+			}
+			for (int j = 0; j < 4; j++)
+			{
+				if (enemy8.parentIsAlive[j])
+				{
+					for (int i = 0; i < 12; i++)
+					{
+						if (!enemy8.isDed[j][i])enemy8.isDed[j][i] = EllipseCollision(player.pos, player.radius.x, enemy8.relativePos[j][i], enemy8.radius);
 					}
 				}
 			}
@@ -744,6 +832,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					for (int i = 0; i < 4; i++)
 					{
 						if (!enemy7.isDed[j][i])enemy7.isDed[j][i] = attAreaObj.TriangleCollision(enemy7.relativePos[j][i]);
+					}
+				}
+			}
+			for (int j = 0; j < 4; j++)
+			{
+				if (enemy8.parentIsAlive[j])
+				{
+					for (int i = 0; i < 12; i++)
+					{
+						if (!enemy8.isDed[j][i])enemy8.isDed[j][i] = attAreaObj.TriangleCollision(enemy8.relativePos[j][i]);
 					}
 				}
 			}
@@ -872,6 +970,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
+		for (int j = 0; j < 4; j++)
+		{
+			if (enemy8.parentIsAlive[j])
+			{
+				for (int i = 0; i < 12; i++)
+				{
+					if (enemy8.isDed[j][i])
+					{
+						if (enemy8.dedTimer[j][i] > 0)enemy8.dedTimer[j][i]--;
+						if (enemy8.dedTimer[j][i] <= 0)enemy8.childIsAlive[j][i] = false;
+					}
+					if (enemy8.dedTimer[j][0] <= 0 && enemy8.dedTimer[j][1] <= 0 && enemy8.dedTimer[j][2] <= 0 && enemy8.dedTimer[j][3] <= 0
+						&& enemy8.dedTimer[j][4] <= 0 && enemy8.dedTimer[j][5] <= 0 && enemy8.dedTimer[j][6] <= 0 && enemy8.dedTimer[j][7] <= 0
+						&& enemy8.dedTimer[j][8] <= 0 && enemy8.dedTimer[j][9] <= 0 && enemy8.dedTimer[j][10] <= 0 && enemy8.dedTimer[j][11] <= 0)
+					{
+						enemy8.parentIsAlive[j] = false;
+					}
+					if (enemy8.parentIsAlive[0] == false && enemy8.parentIsAlive[1] == false && enemy8.parentIsAlive[2] == false && enemy8.parentIsAlive[3] == false)
+					{
+						enemy8.hostIsAlive = false;
+					}
+				}
+			}
+		}
 		//フィールドの外に出ないように
 		//ここはいじらなくてOK
 		if (player.pos.x != 0 || player.pos.y != 0) {
@@ -971,6 +1093,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (!enemy7.isDed[j][i])Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
 					if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
+				}
+			}
+		}
+
+		//ミニマップジグザグ
+		for (int j = 0; j < 4; j++)
+		{
+			for (int i = 0; i < 12; i++)
+			{
+				if (enemy8.childIsAlive[j][i])
+				{
+					if (!enemy8.isDed[j][i])Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
+					if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
+
 				}
 			}
 		}
@@ -1111,7 +1247,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 		}
-		
+		for (int j = 0; j < 4; j++)
+		{
+
+			//Novice::ScreenPrintf(int(enemy7.centorPos[j].x + scroll.x), int(enemy7.centorPos[j].y + scroll.y), "enemy7[%d].parentIsAlive=%d", j, enemy7.parentIsAlive);
+			for (int i = 0; i < 12; i++)
+			{
+				if (enemy8.childIsAlive[j][i])
+				{
+					if (!enemy8.isDed[j][i])Novice::DrawEllipse(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), int(enemy8.radius), int(enemy8.radius), 0, 0xff00ffff, kFillModeSolid);
+					if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)
+					{
+						Novice::DrawEllipse(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), int(enemy8.radius), int(enemy8.radius), 0, BLUE, kFillModeSolid);
+					}
+				}
+				//Novice::ScreenPrintf(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), "enemy8.isDed[%d][%d]=%d", j, i, enemy8.isDed[i]);
+				//Novice::ScreenPrintf(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y + 20), "enemy8.dedTimer[%d][%d]=%d", j, i, enemy8.dedTimer[i]);
+			}
+
+		}
+
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       

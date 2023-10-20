@@ -111,4 +111,19 @@ struct testEnemy4//八方向１列に配置される敵
 
 };
 
+struct testEnemy5//１列に配置される敵
+{
+	Vector2 centorPos[4];
+	Vector2 relativePos[4][12];
+	Vector2 velocity[4];
+	float radius;
+	bool parentIsAlive[4];
+	bool childIsAlive[4][12];
+	bool isDed[4][12];
+	int dedTimer[4][12];
+	Vector2 posReset[4][12];
+	bool hostIsAlive;
+
+};
+
 
