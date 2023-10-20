@@ -80,6 +80,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy2.posReset[15] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y - enemy2.radius * 4.5f };
 
 
+	//testEnemy3 enemy3{};
+
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -132,7 +134,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				enemy1.centorPos = { 0,0 };
 				for (int i = 0; i < 3; i++)
 				{
-					enemy1.relativePos[i] = enemy1.posReset[i];
+					enemy1.relativePos[i] = { enemy1.posReset[i].x + enemy1.centorPos.x,enemy1.posReset[i].y + enemy1.centorPos.y };
 					enemy1.dedTimer[i] = 30;
 					enemy1.isDed[i] = false;
 				}
@@ -140,10 +142,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			else if (keys[DIK_2])
 			{
 				enemy2.isAlive = true;
-				enemy2.centorPos = { 0,0 };
+				enemy2.centorPos = { 500,0 };
 				for (int i = 0; i < kEnemy2Num; i++)
 				{
-					enemy2.relativePos[i] = enemy2.posReset[i];
+					enemy2.relativePos[i] = { enemy2.posReset[i].x + enemy2.centorPos.x,enemy2.posReset[i].y + enemy2.centorPos.y };
 					enemy2.dedTimer[i] = 30;
 					enemy2.isDed[i] = false;
 				}
@@ -287,7 +289,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 		//スティックのポジションがデッドゾーンの中の時
-		if (preJoyStickX<dedZone * 120 && preJoyStickX > -dedZone * 120 && preJoyStickY<dedZone * 120 && preJoyStickY > -dedZone * 120)
+		if (preJoyStickX<dedZone * 60 && preJoyStickX > -dedZone * 60 && preJoyStickY<dedZone * 60 && preJoyStickY > -dedZone * 60)
 		{
 			//フリック判定フレをリセット
 			if (!player.flick && player.flickCT == 0)player.flickTimer = 2;
@@ -311,9 +313,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フリックも三角形も作っていないとき
 		if (!player.aim && !player.flick && player.aimTimer <= 5)
 		{
-			//スティックで移動できるように
-			player.velocity.x = player.direction.x * player.moveSpeed;
-			player.velocity.y = player.direction.y * player.moveSpeed;
+			if (length >= dedZone)
+			{
+				//スティックで移動できるように
+				player.velocity.x = player.joystick.x / 100 * player.moveSpeed;
+				player.velocity.y = player.joystick.y / 100 * player.moveSpeed;
+			}
+			else
+			{
+				player.velocity = { 0,0 };
+			}
+			
 		}
 
 		///スティック入力ここまで
@@ -452,8 +462,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		Novice::ScreenPrintf(0, 200, "joystickX=%d joystickY=%d", joystickX, joystickY);
-		Novice::ScreenPrintf(0, 220, "Player.joystickX=%f ", player.joystick.x);
-		Novice::ScreenPrintf(0, 240, "Player.joystickY=%f", player.joystick.y);
+		Novice::ScreenPrintf(0, 220, "Player.joystickX=%f Player.joystickY=%f", player.joystick.x, player.joystick.y);
+		Novice::ScreenPrintf(0, 240, "Player.direction.x=%f Player.direction.y=%f", player.direction.x, player.direction.y);
 		Novice::ScreenPrintf(0, 260, "player.vel.x=%f player.vel.y=%f", player.velocity.x, player.velocity.y);
 		Novice::ScreenPrintf(0, 280, "player.TrigerA=%d", player.trigerA);
 		Novice::ScreenPrintf(0, 300, "player.velocityRatio=%f", player.velocityRatio);
