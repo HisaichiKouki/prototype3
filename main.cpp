@@ -47,7 +47,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float enemyRadius = 50;//敵全体の半径
 #pragma region enemy1
 
-	testEnemy1 enemy1{};
+	testEnemy1 enemy1{};//小さい三角形
 	enemy1.parentIsAlive = false;
 	enemy1.centorPos = { 0,0 };
 	enemy1.radius = enemyRadius;
@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 #pragma region enemy2
 
-	testEnemy2 enemy2{};
+	testEnemy2 enemy2{};//シシカク
 	enemy2.radius = enemyRadius;
 	const int kEnemy2Num = 16;
 	enemy2.velocity[0] = { 0,-3 };
@@ -136,7 +136,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy6.posReset[3] = { enemy6.centorPos.x - enemy6.radius * 4.5f * 0.7f,enemy6.centorPos.y + enemy6.radius * 4.5f * 0.7f };
 #pragma endregion
 #pragma region enemy7
-	testEnemy4 enemy7;
+	testEnemy4 enemy7{};//八方向
 	enemy7.radius = enemyRadius;
 	float enemy7PosRadius = 1800;
 	float enemy7PosSpeed = 4;
@@ -208,6 +208,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemy7.posReset[7][2] = { enemy7.centorPos[7].x + enemy7.radius * 1.5f * 0.7f,enemy7.centorPos[7].y + enemy7.radius * 1.5f * 0.7f };
 	enemy7.posReset[7][3] = { enemy7.centorPos[7].x + enemy7.radius * 4.5f * 0.7f,enemy7.centorPos[7].y + enemy7.radius * 4.5f * 0.7f };
 #pragma endregion
+#pragma region enemy8//ジグザグ
 	testEnemy5 enemy8{};
 	enemy8.radius = enemyRadius;
 	enemy8.velocity[0].x = 4;
@@ -238,7 +239,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			enemy8.posReset[j][i] = enemy8.posReset[0][i];
 		}
 	}
-
+#pragma endregion
 
 
 
@@ -1129,15 +1130,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//ミニマップ
-		Novice::DrawEllipse(int(30 + fieldRadius / miniMap), int(1050 - fieldRadius / miniMap), int(fieldRadius / miniMap), int(fieldRadius / miniMap), 0, GREEN, kFillModeWireFrame);
+		Novice::DrawEllipse(int(50 + fieldRadius / miniMap), int(1020 - fieldRadius / miniMap), int(fieldRadius / miniMap), int(fieldRadius / miniMap), 0, GREEN, kFillModeWireFrame);
 		for (int i = 0; i < 3; i++)
 		{//ミニマップ三角形の点
-			if (player.prepos[i].x != 0)Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + player.prepos[i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.prepos[i].y / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), 0, RED, kFillModeSolid);
+			if (player.prepos[i].x != 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.prepos[i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[i].y / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), 0, RED, kFillModeSolid);
 		}
 		//ミニマップ範囲
-		if (player.aimTimer > 0)Novice::DrawTriangle(int((30 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((30 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((30 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), RED, kFillModeSolid);
+		if (player.aimTimer > 0)Novice::DrawTriangle(int((50 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), RED, kFillModeSolid);
 		//ミニマッププレイヤー
-		Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1050 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, GREEN, kFillModeSolid);
+		Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, GREEN, kFillModeSolid);
 
 
 		//ミニマップ８方向エネミー
@@ -1149,8 +1150,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy7.childIsAlive[j][i])
 					{
-						if (!enemy7.isDed[j][i])Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
+						if (!enemy7.isDed[j][i])Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
+						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
 					}
 				}
 			}
@@ -1164,15 +1165,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy8.childIsAlive[j][i])
 					{
-						if (!enemy8.isDed[j][i])Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
+						if (!enemy8.isDed[j][i])Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
+						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
 
 					}
 				}
 			}
 		}
 
-		//ミニマップシカクシ
+		//ミニマップシシカク
 		if (enemy2.hostIsAlive)
 		{
 			for (int j = 0; j < 4; j++)
@@ -1181,8 +1182,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy2.childIsAlive[j][i])
 					{
-						if (!enemy2.isDed[j][i])Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Novice::DrawEllipse(int((30 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int(int(1050 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
+						if (!enemy2.isDed[j][i])Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
+						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
 					}
 				}
 			}
