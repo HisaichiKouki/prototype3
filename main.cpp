@@ -2,6 +2,7 @@
 #include "Headers.h"
 #include <corecrt_math.h>
 #include "MatrixCalc.h"
+#include "collision.h"
 
 const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
 
@@ -473,7 +474,48 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (player.dashAttack)
 		{
-
+			if (enemy1.isAlive)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					if (!enemy1.isDed[i])enemy1.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy1.relativePos[i], enemy1.radius);
+				}
+			}
+			if (enemy2.isAlive)
+			{
+				for (int i = 0; i < kEnemy2Num; i++)
+				{
+					if (!enemy2.isDed[i])enemy2.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy2.relativePos[i], enemy2.radius);
+				}
+			}
+			if (enemy3.isAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy3.isDed[i])enemy3.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy3.relativePos[i], enemy3.radius);
+				}
+			}
+			if (enemy4.isAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy4.isDed[i])enemy4.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy4.relativePos[i], enemy4.radius);
+				}
+			}
+			if (enemy5.isAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy5.isDed[i])enemy5.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy5.relativePos[i], enemy5.radius);
+				}
+			}
+			if (enemy6.isAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy6.isDed[i])enemy6.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy6.relativePos[i], enemy6.radius);
+				}
+			}
 		}
 		if (player.triangulAttack)
 		{
@@ -501,6 +543,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				for (int i = 0; i < 4; i++)
 				{
 					if (!enemy3.isDed[i])enemy3.isDed[i] = attAreaObj.TriangleCollision(enemy3.relativePos[i]);
+				}
+			}
+			if (enemy4.isAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy4.isDed[i])enemy4.isDed[i] = attAreaObj.TriangleCollision(enemy4.relativePos[i]);
+				}
+			}
+			if (enemy5.isAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy5.isDed[i])enemy5.isDed[i] = attAreaObj.TriangleCollision(enemy5.relativePos[i]);
+				}
+			}
+			if (enemy6.isAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy6.isDed[i])enemy6.isDed[i] = attAreaObj.TriangleCollision(enemy6.relativePos[i]);
 				}
 			}
 		}
@@ -545,7 +608,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy3.isAlive)
 		{
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				if (enemy3.isDed[i])
 				{
@@ -559,7 +622,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy4.isAlive)
 		{
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				if (enemy4.isDed[i])
 				{
@@ -573,7 +636,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy5.isAlive)
 		{
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				if (enemy5.isDed[i])
 				{
@@ -587,7 +650,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy6.isAlive)
 		{
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				if (enemy6.isDed[i])
 				{
@@ -737,6 +800,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), "enemy2.isDed[%d]=%d", i, enemy2.isDed[i]);
 			Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y + 20), "enemy2.dedTimer[%d]=%d", i, enemy2.dedTimer[i]);
+		}
+
+		Novice::ScreenPrintf(int(enemy3.centorPos.x + scroll.x), int(enemy3.centorPos.y + scroll.y), "enemy3.isAlive=%d", enemy3.isAlive);
+		for (int i = 0; i < 4; i++)
+		{
+			if (!enemy3.isDed[i])Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, 0xff00ffff, kFillModeSolid);
+			if (enemy3.isDed[i] && enemy3.dedTimer[i] > 0)
+			{
+				Novice::DrawEllipse(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius), int(enemy3.radius), 0, BLUE, kFillModeSolid);
+			}
+			Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), "enemy3.isDed[%d]=%d", i, enemy3.isDed[i]);
+			Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y + 20), "enemy3.dedTimer[%d]=%d", i, enemy3.dedTimer[i]);
 		}
 
 		Novice::ScreenPrintf(int(enemy4.centorPos.x + scroll.x), int(enemy4.centorPos.y + scroll.y), "enemy4.isAlive=%d", enemy4.isAlive);
