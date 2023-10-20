@@ -155,11 +155,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 		//攻撃終わりにAボタンを押した時
-		if (player.trigerA && player.aimTimer == 0)
+		if (player.trigerA && player.aimTimer == 0&&!player.dashAttack)
 		{
 			//移動入力がされている時
 			if (player.direction.x!=0|| player.direction.y!=0)
 			{
+				
 				//点がプレイヤーの位置に番号順で設置される
 				player.prepos[player.count] = player.pos;
 				//プレイヤーの速度を等倍に
@@ -213,7 +214,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			player.flickTimer--;
 			//スティックが端に行ったら
-			if (player.flickLength > 32000&&!player.aim)
+			if (player.flickLength > 32000&&!player.aim&&!player.triangulAttack)
 			{
 				//フリックをTRUEに
 				player.flick = true;
@@ -227,7 +228,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (preJoyStickX<dedZone * 120 && preJoyStickX > -dedZone * 120 && preJoyStickY<dedZone * 120 && preJoyStickY > -dedZone * 120)
 		{
 			//フリック判定フレをリセット
-			if (!player.flick && player.flickCT == 0)player.flickTimer = 1;
+			if (!player.flick && player.flickCT == 0)player.flickTimer = 2;
 		}
 		//Aボタンまたはフリックしたとき
 		if (player.trigerA || player.flick && player.flickCT == 0)
@@ -247,7 +248,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//フリックも三角形も作っていないとき
-		if (!player.aim && !player.flick&& player.aimTimer<=15)
+		if (!player.aim && !player.flick&& player.aimTimer<=5)
 		{
 			//スティックで移動できるように
 			player.velocity.x = player.direction.x * player.moveSpeed;
