@@ -72,11 +72,11 @@ struct testEnemy1//三角に配置される敵
 struct testEnemy2//四角に配置される敵
 {
 	Vector2 centorPos;
-	Vector2 relativePos[25];
+	Vector2 relativePos[16];
 	Vector2 velocity;
 	float radius;
 	bool isAlive;
-	bool isDed[25];
-	int dedTimer[25];
-	Vector2 posReset[25];
+	bool isDed[16];
+	int dedTimer[16];
+	Vector2 posReset[16];
 };

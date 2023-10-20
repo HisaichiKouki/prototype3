@@ -54,33 +54,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	testEnemy2 enemy2{};
 	enemy2.radius = 50;
-	//四角上の辺
-	enemy2.posReset[0] = { enemy2.centorPos.x - 2 * enemy2.radius *3 ,enemy2.centorPos.y - 3 * enemy2.radius *3 };
-	enemy2.posReset[1] = { enemy2.centorPos.x - 1 * enemy2.radius *3 ,enemy2.centorPos.y - 3 * enemy2.radius *3 };
-	enemy2.posReset[2] = { enemy2.centorPos.x - 0 * enemy2.radius *3 ,enemy2.centorPos.y - 3 * enemy2.radius *3 };
-	enemy2.posReset[3] = { enemy2.centorPos.x + 1 * enemy2.radius *3 ,enemy2.centorPos.y - 3 * enemy2.radius *3 };
-	enemy2.posReset[4] = { enemy2.centorPos.x + 2 * enemy2.radius *3 ,enemy2.centorPos.y - 3 * enemy2.radius *3 };
+	const int kEnemy2Num = 16;
 
-	//右の辺
-	enemy2.posReset[5] = { enemy2.centorPos.x + 3 * enemy2.radius *3 ,enemy2.centorPos.y - 2 * enemy2.radius *3 };
-	enemy2.posReset[6] = { enemy2.centorPos.x + 3 * enemy2.radius *3 ,enemy2.centorPos.y - 1 * enemy2.radius *3 };
-	enemy2.posReset[7] = { enemy2.centorPos.x + 3 * enemy2.radius *3 ,enemy2.centorPos.y - 0 * enemy2.radius *3 };
-	enemy2.posReset[8] = { enemy2.centorPos.x + 3 * enemy2.radius *3 ,enemy2.centorPos.y + 1 * enemy2.radius *3 };
-	enemy2.posReset[9] = { enemy2.centorPos.x + 3 * enemy2.radius *3 ,enemy2.centorPos.y + 2 * enemy2.radius *3 };
 
-	//下の辺
-	enemy2.posReset[10] = { enemy2.centorPos.x + 2 * enemy2.radius *3 ,enemy2.centorPos.y + 3 * enemy2.radius *3 };
-	enemy2.posReset[11] = { enemy2.centorPos.x + 1 * enemy2.radius *3 ,enemy2.centorPos.y + 3 * enemy2.radius *3 };
-	enemy2.posReset[12] = { enemy2.centorPos.x + 0 * enemy2.radius *3 ,enemy2.centorPos.y + 3 * enemy2.radius *3 };
-	enemy2.posReset[13] = { enemy2.centorPos.x - 1 * enemy2.radius *3 ,enemy2.centorPos.y + 3 * enemy2.radius *3 };
-	enemy2.posReset[14] = { enemy2.centorPos.x - 2 * enemy2.radius *3 ,enemy2.centorPos.y + 3 * enemy2.radius *3 };
+	enemy2.posReset[14] = { enemy2.centorPos.x - 2 * enemy2.radius * 3 ,enemy2.centorPos.y + 3 * enemy2.radius * 3 };
 
-	//左の辺
-	enemy2.posReset[15] = { enemy2.centorPos.x - 3 * enemy2.radius *3 ,enemy2.centorPos.y + 2 * enemy2.radius *3 };
-	enemy2.posReset[16] = { enemy2.centorPos.x - 3 * enemy2.radius *3 ,enemy2.centorPos.y + 1 * enemy2.radius *3 };
-	enemy2.posReset[17] = { enemy2.centorPos.x - 3 * enemy2.radius *3 ,enemy2.centorPos.y + 0 * enemy2.radius *3 };
-	enemy2.posReset[18] = { enemy2.centorPos.x - 3 * enemy2.radius *3 ,enemy2.centorPos.y - 1 * enemy2.radius *3 };
-	enemy2.posReset[19] = { enemy2.centorPos.x - 3 * enemy2.radius *3 ,enemy2.centorPos.y - 2 * enemy2.radius *3 };
+	enemy2.posReset[0] = { enemy2.centorPos.x - enemy2.radius * 4.5f ,enemy2.centorPos.y - enemy2.radius * 7.5f };
+	enemy2.posReset[1] = { enemy2.centorPos.x - enemy2.radius * 1.5f ,enemy2.centorPos.y - enemy2.radius * 7.5f };
+	enemy2.posReset[2] = { enemy2.centorPos.x + enemy2.radius * 1.5f ,enemy2.centorPos.y - enemy2.radius * 7.5f };
+	enemy2.posReset[3] = { enemy2.centorPos.x + enemy2.radius * 4.5f ,enemy2.centorPos.y - enemy2.radius * 7.5f };
+
+	enemy2.posReset[4] = { enemy2.centorPos.x + enemy2.radius * 7.5f ,enemy2.centorPos.y - enemy2.radius * 4.5f };
+	enemy2.posReset[5] = { enemy2.centorPos.x + enemy2.radius * 7.5f ,enemy2.centorPos.y - enemy2.radius * 1.5f };
+	enemy2.posReset[6] = { enemy2.centorPos.x + enemy2.radius * 7.5f ,enemy2.centorPos.y + enemy2.radius * 1.5f };
+	enemy2.posReset[7] = { enemy2.centorPos.x + enemy2.radius * 7.5f ,enemy2.centorPos.y + enemy2.radius * 4.5f };
+
+	enemy2.posReset[8] = { enemy2.centorPos.x + enemy2.radius * 4.5f ,enemy2.centorPos.y + enemy2.radius * 7.5f };
+	enemy2.posReset[9] = { enemy2.centorPos.x + enemy2.radius * 1.5f ,enemy2.centorPos.y + enemy2.radius * 7.5f };
+	enemy2.posReset[10] = { enemy2.centorPos.x - enemy2.radius * 1.5f ,enemy2.centorPos.y + enemy2.radius * 7.5f };
+	enemy2.posReset[11] = { enemy2.centorPos.x - enemy2.radius * 4.5f ,enemy2.centorPos.y + enemy2.radius * 7.5f };
+
+	enemy2.posReset[12] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y + enemy2.radius * 4.5f };
+	enemy2.posReset[13] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y + enemy2.radius * 1.5f };
+	enemy2.posReset[14] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y - enemy2.radius * 1.5f };
+	enemy2.posReset[15] = { enemy2.centorPos.x - enemy2.radius * 7.5f ,enemy2.centorPos.y - enemy2.radius * 4.5f };
 
 
 
@@ -88,7 +85,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	{
 		enemy1.dedTimer[i] = 30;
 	}
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < kEnemy2Num; i++)
 	{
 		enemy2.dedTimer[i] = 30;
 	}
@@ -124,6 +121,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
 
+
+
 		//enemy1reset
 		if (keys[DIK_R])
 		{
@@ -142,7 +141,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				enemy2.isAlive = true;
 				enemy2.centorPos = { 0,0 };
-				for (int i = 0; i < 20; i++)
+				for (int i = 0; i < kEnemy2Num; i++)
 				{
 					enemy2.relativePos[i] = enemy2.posReset[i];
 					enemy2.dedTimer[i] = 30;
@@ -345,7 +344,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (enemy2.isAlive)
 		{
 			enemy2.centorPos.x++;
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < kEnemy2Num; i++)
 			{
 				enemy2.relativePos[i].x++;
 
@@ -356,12 +355,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (player.dashAttack)
 		{
+
 		}
 		if (player.triangulAttack)
 		{
 
 			// 敵の生存フラグを当たり判定によって更新
 			isEnemyDead = attAreaObj.TriangleCollision(enemyPos);
+
 
 			if (enemy1.isAlive)
 			{
@@ -373,7 +374,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (enemy2.isAlive)
 			{
-				for (int i = 0; i < 20; i++)
+				for (int i = 0; i < kEnemy2Num; i++)
 				{
 					if (!enemy2.isDed[i])enemy2.isDed[i] = attAreaObj.TriangleCollision(enemy2.relativePos[i]);
 
@@ -401,7 +402,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy2.isAlive)
 		{
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < kEnemy2Num; i++)
 			{
 				if (enemy2.isDed[i])
 				{
@@ -410,8 +411,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (enemy2.dedTimer[0] <= 0 && enemy2.dedTimer[1] <= 0 && enemy2.dedTimer[2] <= 0 && enemy2.dedTimer[3] <= 0 && enemy2.dedTimer[4] <= 0
 					&& enemy2.dedTimer[5] <= 0 && enemy2.dedTimer[6] <= 0 && enemy2.dedTimer[7] <= 0 && enemy2.dedTimer[8] <= 0 && enemy2.dedTimer[9] <= 0
 					&& enemy2.dedTimer[10] <= 0 && enemy2.dedTimer[11] <= 0 && enemy2.dedTimer[12] <= 0 && enemy2.dedTimer[13] <= 0 && enemy2.dedTimer[14] <= 0
-					&& enemy2.dedTimer[15] <= 0 && enemy2.dedTimer[16] <= 0 && enemy2.dedTimer[17] <= 0 && enemy2.dedTimer[18] <= 0 && enemy2.dedTimer[19] <= 0
-					)
+					&& enemy2.dedTimer[15] <= 0
+					)//&& enemy2.dedTimer[16] <= 0 && enemy2.dedTimer[17] <= 0 && enemy2.dedTimer[18] <= 0 && enemy2.dedTimer[19] <= 0
 				{
 					enemy2.isAlive = false;
 
@@ -549,7 +550,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		Novice::ScreenPrintf(int(enemy2.centorPos.x + scroll.x), int(enemy2.centorPos.y + scroll.y), "enemy2.isAlive=%d", enemy2.isAlive);
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < kEnemy2Num; i++)
 		{
 			if (!enemy2.isDed[i])Novice::DrawEllipse(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), int(enemy2.radius), int(enemy2.radius), 0, 0xff00ffff, kFillModeSolid);
 			if (enemy2.isDed[i] && enemy2.dedTimer[i] > 0)
