@@ -72,15 +72,17 @@ struct testEnemy1//三角に配置される敵
 
 struct testEnemy2//四角に配置される敵
 {
-	Vector2 centorPos;
-	Vector2 relativePos[16];
-	Vector2 velocity;
+	Vector2 centorPos[4];
+	Vector2 relativePos[4][16];
+	Vector2 velocity[4];
 	float radius;
-	bool parentIsAlive;
-	bool childIsAlive[16];
-	bool isDed[16];
-	int dedTimer[16];
-	Vector2 posReset[16];
+	bool parentIsAlive[4];
+	bool childIsAlive[4][16];
+	bool isDed[4][16];
+	int dedTimer[4][16];
+	Vector2 posReset[4][16];
+	bool hostIsAlive;
+
 };
 
 struct testEnemy3//１列に配置される敵
