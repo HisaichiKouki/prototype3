@@ -57,6 +57,25 @@ struct AttackAreaData
 	Vector2 position[3];
 };
 
+struct Count
+{
+	float count;
+	float preCount;
+	float endCount;
+};
+struct Ennergy
+{
+	float count;
+	float max;
+	float dashRate;
+	float triangleRate;
+	float powerUp;
+	bool fever;
+	float feverTime;
+	bool dash;
+	bool triangle;
+};
+
 struct testEnemy1//三角に配置される敵
 {
 	Vector2 centorPos;
@@ -82,7 +101,7 @@ struct testEnemy2//四角に配置される敵
 	int dedTimer[4][16];
 	Vector2 posReset[4][16];
 	bool hostIsAlive;
-
+	float easeT;
 };
 
 struct testEnemy3//１列に配置される敵
@@ -96,7 +115,7 @@ struct testEnemy3//１列に配置される敵
 	bool isDed[4];
 	int dedTimer[4];
 	Vector2 posReset[4];
-
+	float easeT;
 };
 struct testEnemy4//八方向１列に配置される敵
 {
@@ -110,7 +129,7 @@ struct testEnemy4//八方向１列に配置される敵
 	int dedTimer[8][4];
 	Vector2 posReset[8][4];
 	bool hostIsAlive;
-
+	float easeT;
 };
 
 struct testEnemy5//１列に配置される敵
@@ -125,7 +144,7 @@ struct testEnemy5//１列に配置される敵
 	int dedTimer[4][12];
 	Vector2 posReset[4][12];
 	bool hostIsAlive;
-
+	float easeT;
 };
 
 
