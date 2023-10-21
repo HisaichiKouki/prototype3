@@ -355,6 +355,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int quickTimer = 0;
 
 	int gameTimer = 0;
+
+
+
+
+	int score = 0;//これがスコア
+	int plusScore = 10;//1体何点か
+	bool scoreAdd = false;
+
 	// クラス変数の宣言
 	Func Functions;
 	AttackAreaObject attAreaObj;
@@ -394,6 +402,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (allReset)
 		{
+			score = 0;
+			plusScore = 10;
+			scoreAdd = false;
 			for (int i = 0; i < variation; i++)
 			{
 				patterrnIsAlive[i] = false;
@@ -586,6 +597,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			allReset = false;
 		}
+
+
 #pragma region count
 		//倒した数のカウント
 		if (!player.dashAttack)
@@ -614,14 +627,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (!player.dashAttack && !player.triangulAttack)
 		{
-			if (endCount == 0)endCount = count - precount;
-			//precount = count;
+			if (endCount == 0)
+			{
+				endCount = count - precount;
+				scoreAdd = true;//攻撃が終わったら１フレだけ起動するフラグを立てる
+			}
+			precount = count;
 		}
 		else
 		{
 			endCount = 0;
 		}
 #pragma endregion
+
+		//スコア加算
+		if (ennergy.fever)
+		{
+			plusScore = 20;
+		}
+		else
+		{
+			plusScore = 10;
+		}
+
+		if (scoreAdd)
+		{
+			score += int((endCount * plusScore) * (endCount / 10 + 1));//一回に倒した数×スコアの倍率をかける
+			scoreAdd = false;
+		}
+
 #pragma region ennegy
 		//ゲージ処理
 		if (!ennergy.fever)
@@ -831,12 +865,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (quickFlag)
 		{
 			if (quickTimer == 0)quickTimer = 450;
-		
+
 		}
 		if (quickTimer > 0)
 		{
 			quickTimer--;
-			if (quickTimer == 0&& quickFlag)
+			if (quickTimer == 0 && quickFlag)
 			{
 				for (int i = 0; i < 10; i++)
 				{
@@ -845,7 +879,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						patterrnIsAlive[randSpown] = true;
 						preQuickSpown = randSpown;
-						quickFlag=false;
+						quickFlag = false;
 						break;
 					}
 				}
@@ -1329,6 +1363,41 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
+		
+		if (gameTimer < 6000)
+		{
+
+
+			//攻撃終わりにAボタンを押した時
+			if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
+			{
+				//移動入力がされている時
+				if (player.direction.x != 0 || player.direction.y != 0)
+				{
+
+					//点がプレイヤーの位置に番号順で設置される
+					player.prepos[player.count] = player.pos;
+					//点の座標を番号順に記録
+					attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
+					//プレイヤーの速度を等倍に
+					player.velocityRatio = 1;
+					player.aim = true;
+					//点を出したら次の点を出すためにカウントを足す
+					player.count++;
+					if (player.count >= 3)
+					{
+						//三点設置したら設置フェーズをおわる
+						player.count = 0;
+						player.aim = false;
+						player.aimTimer = 30;//攻撃時間を代入
+						player.triangulAttack = true;//三角形攻撃を有効に
+
+					}
+				}
+
+
+			}
+		}
 		//三角形を出した後の攻撃時間
 		if (player.aimTimer > 0)
 		{
@@ -1347,35 +1416,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					player.prepos[i] = { 0,0 };
 				}
 			}
-		}
-		//攻撃終わりにAボタンを押した時
-		if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
-		{
-			//移動入力がされている時
-			if (player.direction.x != 0 || player.direction.y != 0)
-			{
-
-				//点がプレイヤーの位置に番号順で設置される
-				player.prepos[player.count] = player.pos;
-				//点の座標を番号順に記録
-				attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
-				//プレイヤーの速度を等倍に
-				player.velocityRatio = 1;
-				player.aim = true;
-				//点を出したら次の点を出すためにカウントを足す
-				player.count++;
-				if (player.count >= 3)
-				{
-					//三点設置したら設置フェーズをおわる
-					player.count = 0;
-					player.aim = false;
-					player.aimTimer = 30;//攻撃時間を代入
-					player.triangulAttack = true;//三角形攻撃を有効に
-
-				}
-			}
-
-
 		}
 		//ボタン入力ここまで
 
@@ -1405,20 +1445,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			player.direction = { 0,0 };
 		}
 
-		//はじき判定
-		//フリック判定フレが0以上の時
-		if (player.flickTimer > 0)
+		if (gameTimer > 0 && gameTimer < 6000)
 		{
-			player.flickTimer--;
-			//スティックが端に行ったら
-			if (player.flickLength > 32000 && !player.aim && !player.triangulAttack)
+
+
+			//はじき判定
+			//フリック判定フレが0以上の時
+			if (player.flickTimer > 0)
 			{
-				//フリックをTRUEに
-				player.flick = true;
-				//突撃フラグを有効に
-				player.dashAttack = true;
-				//速度を等倍に
-				player.velocityRatio = 1;
+				player.flickTimer--;
+				//スティックが端に行ったら
+				if (player.flickLength > 32000 && !player.aim && !player.triangulAttack)
+				{
+					//フリックをTRUEに
+					player.flick = true;
+					//突撃フラグを有効に
+					player.dashAttack = true;
+					//速度を等倍に
+					player.velocityRatio = 1;
+				}
 			}
 		}
 		//スティックのポジションがデッドゾーンの中の時
@@ -1427,46 +1472,54 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//フリック判定フレをリセット
 			if (!player.flick && player.flickCT == 0)player.flickTimer = 2;
 		}
-		//Aボタンまたはフリックしたとき
-		if (player.trigerA || player.flick && player.flickCT == 0)
+		if (gameTimer < 6000)
 		{
-			//方向に発射速度をかける
-			player.velocity.x = player.direction.x * player.shotSpeed;
-			player.velocity.y = player.direction.y * player.shotSpeed;
 
-			if (ennergy.fever)
+
+			//Aボタンまたはフリックしたとき
+			if (player.trigerA || player.flick && player.flickCT == 0)
 			{
-				//フィーバーの倍率をかける
-				player.velocity.x = player.direction.x * player.shotSpeed * ennergy.powerUp;
-				player.velocity.y = player.direction.y * player.shotSpeed * ennergy.powerUp;
+				//方向に発射速度をかける
+				player.velocity.x = player.direction.x * player.shotSpeed;
+				player.velocity.y = player.direction.y * player.shotSpeed;
+
+				if (ennergy.fever)
+				{
+					//フィーバーの倍率をかける
+					player.velocity.x = player.direction.x * player.shotSpeed * ennergy.powerUp;
+					player.velocity.y = player.direction.y * player.shotSpeed * ennergy.powerUp;
+
+				}
 
 			}
 
+			//割合をかける事で徐々に減速する
+			player.velocity.x *= player.velocityRatio;
+			player.velocity.y *= player.velocityRatio;
+
+
+
+
+			//フリックも三角形も作っていないとき
+			if (!player.aim && !player.flick && player.aimTimer <= 5)
+			{
+				if (length >= dedZone)
+				{
+					//スティックで移動できるように
+					player.velocity.x = player.joystick.x / 100 * player.moveSpeed;
+					player.velocity.y = player.joystick.y / 100 * player.moveSpeed;
+				}
+				else
+				{
+					player.velocity = { 0,0 };
+				}
+
+			}
 		}
-
-		//割合をかける事で徐々に減速する
-		player.velocity.x *= player.velocityRatio;
-		player.velocity.y *= player.velocityRatio;
-
-
-
-
-		//フリックも三角形も作っていないとき
-		if (!player.aim && !player.flick && player.aimTimer <= 5)
+		else
 		{
-			if (length >= dedZone)
-			{
-				//スティックで移動できるように
-				player.velocity.x = player.joystick.x / 100 * player.moveSpeed;
-				player.velocity.y = player.joystick.y / 100 * player.moveSpeed;
-			}
-			else
-			{
-				player.velocity = { 0,0 };
-			}
-
+			player.velocity = { 0,0 };
 		}
-
 		///スティック入力ここまで
 #pragma endregion
 		/// キー入力（デバッグ) ここから
@@ -2772,6 +2825,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, 500, "ennergy.count=%f", ennergy.count);
 		Novice::ScreenPrintf(0, 520, "screenSize=%f", screenSize);
 		Novice::ScreenPrintf(0, 540, "gameTimer=%d seconds=%d", gameTimer, gameTimer / 60);
+		Novice::ScreenPrintf(0, 560, "score=%d", score);
 
 		for (int i = 0; i < variation; i++)
 		{
@@ -2780,8 +2834,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//Novice::ScreenPrintf(1000, 0, "enemy7.count=%d", enemy7.count);
 		Novice::ScreenPrintf(700, 20 * variation, "randSpown=%d", randSpown);
-		Novice::ScreenPrintf(700, 20+20 * variation, "preRandSpown=%d", preRandSpown);
-		Novice::ScreenPrintf(700, 40+20 * variation, "preQuickSpown=%d", preQuickSpown);
+		Novice::ScreenPrintf(700, 20 + 20 * variation, "preRandSpown=%d", preRandSpown);
+		Novice::ScreenPrintf(700, 40 + 20 * variation, "preQuickSpown=%d", preQuickSpown);
 		Novice::ScreenPrintf(1000, 0, "enemy2.hostIsAlive=%d", enemy2.hostIsAlive);
 		Novice::ScreenPrintf(1000, 20, "enemy7.hostIsAlive=%d", enemy7.hostIsAlive);
 		Novice::ScreenPrintf(1000, 40, "enemy8.hostIsAlive=%d", enemy8.hostIsAlive);
@@ -2791,12 +2845,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//一番後ろの背景
 		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x222222ff, kFillModeSolid);
 		//フィールドの画像表示
-		Functions.DrawQuadPlus(int(scroll.x), int(scroll.y), int(fieldRadius * 2 / screenSize), int(fieldRadius * 2 / screenSize), 1.0f, 1.0f, 0, 0, 0, 4000, 4000, fieldTexture, 0xffffffff);
+		Functions.DrawQuadPlus(int(scroll.x), int(scroll.y), int(fieldRadius * 2 / screenSize), int(fieldRadius * 2 / screenSize), 1.0f, 1.0f, 0, 0, 0, 4000, 4000, fieldTexture, 0x999999ff);
 		//三角形を作った時
-		if (player.aim)Novice::DrawBox(0, 0, 1920, 1080, 0, 0x88888844, kFillModeSolid);
+		if (player.aim)Novice::DrawBox(0, 0, 1920, 1080, 0, 0x88888822, kFillModeSolid);
 		//三角形で攻撃時間
-		if (player.aimTimer > 0)Novice::DrawBox(0, 0, 1920, 1080, 0, 0xaa888844, kFillModeSolid);
-		if (player.aimTimer > 0)Novice::DrawTriangle(int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y), int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y), int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y), RED, kFillModeSolid);
+		if (player.aimTimer > 0)Novice::DrawBox(0, 0, 1920, 1080, 0, 0xaa666611, kFillModeSolid);
 
 		//デバッグ用
 		Novice::DrawEllipse(int(100 + player.joystick.x), int(100 + player.joystick.y), 10, 10, 0, GREEN, kFillModeSolid);//直接入力
@@ -2808,17 +2861,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フィールドの円周
 		Novice::DrawEllipse(int(scroll.x), int(scroll.y), (int)(fieldRadius / screenSize), (int)(fieldRadius / screenSize), 0, GREEN, kFillModeWireFrame);
 
-		//三角形の点
-		for (int i = 0; i < 3; i++)
-		{
-			if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, RED, kFillModeSolid);
-		}
+		
 		//スポーン地点
 		Novice::DrawBox(int(-50 / screenSize + scroll.x), int(-50 / screenSize + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);
 		//プレイヤーの方向表示
 		Novice::DrawLine(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.pos.x / screenSize + scroll.x + player.direction.x / screenSize * 150), int(player.pos.y / screenSize + scroll.y + player.direction.y / screenSize * 150), WHITE);
 		//プレイヤー
-		Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, GREEN, kFillModeSolid);
+		Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
 		//プレイヤーフリック時
 		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);
 
@@ -2959,6 +3008,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 #pragma endregion
+
+		if (player.aimTimer > 0)Novice::DrawTriangle(int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y), int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y), int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y), 0x55cc5577, kFillModeSolid);
+
+		//点と点を結ぶ線
+		if (player.prepos[0].x != 0 && player.prepos[1].x != 0)Novice::DrawLine(int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y), int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y), 0x00ff00ff);
+		if (player.prepos[0].x != 0 && player.prepos[1].x != 0)Novice::DrawLine(int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y - 1), int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y - 1), 0x00ff00ff);
+		if (player.prepos[0].x != 0 && player.prepos[1].x != 0)Novice::DrawLine(int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y + 1), int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y + 1), 0x00ff00ff);
+		if (player.prepos[1].x != 0 && player.prepos[2].x != 0)Novice::DrawLine(int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y), int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y), 0x00ff00ff);
+		if (player.prepos[1].x != 0 && player.prepos[2].x != 0)Novice::DrawLine(int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y - 1), int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y - 1), 0x00ff00ff);
+		if (player.prepos[1].x != 0 && player.prepos[2].x != 0)Novice::DrawLine(int(player.prepos[1].x / screenSize + scroll.x), int(player.prepos[1].y / screenSize + scroll.y + 1), int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y + 1), 0x00ff00ff);
+		if (player.prepos[2].x != 0 && player.prepos[0].x != 0)Novice::DrawLine(int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y), int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y), 0x00ff00ff);
+		if (player.prepos[2].x != 0 && player.prepos[0].x != 0)Novice::DrawLine(int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y - 1), int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y - 1), 0x00ff00ff);
+		if (player.prepos[2].x != 0 && player.prepos[0].x != 0)Novice::DrawLine(int(player.prepos[2].x / screenSize + scroll.x), int(player.prepos[2].y / screenSize + scroll.y + 1), int(player.prepos[0].x / screenSize + scroll.x), int(player.prepos[0].y / screenSize + scroll.y + 1), 0x00ff00ff);
+		//三角形の点
+		for (int i = 0; i < 3; i++)
+		{
+			if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, 0x00ff00ff, kFillModeSolid);
+		}
 		//フィーバーゲージ仮
 		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 450, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
 		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), int(450 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
@@ -2969,10 +3036,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::DrawEllipse(int(50 + fieldRadius / miniMap), int(1020 - fieldRadius / miniMap), int(fieldRadius / miniMap), int(fieldRadius / miniMap), 0, GREEN, kFillModeWireFrame);
 		for (int i = 0; i < 3; i++)
 		{//ミニマップ三角形の点
-			if (player.prepos[i].x != 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.prepos[i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[i].y / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), 0, RED, kFillModeSolid);
+			if (player.prepos[i].x != 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.prepos[i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[i].y / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), 0, 0x00ff00ff, kFillModeSolid);
 		}
 		//ミニマップ範囲
-		if (player.aimTimer > 0)Novice::DrawTriangle(int((50 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), RED, kFillModeSolid);
+		if (player.aimTimer > 0)Novice::DrawTriangle(int((50 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), 0x55cc5577, kFillModeSolid);
 		//ミニマッププレイヤー
 		Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, GREEN, kFillModeSolid);
 
