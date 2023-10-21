@@ -8,9 +8,7 @@
 //    return setRand(mt);
 //}
 Vector2 randShake(int radiusX, int radiusY,int seed)
-{
-
-   
+{ 
    unsigned int currentTime = int(time(nullptr));
     srand(currentTime*seed+ currentTime % seed-seed);
     seed *= rand();

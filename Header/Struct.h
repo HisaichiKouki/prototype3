@@ -89,6 +89,8 @@ struct testEnemy1//三角に配置される敵
 	bool isDed[3];
 	int dedTimer[3];
 	Vector2 posReset[3];
+	float easeT;
+
 };
 
 struct testEnemy2//四角に配置される敵
