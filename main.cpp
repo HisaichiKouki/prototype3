@@ -50,8 +50,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region enemy1//小さい三角形
 
 	testEnemy1 enemy1{};
-	enemy1.parentIsAlive = false;
-	enemy1.centorPos = { 0,0 };
 	enemy1.radius = enemyRadius;
 	enemy1.posReset[0] = { enemy1.centorPos.x,enemy1.centorPos.y - (enemy1.radius * 1.5f) };
 	enemy1.posReset[1] = { enemy1.centorPos.x - (enemy1.radius * 1.5f),enemy1.centorPos.y + (enemy1.radius * 1.5f) };
@@ -314,7 +312,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 #pragma endregion
 	testEnemy7 enemy13{};
-
 	enemy13.length = 1340;
 
 
@@ -380,27 +377,187 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
-		if (keys[DIK_RETURN])
+		if (keys[DIK_RETURN] && !preKeys[DIK_RETURN])
 		{
-			gameTimer = 0;
+			allReset = true;
 		}
 
 
 		if (allReset)
 		{
+			shakeGaugePos = { 0,0 };
+			shakeGaugeX = shakeRadius;
+			shakeGaugeY = shakeRadius;
+			shakeGaugeSeed = 1;
+			screenSize = 1.0f;
+			setScreenEaseT = 0;
+			setScreenEaseTChange = 1;
+			ennergy.count = 0;
+			ennergy.damageFlag = false;
+			ennergy.dash = false;
+			ennergy.triangle = false;
+			ennergy.fever = false;
+			dash.count = 0;
+			dash.endCount = 0;
+			dash.preCount = 0;
+			count = 0;
+			precount = 0;
+			endCount = 0;
+			triangle.count = 0;
+			triangle.endCount = 0;
+			triangle.preCount = 0;
+#pragma region enemyReset
+			enemy2.radius = 0;
+			enemy2.easeT = 0;
 
+			for (int j = 0; j < 4; j++)
+			{
+				enemy2.parentIsAlive[j] = false;
+				for (int i = 0; i < kEnemy2Num; i++)
+				{
+					enemy2.childIsAlive[j][i] = false;
+					enemy2.dedTimer[j][i] = 0;
+					enemy2.isDed[j][i] = false;
+				}
+			}
+			enemy5.easeT = 0;
+			enemy5.radius = 0;
+			enemy5.parentIsAlive = false;
+			for (int i = 0; i < 4; i++)
+			{
+				enemy5.childIsAlive[i] = false;
+				enemy5.dedTimer[i] = 0;
+				enemy5.isDed[i] = false;
+			}
+			enemy6.easeT = 0;
+			enemy6.radius = 0;
+			enemy6.parentIsAlive = false;
+			for (int i = 0; i < 4; i++)
+			{
+				enemy6.childIsAlive[i] = false;
+				enemy6.dedTimer[i] = 0;
+				enemy6.isDed[i] = false;
+			}
+			enemy7.radius = 0;
+			enemy7.easeT = 0;
 
-			for (int i = 0; i < 60; i++)
+			for (int j = 0; j < 8; j++)
+			{
+				enemy7.parentIsAlive[j] = false;
+				for (int i = 0; i < 4; i++)
+				{
+					enemy7.childIsAlive[j][i] = false;
+					enemy7.dedTimer[j][i] = 0;
+					enemy7.isDed[j][i] = false;
+				}
+
+			}
+			enemy7.hostIsAlive = false;
+			enemy8.radius = 0;
+			enemy8.easeT = 0;
+			for (int j = 0; j < 4; j++)
+			{
+				enemy8.parentIsAlive[j] = false;
+				for (int i = 0; i < 12; i++)
+				{
+					enemy8.childIsAlive[j][i] = false;
+					enemy8.dedTimer[j][i] = 0;
+					enemy8.isDed[j][i] = false;
+				}
+			}
+			enemy8.hostIsAlive = false;
+
+			enemy9.radius = 0;
+			enemy9.easeT = 0;
+
+			for (int j = 0; j < 2; j++)
+			{
+				enemy9.parentIsAlive[j] = false;
+				for (int i = 0; i < 8; i++)
+				{
+					enemy9.childIsAlive[j][i] = false;
+					enemy9.dedTimer[j][i] = 0;
+					enemy9.isDed[j][i] = false;
+				}
+			}
+			enemy9.hostIsAlive = false;
+			for (int j = 0; j < kenemy10Num; j++)
 			{
 
-				enemy13.radius[i] = enemyRadius;
-				enemy13.dedTimer[i] = kDedTimer;
-				enemy13.childIsAlive[i] = true;
+				enemy10[j].parentIsAlive = false;
+
+				for (int i = 0; i < 4; i++)
+				{
+					enemy10[j].childIsAlive[i] = false;
+					enemy10[j].dedTimer[i] = 0;
+					enemy10[j].isDed[i] = false;
+				}
+
+			}
+			for (int j = 0; j < kenemy11Num; j++)
+			{
+
+				enemy11[j].radius = 0;
+				enemy11[j].easeT = 0;
+				enemy11[j].parentIsAlive = false;
+
+				for (int i = 0; i < 3; i++)
+				{
+					enemy11[j].childIsAlive[i] = false;
+					enemy11[j].dedTimer[i] = 0;
+					enemy11[j].isDed[i] = false;
+				}
+
+			}
+			for (int j = 0; j < kenemy12Num; j++)
+			{
+
+				enemy12[j].radius = 0;
+				enemy12[j].easeT = 0;
+				enemy12[j].parentIsAlive = false;
+				for (int i = 0; i < 4; i++)
+				{
+					enemy12[j].childIsAlive[i] = false;
+					enemy12[j].dedTimer[i] = 0;
+					enemy12[j].isDed[i] = false;
+				}
+
+			}
+			enemy13.hostIsAlive = false;
+			for (int i = 0; i < 60; i++)
+			{
+				enemy13.easeT[i] = 0;
+				enemy13.radius[i] = 0;
+				enemy13.dedTimer[i] = 0;
+				enemy13.childIsAlive[i] = false;
+				enemy13.dedTimer[i] = 0;
+				enemy13.isDed[i] = false;
 				enemy13.z[i] = i * 6.0f;
 				enemy13.thta[i] = (enemy13.z[i] / 180) * 3.1415f;
 				enemy13.relativePos[i].x = float(cosf(enemy13.thta[i]) - sinf(enemy13.thta[i])) * enemy13.length;
 				enemy13.relativePos[i].y = float(cosf(enemy13.thta[i]) + sinf(enemy13.thta[i])) * enemy13.length;
 			}
+#pragma endregion
+
+			player.pos = { 0,0 };
+			player.velocity = { 0,0 };
+			player.aim = false;
+			player.aimTimer = 0;
+			player.count = 0;
+			player.dashAttack = false;
+			player.flick = false;
+			player.flickCT = 0;
+			player.flickLength = 0;
+			player.flickTimer = 0;
+			for (int i = 0; i < 3; i++)
+			{
+				player.prepos[i] = { 0,0 };
+			}
+			player.triangulAttack = 0;
+			player.trigerA = 0;
+			player.velocityRatio = 0;
+
+
 			gameTimer = 0;
 
 
@@ -500,15 +657,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (keys[DIK_1])
 			{
-				enemy1.parentIsAlive = true;
-				enemy1.centorPos = { 0,0 };
-				for (int i = 0; i < 3; i++)
-				{
-					enemy1.childIsAlive[i] = true;
-					enemy1.relativePos[i] = { enemy1.posReset[i].x + enemy1.centorPos.x,enemy1.posReset[i].y + enemy1.centorPos.y };
-					enemy1.dedTimer[i] = kDedTimer;
-					enemy1.isDed[i] = false;
-				}
+
 			}
 			else if (keys[DIK_2])
 			{
@@ -535,28 +684,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (keys[DIK_3])
 			{
-				enemy3.parentIsAlive = true;
-				enemy3.centorPos = { 0,0 };
-				for (int i = 0; i < 4; i++)
-				{
-					enemy3.childIsAlive[i] = true;
-					enemy3.relativePos[i] = { enemy3.posReset[i].x + enemy3.centorPos.x,enemy3.posReset[i].y + enemy3.centorPos.y };
-					enemy3.dedTimer[i] = kDedTimer;
-					enemy3.isDed[i] = false;
-				}
+
 
 			}
 			else if (keys[DIK_4])
 			{
-				enemy4.parentIsAlive = true;
-				enemy4.centorPos = { 0,0 };
-				for (int i = 0; i < 4; i++)
-				{
-					enemy4.childIsAlive[i] = true;
-					enemy4.relativePos[i] = { enemy4.posReset[i].x + enemy4.centorPos.x,enemy4.posReset[i].y + enemy4.centorPos.y };
-					enemy4.dedTimer[i] = kDedTimer;
-					enemy4.isDed[i] = false;
-				}
+
 
 			}
 			else if (keys[DIK_5])
@@ -804,7 +937,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		}
-		
+		if (gameTimer == 1)
+		{
+			enemy13.hostIsAlive = true;
+			for (int i = 0; i < 60; i++)
+			{
+				enemy13.easeT[i] = 0;
+				enemy13.radius[i] = 0;
+				enemy13.dedTimer[i] = kDedTimer;
+				enemy13.childIsAlive[i] = true;
+				enemy13.z[i] = i * 6.0f;
+				enemy13.thta[i] = (enemy13.z[i] / 180) * 3.1415f;
+				enemy13.relativePos[i].x = float(cosf(enemy13.thta[i]) - sinf(enemy13.thta[i])) * enemy13.length;
+				enemy13.relativePos[i].y = float(cosf(enemy13.thta[i]) + sinf(enemy13.thta[i])) * enemy13.length;
+			}
+		}
 
 		//敵出現のイージング
 		if (enemy2.hostIsAlive)
@@ -877,24 +1024,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 		}
-
-		for (int i = 59; i > 0; i--)
+		if (enemy13.hostIsAlive)
 		{
-			if (enemy13.easeT[i - 1] != 0)
+			for (int i = 59; i > 0; i--)
 			{
-				if (enemy13.easeT[i] < 100)enemy13.easeT[i] += 2;
-				if (enemy13.easeT[i] > 100)enemy13.easeT[i] = 100;
+				if (enemy13.easeT[i - 1] != 0)
+				{
+					if (enemy13.easeT[i] < 100)enemy13.easeT[i] += 2;
+					if (enemy13.easeT[i] > 100)enemy13.easeT[i] = 100;
 
+				}
+			}
+
+			if (enemy13.easeT[0] < 100)enemy13.easeT[0] += 2;
+			if (enemy13.easeT[0] > 100)enemy13.easeT[0] = 100;
+
+			for (int i = 0; i < 60; i++)
+			{
+				enemy13.radius[i] = easeOutElastic(enemy13.easeT[i] / 100) * enemyRadius;
 			}
 		}
-		if (enemy13.easeT[0] < 100)enemy13.easeT[0] += 2;
-		if (enemy13.easeT[0] > 100)enemy13.easeT[0] = 100;
 
-		for (int i = 0; i < 60; i++)
-		{
-			enemy13.radius[i] = easeOutElastic(enemy13.easeT[i] / 100) * enemyRadius;
-
-		}
 #pragma endregion
 #pragma region player
 		//前フレのジョイスティック情報を保存
@@ -1092,7 +1242,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//敵の移動
 #pragma region enemyMove
-		if (enemy1.parentIsAlive)
+		/*if (enemy1.parentIsAlive)
 		{
 			enemy1.centorPos.x++;
 			for (int i = 0; i < 3; i++)
@@ -1104,7 +1254,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				enemy1.parentIsAlive = false;
 			}
-		}
+		}*/
 		if (enemy2.hostIsAlive)
 		{
 			if (enemy2.easeT == 100)
@@ -1137,7 +1287,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
-		if (enemy3.parentIsAlive)
+		/*if (enemy3.parentIsAlive)
 		{
 			enemy3.centorPos.x++;
 			for (int i = 0; i < 4; i++)
@@ -1162,7 +1312,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				enemy4.parentIsAlive = false;
 			}
-		}
+		}*/
 		if (enemy5.parentIsAlive)
 		{
 			if (enemy5.easeT == 100)
@@ -1348,7 +1498,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
-		if (enemy13.easeT[59] == 100)
+		if (enemy13.easeT[59] == 100 && enemy13.hostIsAlive)
 		{
 			for (int i = 0; i < 60; i++)
 			{
@@ -1370,13 +1520,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//ダッシュ攻撃
 		if (player.dashAttack)
 		{
-			if (enemy1.parentIsAlive)
+			/*if (enemy1.parentIsAlive)
 			{
 				for (int i = 0; i < 3; i++)
 				{
 					if (!enemy1.isDed[i])enemy1.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy1.relativePos[i], enemy1.radius);
 				}
-			}
+			}*/
 			if (enemy2.hostIsAlive)
 			{
 				for (int j = 0; j < 4; j++)
@@ -1391,7 +1541,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 
-			if (enemy3.parentIsAlive)
+			/*if (enemy3.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
@@ -1404,7 +1554,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (!enemy4.isDed[i])enemy4.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy4.relativePos[i], enemy4.radius);
 				}
-			}
+			}*/
 			if (enemy5.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
@@ -1502,13 +1652,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			isEnemyDead = attAreaObj.TriangleCollision(enemyPos);
 
 
-			if (enemy1.parentIsAlive)
+			/*if (enemy1.parentIsAlive)
 			{
 				for (int i = 0; i < 3; i++)
 				{
 					if (!enemy1.isDed[i])enemy1.isDed[i] = attAreaObj.TriangleCollision(enemy1.relativePos[i]);
 				}
-			}
+			}*/
 			if (enemy2.hostIsAlive)
 			{
 				for (int j = 0; j < 4; j++)
@@ -1524,7 +1674,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 
-			if (enemy3.parentIsAlive)
+			/*if (enemy3.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
@@ -1537,7 +1687,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (!enemy4.isDed[i])enemy4.isDed[i] = attAreaObj.TriangleCollision(enemy4.relativePos[i]);
 				}
-			}
+			}*/
 			if (enemy5.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
@@ -1631,7 +1781,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region playerDamage
 		if (!player.dashAttack && !player.triangulAttack)
 		{
-			if (enemy1.parentIsAlive)
+			/*if (enemy1.parentIsAlive)
 			{
 				for (int i = 0; i < 3; i++)
 				{
@@ -1648,7 +1798,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 					}
 				}
-			}
+			}*/
 			if (enemy2.hostIsAlive)
 			{
 				for (int j = 0; j < 4; j++)
@@ -1674,7 +1824,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 
-			if (enemy3.parentIsAlive)
+			/*if (enemy3.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
 				{
@@ -1709,7 +1859,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 					}
 				}
-			}
+			}*/
 			if (enemy5.parentIsAlive)
 			{
 				for (int i = 0; i < 4; i++)
@@ -1901,7 +2051,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 		//敵のダメージ処理
 #pragma region enemyDamage
-		if (enemy1.parentIsAlive)
+		/*if (enemy1.parentIsAlive)
 		{
 			for (int i = 0; i < 3; i++)
 			{
@@ -1923,7 +2073,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					enemy1.parentIsAlive = false;
 				}
 			}
-		}
+		}*/
 		if (enemy2.hostIsAlive)
 		{
 			for (int j = 0; j < 4; j++)
@@ -1960,7 +2110,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
-		if (enemy3.parentIsAlive)
+		/*if (enemy3.parentIsAlive)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -2001,7 +2151,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					enemy4.parentIsAlive = false;
 				}
 			}
-		}
+		}*/
 		if (enemy5.parentIsAlive)
 		{
 			for (int i = 0; i < 4; i++)
@@ -2335,6 +2485,143 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//プレイヤーフリック時
 		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);
 
+
+		//仮敵描画
+#pragma region enemy
+
+		if (enemy2.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < kEnemy2Num; i++)
+				{
+					if (enemy2.childIsAlive[j][i])
+					{
+						if (!enemy2.isDed[j][i])Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+					}
+				}
+			}
+		}
+
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (enemy5.childIsAlive[i])
+			{
+				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int(enemy5.radius * 2 / screenSize), int(enemy5.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int(enemy5.radius * 2 / screenSize), int(enemy5.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+			}
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (enemy6.childIsAlive[i])
+			{
+				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int(enemy6.radius * 2 / screenSize), int(enemy6.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int(enemy6.radius * 2 / screenSize), int(enemy6.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+			}
+		}
+
+		if (enemy7.hostIsAlive)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy7.childIsAlive[j][i])
+					{
+						if (!enemy7.isDed[j][i])Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+					}
+				}
+			}
+		}
+		if (enemy8.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < 12; i++)
+				{
+					if (enemy8.childIsAlive[j][i])
+					{
+						if (!enemy8.isDed[j][i])Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+
+					}
+				}
+			}
+		}
+		if (enemy9.hostIsAlive)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					if (enemy9.childIsAlive[j][i])
+					{
+						if (!enemy9.isDed[j][i])Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+
+					}
+				}
+			}
+		}
+
+		for (int j = 0; j < kenemy10Num; j++)
+		{
+			if (enemy10[j].parentIsAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy10[j].childIsAlive[i])
+					{
+						if (!enemy10[j].isDed[i])Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+					}
+				}
+			}
+		}
+		for (int j = 0; j < kenemy11Num; j++)
+		{
+			if (enemy11[j].parentIsAlive)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					if (enemy11[j].childIsAlive[i])
+					{
+						if (!enemy11[j].isDed[i])Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+					}
+				}
+			}
+		}
+		for (int j = 0; j < kenemy12Num; j++)
+		{
+			if (enemy12[j].parentIsAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy12[j].childIsAlive[i])
+					{
+						if (!enemy12[j].isDed[i])Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+					}
+				}
+			}
+		}
+
+
+		for (int i = 0; i < 60; i++)
+		{
+			if (enemy13.childIsAlive[i])
+			{
+				if (!enemy13.isDed[i])Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
+				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+			}
+		}
+#pragma endregion
 		//フィーバーゲージ仮
 		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 450, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
 		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), int(450 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
@@ -2516,207 +2803,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
-		//仮敵描画
-		//Novice::ScreenPrintf(int(enemy1.centorPos.x + scroll.x), int(enemy1.centorPos.y + scroll.y), "enemy1.parentIsAlive=%d", enemy1.parentIsAlive);
-		for (int i = 0; i < 3; i++)
-		{
-			if (enemy1.childIsAlive[i])
-			{
-				if (!enemy1.isDed[i])Functions.DrawQuadPlus(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius * 2), int(enemy1.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
 
-				if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), int(enemy1.radius * 2), int(enemy1.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-
-			}
-
-			//Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y), "enemy1.isDed[%d]=%d", i, enemy1.isDed[i]);
-			//Novice::ScreenPrintf(int(enemy1.relativePos[i].x + scroll.x), int(enemy1.relativePos[i].y + scroll.y + 20), "enemy1.dedTimer[%d]=%d", i, enemy1.dedTimer[i]);
-		}
-
-		if (enemy2.hostIsAlive)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				//Novice::ScreenPrintf(int(enemy2.centorPos.x + scroll.x), int(enemy2.centorPos.y + scroll.y), "enemy2.parentIsAlive=%d", enemy2.parentIsAlive);
-				for (int i = 0; i < kEnemy2Num; i++)
-				{
-					if (enemy2.childIsAlive[j][i])
-					{
-						if (!enemy2.isDed[j][i])Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-					}
-					//Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y), "enemy2.isDed[%d]=%d", i, enemy2.isDed[i]);
-					//Novice::ScreenPrintf(int(enemy2.relativePos[i].x + scroll.x), int(enemy2.relativePos[i].y + scroll.y + 20), "enemy2.dedTimer[%d]=%d", i, enemy2.dedTimer[i]);
-				}
-			}
-		}
-
-
-		//Novice::ScreenPrintf(int(enemy3.centorPos.x + scroll.x), int(enemy3.centorPos.y + scroll.y), "enemy3.parentIsAlive=%d", enemy3.parentIsAlive);
-		for (int i = 0; i < 4; i++)
-		{
-			if (enemy3.childIsAlive[i])
-			{
-				if (!enemy3.isDed[i])Functions.DrawQuadPlus(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius * 2), int(enemy3.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-				if (enemy3.isDed[i] && enemy3.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), int(enemy3.radius * 2), int(enemy3.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-			}
-			//Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y), "enemy3.isDed[%d]=%d", i, enemy3.isDed[i]);
-			//Novice::ScreenPrintf(int(enemy3.relativePos[i].x + scroll.x), int(enemy3.relativePos[i].y + scroll.y + 20), "enemy3.dedTimer[%d]=%d", i, enemy3.dedTimer[i]);
-		}
-
-		//Novice::ScreenPrintf(int(enemy4.centorPos.x + scroll.x), int(enemy4.centorPos.y + scroll.y), "enemy4.parentIsAlive=%d", enemy4.parentIsAlive);
-		for (int i = 0; i < 4; i++)
-		{
-			if (enemy4.childIsAlive[i])
-			{
-				if (!enemy4.isDed[i])Functions.DrawQuadPlus(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius * 2), int(enemy4.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-				if (enemy4.isDed[i] && enemy4.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), int(enemy4.radius * 2), int(enemy4.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-			}
-			//Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y), "enemy4.isDed[%d]=%d", i, enemy4.isDed[i]);
-			//Novice::ScreenPrintf(int(enemy4.relativePos[i].x + scroll.x), int(enemy4.relativePos[i].y + scroll.y + 20), "enemy4.dedTimer[%d]=%d", i, enemy4.dedTimer[i]);
-		}
-
-		//Novice::ScreenPrintf(int(enemy5.centorPos.x + scroll.x), int(enemy5.centorPos.y + scroll.y), "enemy5.parentIsAlive=%d", enemy5.parentIsAlive);
-		for (int i = 0; i < 4; i++)
-		{
-			if (enemy5.childIsAlive[i])
-			{
-				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius * 2), int(enemy5.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), int(enemy5.radius * 2), int(enemy5.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-			}
-			//Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y), "enemy5.isDed[%d]=%d", i, enemy5.isDed[i]);
-			//Novice::ScreenPrintf(int(enemy5.relativePos[i].x + scroll.x), int(enemy5.relativePos[i].y + scroll.y + 20), "enemy5.dedTimer[%d]=%d", i, enemy5.dedTimer[i]);
-		}
-
-		//Novice::ScreenPrintf(int(enemy6.centorPos.x + scroll.x), int(enemy6.centorPos.y + scroll.y), "enemy6.parentIsAlive=%d", enemy6.parentIsAlive);
-		for (int i = 0; i < 4; i++)
-		{
-			if (enemy6.childIsAlive[i])
-			{
-				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius * 2), int(enemy6.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), int(enemy6.radius * 2), int(enemy6.radius * 2), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-			}
-			//Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y), "enemy6.isDed[%d]=%d", i, enemy6.isDed[i]);
-			//Novice::ScreenPrintf(int(enemy6.relativePos[i].x + scroll.x), int(enemy6.relativePos[i].y + scroll.y + 20), "enemy6.dedTimer[%d]=%d", i, enemy6.dedTimer[i]);
-		}
-
-		if (enemy7.hostIsAlive)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-
-				//Novice::ScreenPrintf(int(enemy7.centorPos[j].x + scroll.x), int(enemy7.centorPos[j].y + scroll.y), "enemy7[%d].parentIsAlive=%d", j, enemy7.parentIsAlive);
-				for (int i = 0; i < 4; i++)
-				{
-					if (enemy7.childIsAlive[j][i])
-					{
-						if (!enemy7.isDed[j][i])Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-					}
-					//Novice::ScreenPrintf(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y), "enemy7.isDed[%d][%d]=%d", j, i, enemy7.isDed[i]);
-					//Novice::ScreenPrintf(int(enemy7.relativePos[j][i].x + scroll.x), int(enemy7.relativePos[j][i].y + scroll.y + 20), "enemy7.dedTimer[%d][%d]=%d", j, i, enemy7.dedTimer[i]);
-				}
-
-			}
-		}
-		if (enemy8.hostIsAlive)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-
-				//Novice::ScreenPrintf(int(enemy7.centorPos[j].x + scroll.x), int(enemy7.centorPos[j].y + scroll.y), "enemy7[%d].parentIsAlive=%d", j, enemy7.parentIsAlive);
-				for (int i = 0; i < 12; i++)
-				{
-					if (enemy8.childIsAlive[j][i])
-					{
-						if (!enemy8.isDed[j][i])Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-
-					}
-					//Novice::ScreenPrintf(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y), "enemy8.isDed[%d][%d]=%d", j, i, enemy8.isDed[i]);
-					//Novice::ScreenPrintf(int(enemy8.relativePos[j][i].x + scroll.x), int(enemy8.relativePos[j][i].y + scroll.y + 20), "enemy8.dedTimer[%d][%d]=%d", j, i, enemy8.dedTimer[i]);
-				}
-
-			}
-		}
-		if (enemy9.hostIsAlive)
-		{
-			for (int j = 0; j < 2; j++)
-			{
-
-				//Novice::ScreenPrintf(int(enemy7.centorPos[j].x + scroll.x), int(enemy7.centorPos[j].y + scroll.y), "enemy7[%d].parentIsAlive=%d", j, enemy7.parentIsAlive);
-				for (int i = 0; i < 8; i++)
-				{
-					if (enemy9.childIsAlive[j][i])
-					{
-						if (!enemy9.isDed[j][i])Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-
-					}
-					//Novice::ScreenPrintf(int(enemy9.relativePos[j][i].x + scroll.x), int(enemy9.relativePos[j][i].y + scroll.y), "enemy9.isDed[%d][%d]=%d", j, i, enemy9.isDed[i]);
-					//Novice::ScreenPrintf(int(enemy9.relativePos[j][i].x + scroll.x), int(enemy9.relativePos[j][i].y + scroll.y + 20), "enemy9.dedTimer[%d][%d]=%d", j, i, enemy9.dedTimer[i]);
-				}
-
-			}
-		}
-
-		for (int j = 0; j < kenemy10Num; j++)
-		{
-			if (enemy10[j].parentIsAlive)
-			{
-				for (int i = 0; i < 4; i++)
-				{
-					if (enemy10[j].childIsAlive[i])
-					{
-						if (!enemy10[j].isDed[i])Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-					}
-					//Novice::ScreenPrintf(int(enemy10[j].relativePos[i].x + scroll.x), int(enemy10[j].relativePos[i].y + scroll.y), "enemy10[j].isDed[%d]=%d", i, enemy10[j].isDed[i]);
-					//Novice::ScreenPrintf(int(enemy10[j].relativePos[i].x + scroll.x), int(enemy10[j].relativePos[i].y + scroll.y + 20), "enemy10[j].dedTimer[%d]=%d", i, enemy10[j].dedTimer[i]);
-				}
-			}
-		}
-		for (int j = 0; j < kenemy11Num; j++)
-		{
-			if (enemy11[j].parentIsAlive)
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					if (enemy11[j].childIsAlive[i])
-					{
-						if (!enemy11[j].isDed[i])Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-					}
-					//Novice::ScreenPrintf(int(enemy11[j].relativePos[i].x + scroll.x), int(enemy11[j].relativePos[i].y + scroll.y), "enemy11[j].isDed[%d]=%d", i, enemy11[j].isDed[i]);
-					//Novice::ScreenPrintf(int(enemy11[j].relativePos[i].x + scroll.x), int(enemy11[j].relativePos[i].y + scroll.y + 20), "enemy11[j].dedTimer[%d]=%d", i, enemy11[j].dedTimer[i]);
-				}
-			}
-		}
-		for (int j = 0; j < kenemy12Num; j++)
-		{
-			if (enemy12[j].parentIsAlive)
-			{
-				for (int i = 0; i < 4; i++)
-				{
-					if (enemy12[j].childIsAlive[i])
-					{
-						if (!enemy12[j].isDed[i])Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-					}
-					//Novice::ScreenPrintf(int(enemy10[j].relativePos[i].x + scroll.x), int(enemy10[j].relativePos[i].y + scroll.y), "enemy10[j].isDed[%d]=%d", i, enemy10[j].isDed[i]);
-					//Novice::ScreenPrintf(int(enemy10[j].relativePos[i].x + scroll.x), int(enemy10[j].relativePos[i].y + scroll.y + 20), "enemy10[j].dedTimer[%d]=%d", i, enemy10[j].dedTimer[i]);
-				}
-			}
-		}
-
-
-		for (int i = 0; i < 60; i++)
-		{
-			if (enemy13.childIsAlive[i])
-			{
-				if (!enemy13.isDed[i])Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
-			}
-		}
 
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
