@@ -147,4 +147,20 @@ struct testEnemy5//１列に配置される敵
 	float easeT;
 };
 
+struct testEnemy6  //列が上下に出て中心に向かって進む
+{
+	Vector2 centorPos[2];
+	Vector2 relativePos[2][8];
+	Vector2 velocity[2][8];
+	float radius;
+	bool parentIsAlive[2];
+	bool childIsAlive[2][8];
+	bool isDed[2][8];
+	int dedTimer[2][8];
+	Vector2 posReset[2][8];
+	bool hostIsAlive;
+	float easeT;
+
+};
+
 
