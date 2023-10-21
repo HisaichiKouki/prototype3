@@ -4,7 +4,7 @@
 #include "MatrixCalc.h"
 #include "collision.h"
 #include "Easing.h"
-
+#include "randPlus.h"
 const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
 
 float clump(float a, float min, float max);
@@ -283,9 +283,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ennergy.dashRate = 3;//ダッシュは三角の数字倍貯まる
 	ennergy.triangleRate = 1;
 	ennergy.powerUp = 2.0f;//移動速度が倍になる
-	ennergy.max = 30;
+	ennergy.max = 100;
 	ennergy.fever = false;
 	ennergy.feverTime = 300;//フレーム数 実際にはちょっと長くなる
+	ennergy.damage = 0.2f;//攻撃していない時に敵に当たった時ダメージの代わりにゲージが減る
+
+	int shakeRadius = 10;
+	int shakeGaugeX = shakeRadius;
+	int shakeGaugeY = shakeRadius;
+	int shakeGaugeSeed = 1;
+	Vector2 shakeGaugePos{};
 
 	float screenSize = 1;//フィーバー中画面を小さくする
 	float setScreenSize = 2.3f;//数字が大きいほど画面が小さくなる
@@ -555,7 +562,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					for (int i = 0; i < 8; i++)
 					{
 						enemy9.childIsAlive[j][i] = true;
-						enemy9.relativePos[j][i] = {  enemy9.posReset[j][i].x , enemy9.posReset[j][i].y };
+						enemy9.relativePos[j][i] = { enemy9.posReset[j][i].x , enemy9.posReset[j][i].y };
 						enemy9.dedTimer[j][i] = kDedTimer;
 						enemy9.isDed[j][i] = false;
 					}
@@ -969,14 +976,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								enemy9.relativePos[j][i].y -= enemy9.velocity[j][i].y;
 							}
 						}
-						if (!enemy9.childIsAlive[j][0] && !enemy9.childIsAlive[j][1] && !enemy9.childIsAlive[j][2] && !enemy9.childIsAlive[j][3] && !enemy9.childIsAlive[j][4] && !enemy9.childIsAlive[j][5] && !enemy9.childIsAlive[j][6] && !enemy9.childIsAlive[j][7] )
+						if (!enemy9.childIsAlive[j][0] && !enemy9.childIsAlive[j][1] && !enemy9.childIsAlive[j][2] && !enemy9.childIsAlive[j][3] && !enemy9.childIsAlive[j][4] && !enemy9.childIsAlive[j][5] && !enemy9.childIsAlive[j][6] && !enemy9.childIsAlive[j][7])
 						{
 							enemy9.parentIsAlive[j] = false;
 						}
 					}
 				}
 			}
-			if (enemy9.parentIsAlive[0] == false && enemy9.parentIsAlive[1] == false )enemy9.hostIsAlive = false;
+			if (enemy9.parentIsAlive[0] == false && enemy9.parentIsAlive[1] == false)enemy9.hostIsAlive = false;
 		}
 #pragma endregion
 		//ここで攻撃処理をしたいと考えてる
@@ -1175,6 +1182,199 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 #pragma endregion
 
+#pragma region playerDamage
+		if (!player.dashAttack && !player.triangulAttack)
+		{
+			if (enemy1.parentIsAlive)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					if (enemy1.dedTimer[i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy1.relativePos[i], enemy1.radius))
+					{
+						if (ennergy.count > 0)
+						{
+							ennergy.count -= ennergy.damage;
+							ennergy.damageFlag = true;
+						}
+						else
+						{
+							ennergy.count = 0;
+						}
+					}
+				}
+			}
+			if (enemy2.hostIsAlive)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					if (enemy2.parentIsAlive[j])
+					{
+						for (int i = 0; i < kEnemy2Num; i++)
+						{
+							if (enemy2.dedTimer[j][i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy2.relativePos[j][i], enemy2.radius))
+							{
+								if (ennergy.count > 0)
+								{
+									ennergy.count -= ennergy.damage;
+									ennergy.damageFlag = true;
+								}
+								else
+								{
+									ennergy.count = 0;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (enemy3.parentIsAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy3.dedTimer[i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy3.relativePos[i], enemy3.radius))
+					{
+						if (ennergy.count > 0)
+						{
+							ennergy.count -= ennergy.damage;
+							ennergy.damageFlag = true;
+						}
+						else
+						{
+							ennergy.count = 0;
+						}
+					}
+				}
+			}
+			if (enemy4.parentIsAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy4.dedTimer[i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy4.relativePos[i], enemy4.radius))
+					{
+						if (ennergy.count > 0)
+						{
+							ennergy.count -= ennergy.damage;
+							ennergy.damageFlag = true;
+						}
+						else
+						{
+							ennergy.count = 0;
+						}
+					}
+				}
+			}
+			if (enemy5.parentIsAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy5.dedTimer[i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy5.relativePos[i], enemy5.radius))
+					{
+						if (ennergy.count > 0)
+						{
+							ennergy.count -= ennergy.damage;
+							ennergy.damageFlag = true;
+						}
+						else
+						{
+							ennergy.count = 0;
+						}
+					}
+				}
+			}
+			if (enemy6.parentIsAlive)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy6.dedTimer[i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy6.relativePos[i], enemy6.radius))
+					{
+						if (ennergy.count > 0)
+						{
+							ennergy.count -= ennergy.damage;
+							ennergy.damageFlag = true;
+						}
+						else
+						{
+							ennergy.count = 0;
+						}
+					}
+				}
+			}
+			if (enemy7.hostIsAlive)
+			{
+				for (int j = 0; j < 8; j++)
+				{
+					if (enemy7.parentIsAlive[j])
+					{
+						for (int i = 0; i < 4; i++)
+						{
+							if (enemy7.dedTimer[j][i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy7.relativePos[j][i], enemy7.radius))
+							{
+								if (ennergy.count > 0)
+								{
+									ennergy.count -= ennergy.damage;
+									ennergy.damageFlag = true;
+								}
+								else
+								{
+									ennergy.count = 0;
+								}
+							}
+						}
+					}
+				}
+			}
+			if (enemy8.hostIsAlive)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					if (enemy8.parentIsAlive[j])
+					{
+						for (int i = 0; i < 12; i++)
+						{
+							if (enemy8.dedTimer[j][i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy8.relativePos[j][i], enemy8.radius))
+							{
+								if (ennergy.count > 0)
+								{
+									ennergy.count -= ennergy.damage;
+									ennergy.damageFlag = true;
+								}
+								else
+								{
+									ennergy.count = 0;
+								}
+							}
+						}
+					}
+				}
+			}
+			if (enemy9.hostIsAlive)
+			{
+				for (int j = 0; j < 2; j++)
+				{
+					if (enemy9.parentIsAlive[j])
+					{
+						for (int i = 0; i < 8; i++)
+						{
+							if (enemy9.dedTimer[j][i] == kDedTimer && EllipseCollision(player.pos, player.radius.x, enemy9.relativePos[j][i], enemy9.radius))
+							{
+								if (ennergy.count > 0)
+								{
+									ennergy.count -= ennergy.damage;
+									ennergy.damageFlag = true;
+								}
+								else
+								{
+									ennergy.count = 0;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+#pragma endregion
 		//敵のダメージ処理
 #pragma region enemyDamage
 		if (enemy1.parentIsAlive)
@@ -1420,6 +1620,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 		//フィールドの外に出ないように
+
+
+		//ダメージのシェイク
+		if (ennergy.damageFlag)
+		{
+			if (shakeGaugeSeed % 1 == 0)
+			{
+				shakeGaugeX--;
+				shakeGaugeY--;
+			}
+			shakeGaugePos = randShake(shakeGaugeX, shakeGaugeY, shakeGaugeSeed);
+
+			shakeGaugeSeed++;
+			if (shakeGaugeX <= 0)
+			{
+				shakeGaugePos = { 0,0 };
+				shakeGaugeSeed = 1;
+				shakeGaugeX = shakeRadius;
+				shakeGaugeY = shakeRadius;
+				ennergy.damageFlag = false;
+			}
+		}
+
 		//ここはいじらなくてOK
 		if (player.pos.x != 0 || player.pos.y != 0) {
 			fieldToPlayer.x = (fieldRadius - player.radius.x) * vectorNormalize(player.pos, { 0,0 }).x;
@@ -1502,8 +1725,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//プレイヤーフリック時
 		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);
 
-		Novice::DrawBox(1400, 950, 450, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
-		Novice::DrawBox(1400, 950, int(450 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
+		//フィーバーゲージ仮
+		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 450, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
+		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), int(450 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
 
 
 

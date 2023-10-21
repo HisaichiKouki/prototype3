@@ -74,6 +74,8 @@ struct Ennergy
 	float feverTime;
 	bool dash;
 	bool triangle;
+	float damage;
+	bool damageFlag;
 };
 
 struct testEnemy1//三角に配置される敵

@@ -64,6 +64,7 @@
     <ClCompile Include="MatrixCalc.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="randPlus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -162,5 +163,6 @@
     <ClInclude Include="MatrixCalc.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="Easing.h" />
+    <ClInclude Include="randPlus.h" />
   </ItemGroup>
 </Project>

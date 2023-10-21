@@ -120,6 +120,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixCalc.cpp" />
+    <ClCompile Include="randPlus.cpp" />
     <ClCompile Include="Source\AttackArea.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\OriginObject.cpp" />
@@ -163,6 +164,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Header\Struct.h" />
     <ClInclude Include="Header\Various.h" />
     <ClInclude Include="MatrixCalc.h" />
+    <ClInclude Include="randPlus.h" />
     <ClInclude Include="VectorPlus.h" />
     <ClInclude Include="collision.h" />
   </ItemGroup>
