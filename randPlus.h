@@ -3,3 +3,5 @@
 
 Vector2 randShake(int radiusX,int radiusY,int seed);
 
+int RandomNum(int seed);
+

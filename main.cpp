@@ -135,6 +135,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 #pragma region enemy7//八方向
 	testEnemy4 enemy7{};
+	enemy7.count = 0;
 	enemy7.radius = enemyRadius;
 	float enemy7PosRadius = 1400;
 	float enemy7PosSpeed = 4;
@@ -347,9 +348,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int randSpown = 0;
 	int preRandSpown = 0;
-	const int variation = 4;
+	int preQuickSpown = 0;
+	const int variation = 5;
 	bool patterrnIsAlive[variation]{};
-
+	bool quickFlag = false;//範囲外に行く前に全員倒したら次の出現が早くなる
+	int quickTimer = 0;
 
 	int gameTimer = 0;
 	// クラス変数の宣言
@@ -419,12 +422,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region enemyReset
 			enemy2.radius = 0;
 			enemy2.easeT = 0;
+			enemy2.hostIsAlive = false;
+			enemy2.count = 0;
 
 			for (int j = 0; j < 4; j++)
 			{
 				enemy2.parentIsAlive[j] = false;
 				for (int i = 0; i < kEnemy2Num; i++)
 				{
+					enemy2.countFlag[j][i] = false;
 					enemy2.childIsAlive[j][i] = false;
 					enemy2.dedTimer[j][i] = 0;
 					enemy2.isDed[j][i] = false;
@@ -450,12 +456,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			enemy7.radius = 0;
 			enemy7.easeT = 0;
+			enemy7.count = 0;
 
 			for (int j = 0; j < 8; j++)
 			{
 				enemy7.parentIsAlive[j] = false;
 				for (int i = 0; i < 4; i++)
 				{
+					enemy7.countFlag[j][i] = false;
 					enemy7.childIsAlive[j][i] = false;
 					enemy7.dedTimer[j][i] = 0;
 					enemy7.isDed[j][i] = false;
@@ -465,11 +473,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			enemy7.hostIsAlive = false;
 			enemy8.radius = 0;
 			enemy8.easeT = 0;
+			enemy8.count = 0;
 			for (int j = 0; j < 4; j++)
 			{
 				enemy8.parentIsAlive[j] = false;
 				for (int i = 0; i < 12; i++)
 				{
+					enemy8.countFlag[j][i] = false;
 					enemy8.childIsAlive[j][i] = false;
 					enemy8.dedTimer[j][i] = 0;
 					enemy8.isDed[j][i] = false;
@@ -479,12 +489,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			enemy9.radius = 0;
 			enemy9.easeT = 0;
-
+			enemy9.count = 0;
 			for (int j = 0; j < 2; j++)
 			{
 				enemy9.parentIsAlive[j] = false;
 				for (int i = 0; i < 8; i++)
 				{
+					enemy9.countFlag[j][i] = false;
 					enemy9.childIsAlive[j][i] = false;
 					enemy9.dedTimer[j][i] = 0;
 					enemy9.isDed[j][i] = false;
@@ -534,8 +545,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			enemy13.hostIsAlive = false;
+			enemy13.count = 0;
 			for (int i = 0; i < 60; i++)
 			{
+				enemy13.countFlag[i] = false;
 				enemy13.easeT[i] = 0;
 				enemy13.radius[i] = 0;
 				enemy13.dedTimer[i] = 0;
@@ -732,12 +745,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				enemy7.radius = 0;
 				enemy7.easeT = 0;
+				enemy7.count = 0;
 
 				for (int j = 0; j < 8; j++)
 				{
 					enemy7.parentIsAlive[j] = true;
 					for (int i = 0; i < 4; i++)
 					{
+						enemy7.countFlag[j][i] = false;
 						enemy7.childIsAlive[j][i] = true;
 						enemy7.relativePos[j][i] = { enemy7.posReset[j][i].x ,enemy7.posReset[j][i].y };
 						enemy7.dedTimer[j][i] = kDedTimer;
@@ -813,13 +828,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//大グループ
-		if (gameTimer == 240 || gameTimer == 840 || gameTimer == 2100 || gameTimer == 3300 || gameTimer == 4200 || gameTimer == 4800 || gameTimer == 5400 || gameTimer == 5700)
+		if (quickFlag)
+		{
+			if (quickTimer == 0)quickTimer = 450;
+		
+		}
+		if (quickTimer > 0)
+		{
+			quickTimer--;
+			if (quickTimer == 0&& quickFlag)
+			{
+				for (int i = 0; i < 10; i++)
+				{
+					randSpown = RandomNum(i + 1 + i * 3) % variation;
+					if (randSpown != preRandSpown && randSpown != preQuickSpown && !patterrnIsAlive[randSpown])
+					{
+						patterrnIsAlive[randSpown] = true;
+						preQuickSpown = randSpown;
+						quickFlag=false;
+						break;
+					}
+				}
+			}
+		}
+		if (gameTimer == 120 || gameTimer == 840 || gameTimer == 2100 || gameTimer == 3300 || gameTimer == 4500 || gameTimer == 5100 || gameTimer == 5250)
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				randSpown = rand() % variation;
-				if (randSpown != preRandSpown && !patterrnIsAlive[randSpown])
+				randSpown = RandomNum(i + 1 + i * 3) % variation;
+				if (randSpown != preRandSpown && randSpown != preQuickSpown && !patterrnIsAlive[randSpown])
 				{
+
 					patterrnIsAlive[randSpown] = true;
 					preRandSpown = randSpown;
 					break;
@@ -831,7 +870,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			enemy2.radius = 0;
 			enemy2.easeT = 0;
-
+			enemy2.count = 0;
 			for (int j = 0; j < 4; j++)
 			{
 				enemy2.parentIsAlive[j] = true;
@@ -841,6 +880,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				enemy2.centorPos[3] = { 1200,400 };
 				for (int i = 0; i < kEnemy2Num; i++)
 				{
+					enemy2.countFlag[j][i] = false;
 					enemy2.childIsAlive[j][i] = true;
 					enemy2.relativePos[j][i] = { enemy2.posReset[j][i].x + enemy2.centorPos[j].x,enemy2.posReset[j][i].y + enemy2.centorPos[j].y };
 					enemy2.dedTimer[j][i] = kDedTimer;
@@ -853,23 +893,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			enemy7.radius = 0;
 			enemy7.easeT = 0;
-
+			enemy7.count = 0;
 			for (int j = 0; j < 8; j++)
 			{
 				enemy7.parentIsAlive[j] = true;
 				for (int i = 0; i < 4; i++)
 				{
+					enemy7.countFlag[j][i] = false;
 					enemy7.childIsAlive[j][i] = true;
 					enemy7.relativePos[j][i] = { enemy7.posReset[j][i].x ,enemy7.posReset[j][i].y };
 					enemy7.dedTimer[j][i] = kDedTimer;
 					enemy7.isDed[j][i] = false;
 				}
-
 			}
 			enemy7.hostIsAlive = true;
 		}
 		else if (patterrnIsAlive[2] && !enemy8.hostIsAlive)
 		{
+			enemy8.count = 0;
 			enemy8.radius = 0;
 			enemy8.easeT = 0;
 			enemy8.centorPos[0] = { -600,-450 };
@@ -882,6 +923,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				enemy8.parentIsAlive[j] = true;
 				for (int i = 0; i < 12; i++)
 				{
+					enemy8.countFlag[j][i] = false;
 					enemy8.childIsAlive[j][i] = true;
 					enemy8.relativePos[j][i] = { enemy8.centorPos[j].x + enemy8.posReset[j][i].x ,enemy8.centorPos[j].y + enemy8.posReset[j][i].y };
 					enemy8.dedTimer[j][i] = kDedTimer;
@@ -894,12 +936,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			enemy9.radius = 0;
 			enemy9.easeT = 0;
-
+			enemy9.count = 0;
 			for (int j = 0; j < 2; j++)
 			{
 				enemy9.parentIsAlive[j] = true;
 				for (int i = 0; i < 8; i++)
 				{
+					enemy9.countFlag[j][i] = false;
 					enemy9.childIsAlive[j][i] = true;
 					enemy9.relativePos[j][i] = { enemy9.posReset[j][i].x , enemy9.posReset[j][i].y };
 					enemy9.dedTimer[j][i] = kDedTimer;
@@ -907,6 +950,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 			enemy9.hostIsAlive = true;
+		}
+		else if (patterrnIsAlive[4] && !enemy13.hostIsAlive)
+		{
+			enemy13.count = 0;
+			enemy13.hostIsAlive = true;
+			for (int i = 0; i < 60; i++)
+			{
+				enemy13.countFlag[i] = false;
+				enemy13.easeT[i] = 0;
+				enemy13.radius[i] = 0;
+				enemy13.dedTimer[i] = kDedTimer;
+				enemy13.childIsAlive[i] = true;
+				enemy13.isDed[i] = false;
+				enemy13.z[i] = i * 6.0f;
+				enemy13.thta[i] = (enemy13.z[i] / 180) * 3.1415f;
+				enemy13.relativePos[i].x = float(cosf(enemy13.thta[i]) - sinf(enemy13.thta[i])) * enemy13.length;
+				enemy13.relativePos[i].y = float(cosf(enemy13.thta[i]) + sinf(enemy13.thta[i])) * enemy13.length;
+			}
 		}
 
 		//横一列
@@ -1044,24 +1105,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		}
-		if (gameTimer == 1)
-		{
-			enemy13.hostIsAlive = true;
-			for (int i = 0; i < 60; i++)
-			{
-				enemy13.easeT[i] = 0;
-				enemy13.radius[i] = 0;
-				enemy13.dedTimer[i] = kDedTimer;
-				enemy13.childIsAlive[i] = true;
-				enemy13.z[i] = i * 6.0f;
-				enemy13.thta[i] = (enemy13.z[i] / 180) * 3.1415f;
-				enemy13.relativePos[i].x = float(cosf(enemy13.thta[i]) - sinf(enemy13.thta[i])) * enemy13.length;
-				enemy13.relativePos[i].y = float(cosf(enemy13.thta[i]) + sinf(enemy13.thta[i])) * enemy13.length;
-			}
-		}
+
 
 		//敵出現のイージング
-		if (gameTimer <= 6000)
+		if (gameTimer < 6000)
 		{
 
 			if (enemy2.hostIsAlive)
@@ -1157,74 +1204,65 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else
 		{
-			if (enemy2.hostIsAlive)
-			{
-				enemy2.radius = easeOutElastic(enemy2.easeT / 100) * enemyRadius;
-				if (enemy2.easeT > 0)enemy2.easeT -= 1;
-				if (enemy2.easeT < 0)enemy2.easeT = 0;
 
-			}
-			if (enemy5.parentIsAlive)
-			{
-				enemy5.radius = easeOutElastic(enemy5.easeT / 100) * enemyRadius;
-				if (enemy5.easeT > 0)enemy5.easeT -= 1;
-				if (enemy5.easeT < 0)enemy5.easeT = 0;
-			}
-			if (enemy6.parentIsAlive)
-			{
-				enemy6.radius = easeOutElastic(enemy6.easeT / 100) * enemyRadius;
-				if (enemy6.easeT > 0)enemy6.easeT -= 1;
-				if (enemy6.easeT < 0)enemy6.easeT = 0;
-			}
-			if (enemy7.hostIsAlive)
-			{
-				enemy7.radius = easeOutElastic(enemy7.easeT / 100) * enemyRadius;
-				if (enemy7.easeT > 0)enemy7.easeT -= 1;
-				if (enemy7.easeT < 0)enemy7.easeT = 0;
+			enemy2.radius = easeOutElastic(enemy2.easeT / 100) * enemyRadius;
+			if (enemy2.easeT > 0)enemy2.easeT -= 1;
+			if (enemy2.easeT < 0)enemy2.easeT = 0;
 
-			}
-			if (enemy8.hostIsAlive)
-			{
-				enemy8.radius = easeOutElastic(enemy8.easeT / 100) * enemyRadius;
-				if (enemy8.easeT > 0)enemy8.easeT -= 1;
-				if (enemy8.easeT < 0)enemy8.easeT = 0;
 
-			}
-			if (enemy9.hostIsAlive)
-			{
-				enemy9.radius = easeOutElastic(enemy9.easeT / 100) * enemyRadius;
-				if (enemy9.easeT > 0)enemy9.easeT -= 1;
-				if (enemy9.easeT < 0)enemy9.easeT = 0;
-			}
+
+			enemy5.radius = easeOutElastic(enemy5.easeT / 100) * enemyRadius;
+			if (enemy5.easeT > 0)enemy5.easeT -= 1;
+			if (enemy5.easeT < 0)enemy5.easeT = 0;
+
+
+			enemy6.radius = easeOutElastic(enemy6.easeT / 100) * enemyRadius;
+			if (enemy6.easeT > 0)enemy6.easeT -= 1;
+			if (enemy6.easeT < 0)enemy6.easeT = 0;
+
+
+			enemy7.radius = easeOutElastic(enemy7.easeT / 100) * enemyRadius;
+			if (enemy7.easeT > 0)enemy7.easeT -= 1;
+			if (enemy7.easeT < 0)enemy7.easeT = 0;
+
+
+
+			enemy8.radius = easeOutElastic(enemy8.easeT / 100) * enemyRadius;
+			if (enemy8.easeT > 0)enemy8.easeT -= 1;
+			if (enemy8.easeT < 0)enemy8.easeT = 0;
+
+
+
+			enemy9.radius = easeOutElastic(enemy9.easeT / 100) * enemyRadius;
+			if (enemy9.easeT > 0)enemy9.easeT -= 1;
+			if (enemy9.easeT < 0)enemy9.easeT = 0;
+
 			for (int j = 0; j < kenemy10Num; j++)
 			{
-				if (enemy10[j].parentIsAlive)
-				{
-					enemy10[j].radius = easeOutElastic(enemy10[j].easeT / 100) * enemyRadius;
-					if (enemy10[j].easeT > 0)enemy10[j].easeT -= 1;
-					if (enemy10[j].easeT < 0)enemy10[j].easeT = 0;
 
-				}
+				enemy10[j].radius = easeOutElastic(enemy10[j].easeT / 100) * enemyRadius;
+				if (enemy10[j].easeT > 0)enemy10[j].easeT -= 1;
+				if (enemy10[j].easeT < 0)enemy10[j].easeT = 0;
+
+
 			}
 			for (int j = 0; j < kenemy11Num; j++)
 			{
-				if (enemy11[j].parentIsAlive)
-				{
-					enemy11[j].radius = easeOutElastic(enemy11[j].easeT / 100) * enemyRadius;
-					if (enemy11[j].easeT > 0)enemy11[j].easeT -= 1;
-					if (enemy11[j].easeT < 0)enemy11[j].easeT = 0;
 
-				}
+				enemy11[j].radius = easeOutElastic(enemy11[j].easeT / 100) * enemyRadius;
+				if (enemy11[j].easeT > 0)enemy11[j].easeT -= 1;
+				if (enemy11[j].easeT < 0)enemy11[j].easeT = 0;
+
+
 			}
 			for (int j = 0; j < kenemy12Num; j++)
 			{
-				if (enemy12[j].parentIsAlive)
-				{
-					enemy12[j].radius = easeOutElastic(enemy12[j].easeT / 100) * enemyRadius;
-					if (enemy12[j].easeT > 0)enemy11[j].easeT -= 1;
-					if (enemy12[j].easeT < 0)enemy11[j].easeT = 0;
 
-				}
+				enemy12[j].radius = easeOutElastic(enemy12[j].easeT / 100) * enemyRadius;
+				if (enemy12[j].easeT > 0)enemy12[j].easeT -= 1;
+				if (enemy12[j].easeT < 0)enemy12[j].easeT = 0;
+
+
 			}
 			if (enemy13.hostIsAlive)
 			{
@@ -1487,6 +1525,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					}
 				}
+				if (!enemy2.parentIsAlive[0] && !enemy2.parentIsAlive[1] && !enemy2.parentIsAlive[2] && !enemy2.parentIsAlive[3])
+				{
+					enemy2.hostIsAlive = false;
+				}
 			}
 		}
 
@@ -1578,7 +1620,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 			}
-			if (enemy7.parentIsAlive[0] == false && enemy7.parentIsAlive[1] == false && enemy7.parentIsAlive[2] == false && enemy7.parentIsAlive[3] == false && enemy7.parentIsAlive[4] == false && enemy7.parentIsAlive[5] == false && enemy7.parentIsAlive[6] == false && enemy7.parentIsAlive[7] == false)enemy7.hostIsAlive = false;
+			if (enemy7.parentIsAlive[0] == false && enemy7.parentIsAlive[1] == false && enemy7.parentIsAlive[2] == false && enemy7.parentIsAlive[3] == false && enemy7.parentIsAlive[4] == false && enemy7.parentIsAlive[5] == false && enemy7.parentIsAlive[6] == false && enemy7.parentIsAlive[7] == false)
+			{
+				enemy7.hostIsAlive = false;
+			}
 		}
 		if (enemy8.hostIsAlive)
 		{
@@ -2294,6 +2339,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (enemy2.parentIsAlive[0] == false && enemy2.parentIsAlive[1] == false && enemy2.parentIsAlive[2] == false && enemy2.parentIsAlive[3] == false)
 						{
 							enemy2.hostIsAlive = false;
+							quickFlag = true;
+
 						}
 					}
 				}
@@ -2411,6 +2458,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							&& enemy7.parentIsAlive[4] == false && enemy7.parentIsAlive[5] == false && enemy7.parentIsAlive[6] == false && enemy7.parentIsAlive[7] == false)
 						{
 							enemy7.hostIsAlive = false;
+							quickFlag = true;
 						}
 					}
 				}
@@ -2444,6 +2492,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (enemy8.parentIsAlive[0] == false && enemy8.parentIsAlive[1] == false && enemy8.parentIsAlive[2] == false && enemy8.parentIsAlive[3] == false)
 						{
 							enemy8.hostIsAlive = false;
+							quickFlag = true;
 						}
 					}
 				}
@@ -2476,6 +2525,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (enemy9.parentIsAlive[0] == false && enemy9.parentIsAlive[1] == false)
 						{
 							enemy9.hostIsAlive = false;
+							quickFlag = true;
 						}
 					}
 				}
@@ -2585,9 +2635,73 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			patterrnIsAlive[3] = false;
 		}
-#pragma endregion
-		//フィールドの外に出ないように
+		if (!enemy13.hostIsAlive)
+		{
+			patterrnIsAlive[4] = false;
 
+		}
+#pragma endregion
+
+		//敵がちゃんと死んでいるか確認
+		if (enemy2.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < 16; i++)
+				{
+					if (!enemy2.childIsAlive[j][i] && !enemy2.countFlag[j][i])
+					{
+						enemy2.count++;
+						enemy2.countFlag[j][i] = true;
+					}
+				}
+			}
+			if (enemy2.count == 64)enemy2.hostIsAlive = false;
+		}
+		if (enemy7.hostIsAlive)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (!enemy7.childIsAlive[j][i] && !enemy7.countFlag[j][i])
+					{
+						enemy7.count++;
+						enemy7.countFlag[j][i] = true;
+					}
+				}
+			}
+			if (enemy7.count == 32)enemy7.hostIsAlive = false;
+		}
+		if (enemy9.hostIsAlive)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					if (!enemy9.childIsAlive[j][i] && !enemy9.countFlag[j][i])
+					{
+						enemy9.count++;
+						enemy9.countFlag[j][i] = true;
+					}
+				}
+			}
+			if (enemy9.count == 16)enemy9.hostIsAlive = false;
+		}
+		if (enemy13.hostIsAlive)
+		{
+
+			for (int i = 0; i < 60; i++)
+			{
+				if (!enemy13.childIsAlive[i] && !enemy13.countFlag[i])
+				{
+					enemy13.count++;
+					enemy13.countFlag[i] = true;
+				}
+			}
+
+			if (enemy13.count == 60)enemy13.hostIsAlive = false;
+		}
 
 		//ダメージのシェイク
 		if (ennergy.damageFlag)
@@ -2609,6 +2723,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ennergy.damageFlag = false;
 			}
 		}
+		//フィールドの外に出ないように
 
 		//ここはいじらなくてOK
 		if (player.pos.x != 0 || player.pos.y != 0) {
@@ -2639,13 +2754,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///
 
 
-		Novice::ScreenPrintf(0, 200, "joystickX=%d joystickY=%d", joystickX, joystickY);
-		Novice::ScreenPrintf(0, 220, "Player.joystickX=%f Player.joystickY=%f", player.joystick.x, player.joystick.y);
-		Novice::ScreenPrintf(0, 240, "Player.direction.x=%f Player.direction.y=%f", player.direction.x, player.direction.y);
-		Novice::ScreenPrintf(0, 260, "player.vel.x=%f player.vel.y=%f", player.velocity.x, player.velocity.y);
-		Novice::ScreenPrintf(0, 280, "player.TrigerA=%d", player.trigerA);
-		Novice::ScreenPrintf(0, 300, "player.velocityRatio=%f", player.velocityRatio);
-		Novice::ScreenPrintf(0, 320, "player.count=%d", player.count);
+		//Novice::ScreenPrintf(0, 200, "joystickX=%d joystickY=%d", joystickX, joystickY);
+		//Novice::ScreenPrintf(0, 220, "Player.joystickX=%f Player.joystickY=%f", player.joystick.x, player.joystick.y);
+		//Novice::ScreenPrintf(0, 240, "Player.direction.x=%f Player.direction.y=%f", player.direction.x, player.direction.y);
+		//Novice::ScreenPrintf(0, 260, "player.vel.x=%f player.vel.y=%f", player.velocity.x, player.velocity.y);
+		//Novice::ScreenPrintf(0, 280, "player.TrigerA=%d", player.trigerA);
+		//Novice::ScreenPrintf(0, 300, "player.velocityRatio=%f", player.velocityRatio);
+		//Novice::ScreenPrintf(0, 320, "player.count=%d", player.count);
 		Novice::ScreenPrintf(0, 340, "World.X=%f World.Y=%f", player.pos.x, player.pos.y);
 		Novice::ScreenPrintf(0, 360, "player.playTime=%d player.flick=%d", player.flickTimer, player.flick);
 		Novice::ScreenPrintf(0, 380, "player.flickLength=%f", player.flickLength);
@@ -2658,7 +2773,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, 520, "screenSize=%f", screenSize);
 		Novice::ScreenPrintf(0, 540, "gameTimer=%d seconds=%d", gameTimer, gameTimer / 60);
 
+		for (int i = 0; i < variation; i++)
+		{
+			Novice::ScreenPrintf(700, i * 20, "patterrnIsAlive[%d]=%d", i, patterrnIsAlive[i]);
+		}
 
+		//Novice::ScreenPrintf(1000, 0, "enemy7.count=%d", enemy7.count);
+		Novice::ScreenPrintf(700, 20 * variation, "randSpown=%d", randSpown);
+		Novice::ScreenPrintf(700, 20+20 * variation, "preRandSpown=%d", preRandSpown);
+		Novice::ScreenPrintf(700, 40+20 * variation, "preQuickSpown=%d", preQuickSpown);
+		Novice::ScreenPrintf(1000, 0, "enemy2.hostIsAlive=%d", enemy2.hostIsAlive);
+		Novice::ScreenPrintf(1000, 20, "enemy7.hostIsAlive=%d", enemy7.hostIsAlive);
+		Novice::ScreenPrintf(1000, 40, "enemy8.hostIsAlive=%d", enemy8.hostIsAlive);
+		Novice::ScreenPrintf(1000, 60, "enemy9.hostIsAlive=%d", enemy9.hostIsAlive);
+		Novice::ScreenPrintf(1000, 80, "enemy13.hostIsAlive=%d", enemy13.hostIsAlive);
+		Novice::ScreenPrintf(1000, 100, "quickTimer=%d", quickTimer);
 		//一番後ろの背景
 		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x222222ff, kFillModeSolid);
 		//フィールドの画像表示

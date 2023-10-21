@@ -15,3 +15,12 @@ Vector2 randShake(int radiusX, int radiusY,int seed)
     srand(seed);
     return Vector2(float(rand() % (radiusX * 2 + 1) - radiusX), float(rand() % (radiusY * 2 + 1) - radiusY));
 }
+
+int RandomNum(int seed)
+{
+    unsigned int currentTime = int(time(nullptr));
+    srand(currentTime * seed + currentTime % seed - seed);
+    seed *= rand();
+    srand(seed);
+    return(rand());
+}
