@@ -137,7 +137,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region enemy7//八方向
 	testEnemy4 enemy7{};
 	enemy7.radius = enemyRadius;
-	float enemy7PosRadius = 1800;
+	float enemy7PosRadius = 1700;
 	float enemy7PosSpeed = 4;
 	enemy7.velocity[0] = { 0,enemy7PosSpeed };
 	enemy7.velocity[1] = { -enemy7PosSpeed,0 };
@@ -243,6 +243,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	int count = 0;
+	int endCount = 0;//一回の攻撃で何体倒したか
+	int precount = 0;
 	// クラス変数の宣言
 	Func Functions;
 	AttackAreaObject attAreaObj;
@@ -275,7 +277,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
 
+		if (!player.dashAttack&&!player.triangulAttack)
+		{
+			if(endCount==0)endCount = count- precount;
+			precount = count;
 
+		}
+		else
+		{
+			endCount = 0;
+		}
 #pragma region enemySpawn
 		if (keys[DIK_R])
 		{
@@ -382,10 +393,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (keys[DIK_8])
 			{
-				enemy8.centorPos[0] = { -700,-450 };
-				enemy8.centorPos[1] = { 700,-150 };
-				enemy8.centorPos[2] = { -700,150 };
-				enemy8.centorPos[3] = { 700,450 };
+				enemy8.centorPos[0] = { -600,-450 };
+				enemy8.centorPos[1] = { 600,-150 };
+				enemy8.centorPos[2] = { -600,150 };
+				enemy8.centorPos[3] = { 600,450 };
 
 				for (int j = 0; j < 4; j++)
 				{
@@ -1115,6 +1126,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, 400, "length=%f", length);
 		Novice::ScreenPrintf(0, 420, "player.flickCT=%d", player.flickCT);
 		Novice::ScreenPrintf(0, 440, "count=%d", count);
+		Novice::ScreenPrintf(0, 460, "endcount=%d", endCount);
+		Novice::ScreenPrintf(0, 480, "precount=%d", precount);
 
 		//一番後ろの背景
 		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x222222ff, kFillModeSolid);
