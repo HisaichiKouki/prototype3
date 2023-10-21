@@ -23,6 +23,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.pos.x = 0;
 	player.pos.y = 0;
 	player.anchorRadius = 10;
+
+	const int kPreNum = 15;
+	Vector2 playerPrePos[kPreNum]{};
+	unsigned int prePosColor[kPreNum]{};
+	for (int i = 0; i < kPreNum; i++)
+	{
+		prePosColor[i] = WHITE;
+	}
 	int joystickX = 0;
 	int joystickY = 0;
 	int preJoyStickX = 0;
@@ -348,7 +356,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int randSpown = 0;
 	int preRandSpown = 0;
-	int preQuickSpown = 0;
+	int prepreRandSpown = 0;
+	int pre3RandSpown = 0;
 	const int variation = 5;
 	bool patterrnIsAlive[variation]{};
 	bool quickFlag = false;//範囲外に行く前に全員倒したら次の出現が早くなる
@@ -422,6 +431,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (allReset)
 		{
+
+			enemy2.timer = 0;
+			enemy7.timer = 0;
+			enemy8.timer = 0;
+			enemy9.timer = 0;
+			quickFlag = false;
+			quickTimer = 0;
+			finishEaseT = 0;
+			finishSize = 0;
 			bigNumEaseT = 0;
 			bigNumSize = 0;
 			bigNumCount = 0;
@@ -508,6 +526,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			enemy8.radius = 0;
 			enemy8.easeT = 0;
 			enemy8.count = 0;
+			enemy8.timer = 0;
 			for (int j = 0; j < 4; j++)
 			{
 				enemy8.parentIsAlive[j] = false;
@@ -895,28 +914,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			quickTimer--;
 			if (quickTimer == 0 && quickFlag)
 			{
+				quickFlag = false;
+
 				for (int i = 0; i < 10; i++)
 				{
 					randSpown = RandomNum(i + 1 + i * 3) % variation;
-					if (randSpown != preRandSpown && randSpown != preQuickSpown && !patterrnIsAlive[randSpown])
+					if (randSpown != preRandSpown && randSpown != prepreRandSpown && randSpown != pre3RandSpown && !patterrnIsAlive[randSpown])
 					{
 						patterrnIsAlive[randSpown] = true;
-						preQuickSpown = randSpown;
-						quickFlag = false;
+						pre3RandSpown = prepreRandSpown;
+						prepreRandSpown = preRandSpown;
+						preRandSpown = randSpown;
 						break;
 					}
 				}
 			}
 		}
-		if (gameTimer == 120 || gameTimer == 840 || gameTimer == 2100 || gameTimer == 3300 || gameTimer == 4500 || gameTimer == 5100 || gameTimer == 5250)
+		if (gameTimer == 120 || gameTimer == 840 || gameTimer == 2100 || gameTimer == 3300 || gameTimer == 4500 || gameTimer == 5100 || gameTimer == 5250&&!quickFlag)
 		{
 			for (int i = 0; i < 10; i++)
 			{
 				randSpown = RandomNum(i + 1 + i * 3) % variation;
-				if (randSpown != preRandSpown && randSpown != preQuickSpown && !patterrnIsAlive[randSpown])
+				if (randSpown != preRandSpown && randSpown != prepreRandSpown && randSpown != pre3RandSpown && !patterrnIsAlive[randSpown])
 				{
 
 					patterrnIsAlive[randSpown] = true;
+					pre3RandSpown = prepreRandSpown;
+					prepreRandSpown = preRandSpown;
 					preRandSpown = randSpown;
 					break;
 				}
@@ -925,6 +949,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (patterrnIsAlive[0] && !enemy2.hostIsAlive)
 		{
+			enemy2.timer = 0;
 			enemy2.radius = 0;
 			enemy2.easeT = 0;
 			enemy2.count = 0;
@@ -948,6 +973,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else if (patterrnIsAlive[1] && !enemy7.hostIsAlive)
 		{
+			enemy7.timer = 0;
 			enemy7.radius = 0;
 			enemy7.easeT = 0;
 			enemy7.count = 0;
@@ -967,6 +993,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else if (patterrnIsAlive[2] && !enemy8.hostIsAlive)
 		{
+			enemy8.timer = 0;
+
 			enemy8.count = 0;
 			enemy8.radius = 0;
 			enemy8.easeT = 0;
@@ -991,6 +1019,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else if (patterrnIsAlive[3] && !enemy9.hostIsAlive)
 		{
+			enemy9.timer = 0;
 			enemy9.radius = 0;
 			enemy9.easeT = 0;
 			enemy9.count = 0;
@@ -1346,6 +1375,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 #pragma region player
+
+		for (int i = kPreNum - 1; i > 0; i--)
+		{
+			prePosColor[i] = prePosColor[i - 1];
+			playerPrePos[i] = playerPrePos[i - 1];
+		}
+
+		if (player.dashAttack)
+		{
+			prePosColor[0] = 0x00ffff99;
+
+		}
+		else if (player.triangulAttack||player.aim)
+		{
+			prePosColor[0] = 0x55ff5577;
+
+		}
+		else
+		{
+			prePosColor[0] = 0xffffff99;
+
+		}
+		playerPrePos[0] = player.pos;
 		//前フレのジョイスティック情報を保存
 		preJoyStickX = joystickX;
 		preJoyStickY = joystickY;
@@ -2565,13 +2617,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						{
 							enemy8.parentIsAlive[j] = false;
 						}
-						if (enemy8.parentIsAlive[0] == false && enemy8.parentIsAlive[1] == false && enemy8.parentIsAlive[2] == false && enemy8.parentIsAlive[3] == false)
-						{
-							enemy8.hostIsAlive = false;
-							quickFlag = true;
-						}
+						
 					}
 				}
+			}
+			if (enemy8.parentIsAlive[0] == false && enemy8.parentIsAlive[1] == false && enemy8.parentIsAlive[2] == false && enemy8.parentIsAlive[3] == false)
+			{
+				enemy8.hostIsAlive = false;
+				quickFlag = true;
 			}
 		}
 		if (enemy9.hostIsAlive)
@@ -2695,32 +2748,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
-		if (!enemy2.hostIsAlive)
-		{
-			patterrnIsAlive[0] = false;
-		}
-		if (!enemy7.hostIsAlive)
-		{
-			patterrnIsAlive[1] = false;
-		}
-		if (!enemy8.hostIsAlive)
-		{
-			patterrnIsAlive[2] = false;
-		}
-		if (!enemy9.hostIsAlive)
-		{
-			patterrnIsAlive[3] = false;
-		}
-		if (!enemy13.hostIsAlive)
-		{
-			patterrnIsAlive[4] = false;
-
-		}
+		
 #pragma endregion
 
 		//敵がちゃんと死んでいるか確認
 		if (enemy2.hostIsAlive)
 		{
+			
 			for (int j = 0; j < 4; j++)
 			{
 				for (int i = 0; i < 16; i++)
@@ -2749,8 +2783,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (enemy7.count == 32)enemy7.hostIsAlive = false;
 		}
+		if (enemy8.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < 12; i++)
+				{
+					if (!enemy8.childIsAlive[j][i] && !enemy8.countFlag[j][i])
+					{
+						enemy8.count++;
+						enemy8.countFlag[j][i] = true;
+					}
+				}
+			}
+			if (enemy8.count == 48)enemy8.hostIsAlive = false;
+		}
 		if (enemy9.hostIsAlive)
 		{
+			
 			for (int j = 0; j < 2; j++)
 			{
 				for (int i = 0; i < 8; i++)
@@ -2766,7 +2816,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy13.hostIsAlive)
 		{
-
+			
 			for (int i = 0; i < 60; i++)
 			{
 				if (!enemy13.childIsAlive[i] && !enemy13.countFlag[i])
@@ -2777,6 +2827,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 
 			if (enemy13.count == 60)enemy13.hostIsAlive = false;
+		}
+		if (!enemy2.hostIsAlive)
+		{
+			patterrnIsAlive[0] = false;
+		}
+		if (!enemy7.hostIsAlive)
+		{
+			patterrnIsAlive[1] = false;
+		}
+		if (!enemy8.hostIsAlive)
+		{
+			patterrnIsAlive[2] = false;
+		}
+		if (!enemy9.hostIsAlive)
+		{
+			patterrnIsAlive[3] = false;
+		}
+		if (!enemy13.hostIsAlive)
+		{
+			patterrnIsAlive[4] = false;
+
 		}
 
 		//ダメージのシェイク
@@ -2816,8 +2887,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//ここまでいじらなくてOK
 
 		//スクロールの値を代入
-		scroll.x = (-player.pos.x / screenSize + 960);
-		scroll.y = (-player.pos.y / screenSize + 540);
+		scroll.x = (-playerPrePos[2].x / screenSize + 960);
+		scroll.y = (-playerPrePos[2].y / screenSize + 540);
 
 
 
@@ -2842,14 +2913,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Novice::ScreenPrintf(0, 300, "player.velocityRatio=%f", player.velocityRatio);
 		//Novice::ScreenPrintf(0, 320, "player.count=%d", player.count);
 		Novice::ScreenPrintf(0, 340, "World.X=%f World.Y=%f", player.pos.x, player.pos.y);
-		Novice::ScreenPrintf(0, 360, "player.playTime=%d player.flick=%d", player.flickTimer, player.flick);
-		Novice::ScreenPrintf(0, 380, "player.flickLength=%f", player.flickLength);
-		Novice::ScreenPrintf(0, 400, "length=%f", length);
-		Novice::ScreenPrintf(0, 420, "player.flickCT=%d", player.flickCT);
+		//Novice::ScreenPrintf(0, 360, "player.playTime=%d player.flick=%d", player.flickTimer, player.flick);
+		//Novice::ScreenPrintf(0, 380, "player.flickLength=%f", player.flickLength);
+		//Novice::ScreenPrintf(0, 400, "length=%f", length);
+		//Novice::ScreenPrintf(0, 420, "player.flickCT=%d", player.flickCT);
 		Novice::ScreenPrintf(0, 440, "count=%f endCount=%f", count, endCount);
 		Novice::ScreenPrintf(0, 460, " dash.endcount=%f dash.endCount=%f", dash.count, dash.endCount);
 		Novice::ScreenPrintf(0, 480, "trian.endcount=%f tria.endCount=%f", triangle.count, triangle.endCount);
-		Novice::ScreenPrintf(0, 500, "ennergy.count=%f", ennergy.count);
+		//Novice::ScreenPrintf(0, 500, "ennergy.count=%f", ennergy.count);
 		Novice::ScreenPrintf(0, 520, "screenSize=%f", screenSize);
 		Novice::ScreenPrintf(0, 540, "gameTimer=%d seconds=%d", gameTimer, gameTimer / 60);
 		Novice::ScreenPrintf(0, 560, "score=%d", score);
@@ -2862,13 +2933,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//Novice::ScreenPrintf(1000, 0, "enemy7.count=%d", enemy7.count);
 		Novice::ScreenPrintf(700, 20 * variation, "randSpown=%d", randSpown);
 		Novice::ScreenPrintf(700, 20 + 20 * variation, "preRandSpown=%d", preRandSpown);
-		Novice::ScreenPrintf(700, 40 + 20 * variation, "preQuickSpown=%d", preQuickSpown);
-		Novice::ScreenPrintf(1000, 0, "enemy2.hostIsAlive=%d", enemy2.hostIsAlive);
-		Novice::ScreenPrintf(1000, 20, "enemy7.hostIsAlive=%d", enemy7.hostIsAlive);
-		Novice::ScreenPrintf(1000, 40, "enemy8.hostIsAlive=%d", enemy8.hostIsAlive);
-		Novice::ScreenPrintf(1000, 60, "enemy9.hostIsAlive=%d", enemy9.hostIsAlive);
+		Novice::ScreenPrintf(700, 40 + 20 * variation, "prepreRandSpown=%d", prepreRandSpown);
+		Novice::ScreenPrintf(700, 60 + 20 * variation, "pre3RandSpown=%d", pre3RandSpown);
+		Novice::ScreenPrintf(1000, 0, "enemy2.hostIsAlive=%d enemy2.timer=%d", enemy2.hostIsAlive, enemy9.timer);
+		Novice::ScreenPrintf(1000, 20, "enemy7.hostIsAlive=%d enemy7.timer=%d", enemy7.hostIsAlive, enemy9.timer);
+		Novice::ScreenPrintf(1000, 40, "enemy8.hostIsAlive=%d enemy8.timer=%d", enemy8.hostIsAlive, enemy9.timer);
+		Novice::ScreenPrintf(1000, 60, "enemy9.hostIsAlive=%d enemy9.timer=%d", enemy9.hostIsAlive, enemy9.timer);
 		Novice::ScreenPrintf(1000, 80, "enemy13.hostIsAlive=%d", enemy13.hostIsAlive);
 		Novice::ScreenPrintf(1000, 100, "quickTimer=%d", quickTimer);
+
+		for (int i = 0; i < kPreNum; i++)
+		{
+			Novice::ScreenPrintf(500, 500 + i * 20, "prepos[%d].x=%f prepos[%d].y=%f", i, playerPrePos[i].x, i, playerPrePos[i].y);
+		}
 		//一番後ろの背景
 		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x222222ff, kFillModeSolid);
 		//フィールドの画像表示
@@ -2893,11 +2970,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::DrawBox(int(-50 / screenSize + scroll.x), int(-50 / screenSize + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);
 		//プレイヤーの方向表示
 		Novice::DrawLine(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.pos.x / screenSize + scroll.x + player.direction.x / screenSize * 150), int(player.pos.y / screenSize + scroll.y + player.direction.y / screenSize * 150), WHITE);
+
+		for (int i = 0; i < kPreNum; i++)
+		{
+			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (i + 1) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i]);
+		}
 		//プレイヤー
 		Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
 		//プレイヤーフリック時
-		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);
-
+		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);//0x55ff5599
+		if(player.aim||player.triangulAttack)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x33ff33ff, kFillModeSolid);
 
 		//仮敵描画
 #pragma region enemy
@@ -3051,7 +3133,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//三角形の点
 		for (int i = 0; i < 3; i++)
 		{
-			if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, 0x00ff00ff, kFillModeSolid);
+			if (player.prepos[i].x != 0)Functions.DrawQuadPlus(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius * 2 / screenSize), int(player.anchorRadius * 2 / screenSize),1, 1, ((gameTimer*3 + 1)%360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, 0x00ff00ff);
+			//if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, 0x00ff00ff, kFillModeSolid);
 		}
 		//フィーバーゲージ仮
 		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 450, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ

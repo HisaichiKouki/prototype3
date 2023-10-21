@@ -108,6 +108,7 @@ struct testEnemy2//四角に配置される敵
 	float easeT;
 	int count;
 	bool countFlag[4][16];
+	int timer;
 
 };
 
@@ -123,6 +124,8 @@ struct testEnemy3//１列に配置される敵
 	int dedTimer[4];
 	Vector2 posReset[4];
 	float easeT;
+	int timer;
+
 };
 struct testEnemy4//八方向１列に配置される敵
 {
@@ -139,6 +142,8 @@ struct testEnemy4//八方向１列に配置される敵
 	float easeT;
 	int count;
 	bool countFlag[8][4];
+	int timer;
+
 };
 
 struct testEnemy5//１列に配置される敵
@@ -156,6 +161,7 @@ struct testEnemy5//１列に配置される敵
 	float easeT;
 	int count;
 	bool countFlag[4][12];
+	int timer;
 
 };
 
@@ -174,6 +180,7 @@ struct testEnemy6  //列が上下に出て中心に向かって進む
 	float easeT;
 	int count;
 	bool countFlag[2][8];
+	int timer;
 
 };
 
@@ -195,6 +202,7 @@ struct testEnemy7
 	float z[60];
 	int count;
 	bool countFlag[60];
+	int timer;
 
 };
 
