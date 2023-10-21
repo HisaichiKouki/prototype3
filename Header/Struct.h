@@ -167,4 +167,23 @@ struct testEnemy6  //列が上下に出て中心に向かって進む
 
 };
 
+struct testEnemy7
+{
+	Vector2 centorPos;
+	Vector2 relativePos[60];
+	Vector2 velocity[60];
+	float radius[60];
+	bool parentIsAlive;
+	bool childIsAlive[60];
+	bool isDed[60];
+	int dedTimer[60];
+	Vector2 posReset[60];
+	bool hostIsAlive;
+	float easeT[60];
+	float thta[60];
+	float length;
+	float z[60];
+
+};
+
 
