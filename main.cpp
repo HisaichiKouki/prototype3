@@ -325,7 +325,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Ennergy ennergy{};
 	ennergy.dashRate = 3;//ダッシュは三角の数字倍貯まる
-	ennergy.triangleRate = 1.5f;
+	ennergy.triangleRate = 1.0f;
 	ennergy.powerUp = 2.0f;//移動速度が倍になる
 	ennergy.max = 100;
 	ennergy.fever = false;
@@ -363,6 +363,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int plusScore = 10;//1体何点か
 	bool scoreAdd = false;
 
+	float bigNumEaseT = 0;
+	float bigNumSize = 0;
+	int bigNumTexture[5]{};
+	int bigNumCount = 0;
+	unsigned int bigNumColor[5]{};
+	bigNumColor[0] = 0xffffff44;
+	bigNumColor[1] = 0xffffff11;
+	bigNumColor[2] = 0xffffff22;
+	bigNumColor[3] = 0xffffff33;
+	bigNumColor[4] = 0xffffff55;
+
+	bigNumTexture[0] = Novice::LoadTexture("./Resources/images/number_5.png");
+	bigNumTexture[1] = Novice::LoadTexture("./Resources/images/number_4.png");
+	bigNumTexture[2] = Novice::LoadTexture("./Resources/images/number_3.png");
+	bigNumTexture[3] = Novice::LoadTexture("./Resources/images/number_2.png");
+	bigNumTexture[4] = Novice::LoadTexture("./Resources/images/number_1.png");
+
+	float finishEaseT = 0;
+	float finishSize = 0;
+	int finishTexture = Novice::LoadTexture("./Resources/images/finish.png");
+
 	// クラス変数の宣言
 	Func Functions;
 	AttackAreaObject attAreaObj;
@@ -399,9 +420,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			allReset = true;
 		}
 
-
 		if (allReset)
 		{
+			bigNumEaseT = 0;
+			bigNumSize = 0;
+			bigNumCount = 0;
 			score = 0;
 			plusScore = 10;
 			scoreAdd = false;
@@ -1363,7 +1386,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
-		
+
 		if (gameTimer < 6000)
 		{
 
@@ -2798,6 +2821,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+
+
+
+
 		///                                                            ///
 		/// --------------------↑更新処理ここまで-------------------- ///
 		///                                                            ///
@@ -2861,7 +2888,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フィールドの円周
 		Novice::DrawEllipse(int(scroll.x), int(scroll.y), (int)(fieldRadius / screenSize), (int)(fieldRadius / screenSize), 0, GREEN, kFillModeWireFrame);
 
-		
+
 		//スポーン地点
 		Novice::DrawBox(int(-50 / screenSize + scroll.x), int(-50 / screenSize + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);
 		//プレイヤーの方向表示
@@ -3208,7 +3235,48 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+		if (keys[DIK_P])
+		{
+			bigNumEaseT = 0;
+		}
 
+		if (gameTimer > 6000)
+		{
+			if (finishEaseT < 120)
+			{
+				finishSize = easeOutCirc(finishEaseT / 100);
+
+				finishEaseT += 2;
+			}
+		}
+		else if (gameTimer >= 5700)
+		{
+			bigNumSize = easeOutCirc(bigNumEaseT / 100);
+
+			if (bigNumEaseT < 120 && bigNumEaseT>-1 && bigNumCount < 5)
+			{
+				bigNumEaseT += 2;
+
+				if (bigNumEaseT >= 120)
+				{
+					bigNumEaseT = 0;
+					bigNumSize = 0;
+					bigNumCount++;
+					if (bigNumCount >= 5)
+					{
+						bigNumCount = 4;
+						bigNumEaseT = -1;
+					}
+				}
+			}
+		}
+
+
+
+
+		Novice::ScreenPrintf(700, 700, "bigNumEaseT=%f", bigNumEaseT);
+		Functions.DrawQuadPlus(960, 540, 800, 800, bigNumSize, bigNumSize, 0, 0, 0, 800, 800, bigNumTexture[bigNumCount], bigNumColor[bigNumCount]);
+		Functions.DrawQuadPlus(960, 540, 1600, 800, finishSize, finishSize, 0, 0, 0, 1600, 800, finishTexture, 0xffffffff);
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       
