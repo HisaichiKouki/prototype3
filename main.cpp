@@ -463,6 +463,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float gaugeEasePos = 0;
 	int playerTexture = Novice::LoadTexture("./Resources/images/player.png");
 
+	int informationTexture[3]{};
+	informationTexture[0]= Novice::LoadTexture("./Resources/images/information_1.png");
+	informationTexture[1]= Novice::LoadTexture("./Resources/images/information_2.png");
+	informationTexture[2]= Novice::LoadTexture("./Resources/images/information_3.png");
+
+	int infoFont[4]{};
+	infoFont[0]= Novice::LoadTexture("./Resources/font/info_font_1.png");
+	infoFont[1]= Novice::LoadTexture("./Resources/font/info_font_2.png");
+	infoFont[2]= Novice::LoadTexture("./Resources/font/info_font_3.png");
+	infoFont[3]= Novice::LoadTexture("./Resources/font/info_font_4.png");
+
+	float informationEaseT = 0;
+	float informationEase = 0;
+
+	float infoFontEaseT = 0;
+	float infoFontEase = 0;
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -987,7 +1003,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (length >= dedZone)
 					{
 						walkTimer++;
-						if (walkTimer >= 60)
+						if (walkTimer >= 30)
 						{
 							whileFlag = true;
 						}
@@ -1109,7 +1125,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						whileTime = 60;
 						whileFlag = false;
 						titleCount++;
-
+						informationEaseT = 0;
+						informationEase = 0;
+						infoFontEase = 0;
+						infoFontEaseT = 0;
 						if (titleCount == 1)
 						{
 							titleDashFlag = true;
@@ -1619,7 +1638,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 					}
 				}
-				if (gameTimer == 120 || gameTimer == 660 || gameTimer == 1800 || gameTimer == 2700 || gameTimer == 3800 || gameTimer == 4700 || gameTimer == 5250 && !quickFlag)
+				if (gameTimer == 120 || gameTimer == 660 || gameTimer == 1800 || gameTimer == 2700 || gameTimer == 3800 || gameTimer == 4700 || gameTimer == 5400 && quickTimer == 0 || gameTimer == 5640)
 				{
 					for (int i = 0; i < 10; i++)
 					{
@@ -4506,26 +4525,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 		case kTypeGameTitle:
 			Novice::DrawBox(1800, 700, 100, 100, 0, WHITE, kFillModeSolid);
-			if (titleCount == 0)
-			{
-				Novice::ScreenPrintf(700, 540, "Walk");
 
-			}
-			else if (titleCount == 1)
-			{
-				Novice::ScreenPrintf(700, 540, "Dash");
-
-			}
-			else if (titleCount == 2)
-			{
-				Novice::ScreenPrintf(700, 540, "Triangle");
-
-			}
-			else if (titleCount == 3)
-			{
-				Novice::ScreenPrintf(700, 540, "kill to gamestart");
-
-			}
+			
 
 
 			for (int i = 0; i < 3; i++)
@@ -4549,7 +4550,63 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
 				}
 			}
+			if (titleCount == 0)
+			{
+				Novice::ScreenPrintf(700, 540, "Walk");
+				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[0], WHITE);
+				informationEase = easeOutElastic(informationEaseT / 100);
+				if (informationEaseT < 100)informationEaseT += 2;
 
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[0], WHITE);
+
+				infoFontEase = easeOutElastic(infoFontEaseT / 100);
+				if (infoFontEaseT < 100)infoFontEaseT += 2;
+
+			}
+			else if (titleCount == 1)
+			{
+				Novice::ScreenPrintf(700, 540, "Dash");
+				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[1], WHITE);
+				informationEase = easeOutElastic(informationEaseT / 100);
+				if (informationEaseT < 100)informationEaseT += 2;
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[1], WHITE);
+
+				infoFontEase = easeOutElastic(infoFontEaseT / 100);
+				if (infoFontEaseT < 100)infoFontEaseT += 2;
+
+			}
+			else if (titleCount == 2)
+			{
+				Novice::ScreenPrintf(700, 540, "Triangle");
+				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[2], WHITE);
+				informationEase = easeOutElastic(informationEaseT / 100);
+				if (informationEaseT < 100)informationEaseT += 2;
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[2], WHITE);
+
+				infoFontEase = easeOutElastic(infoFontEaseT / 100);
+				if (infoFontEaseT < 100)infoFontEaseT += 2;
+
+			}
+			else if (titleCount == 3)
+			{
+				Novice::ScreenPrintf(700, 540, "kill to gamestart");
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[3], WHITE);
+				
+				if (!startNewGame)
+				{
+					infoFontEase = easeOutElastic(infoFontEaseT / 100);
+					if (infoFontEaseT < 100)infoFontEaseT += 2;
+				}
+				else
+				{
+					infoFontEase = easeInQuint(infoFontEaseT / 100);
+					 if(infoFontEaseT > 0)infoFontEaseT -= 2;
+					
+
+				}
+				
+
+			}
 
 			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE);
 			break;
