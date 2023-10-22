@@ -79,6 +79,8 @@ struct Ennergy
 	bool damageFlag;
 };
 
+#pragma region EnemiesPattern
+
 struct testEnemy1//三角に配置される敵
 {
 	Vector2 centorPos;
@@ -207,4 +209,13 @@ struct testEnemy7
 
 };
 
+#pragma endregion
 
+struct ScoreData
+{
+	Vector2 position;
+	int width;
+	int height;
+	int textureHandle;
+	unsigned int color;
+};
