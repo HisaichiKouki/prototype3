@@ -1217,70 +1217,63 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region ennegy
 			//ゲージ処理
-			if (gameTimer < 6000)
+
+
+			if (!ennergy.fever)
+			{
+				setScreenEaseTChange = -1;
+				if (screenSize > 1.0f)
+				{
+					screenSize -= 0.01f;
+					if (screenSize < 1.0f)
+					{
+						screenSize = 1.0f;
+					}
+				}
+				if (!ennergy.dash && dash.endCount != 0)
+				{
+					ennergy.count += dash.endCount * ennergy.dashRate * (dash.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
+					ennergy.dash = true;
+				}
+				if (!ennergy.triangle && triangle.endCount != 0)
+				{
+					ennergy.count += triangle.endCount * ennergy.triangleRate * (triangle.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
+					ennergy.triangle = true;
+				}
+
+				if (ennergy.count >= ennergy.max)
+				{
+					ennergy.count = ennergy.max;
+					ennergy.fever = true;
+				}
+
+			}
+			else
 			{
 
-				if (!ennergy.fever)
+				setScreenEaseTChange = 1;
+				ennergy.count -= ennergy.max / ennergy.feverTime;
+				;
+				if (ennergy.count < 0)
 				{
-					setScreenEaseTChange = -1;
-					if (screenSize > 1.0f)
-					{
-						screenSize -= 0.01f;
-						if (screenSize < 1.0f)
-						{
-							screenSize = 1.0f;
-						}
-					}
-					if (!ennergy.dash && dash.endCount != 0)
-					{
-						ennergy.count += dash.endCount * ennergy.dashRate * (dash.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
-						ennergy.dash = true;
-					}
-					if (!ennergy.triangle && triangle.endCount != 0)
-					{
-						ennergy.count += triangle.endCount * ennergy.triangleRate * (triangle.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
-						ennergy.triangle = true;
-					}
-
-					if (ennergy.count >= ennergy.max)
-					{
-						ennergy.count = ennergy.max;
-						ennergy.fever = true;
-					}
-
-				}
-				else
-				{
-
-					setScreenEaseTChange = 1;
-					ennergy.count -= ennergy.max / ennergy.feverTime;
-					;
-					if (ennergy.count < 0)
-					{
-						ennergy.count = 0;
-						ennergy.fever = false;
-					}
-
-
-
+					ennergy.count = 0;
+					ennergy.fever = false;
 				}
 
-				//スクリーン拡縮処理
-				if (finishEaseT != 100) {
-					screenSize = easeInOutCubic(setScreenEaseT / 100) * (setScreenSize - 1) + 1;//easeOutBack
-					if (setScreenEaseT < 100 || setScreenEaseT > 0)
-					{
-						setScreenEaseT += setScreenEaseTChange * 2;
-						if (setScreenEaseT > 100)setScreenEaseT = 100;
-						if (setScreenEaseT < 0)setScreenEaseT = 0;
-					}
-				}
+
+
 			}
-			if (finishEaseT == 100) {
-				screenSize = easeInCubic(setScreenEaseT / 100) * (100 - 1) + 1;//easeOutBack
-				setScreenEaseT += 1;
-				if (setScreenEaseT > 100)setScreenEaseT = 100;
 
+
+
+
+			//スクリーン拡縮処理
+			screenSize = easeInOutCubic(setScreenEaseT / 100) * (setScreenSize - 1) + 1;//easeOutBack
+			if (setScreenEaseT < 100 || setScreenEaseT > 0)
+			{
+				setScreenEaseT += setScreenEaseTChange * 2;
+				if (setScreenEaseT > 100)setScreenEaseT = 100;
+				if (setScreenEaseT < 0)setScreenEaseT = 0;
 			}
 #pragma endregion
 #pragma region enemySpawn
@@ -3763,7 +3756,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		case kTypeGameResult:
 			Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
-			Novice::ScreenPrintf(500, 500, "-J- Title -L- NewGame");
+			Novice::ScreenPrintf(500, 500, "-H- Title -J- NewGame");
 			break;
 		}
 
