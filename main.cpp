@@ -340,6 +340,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ennergy.fever = false;
 	ennergy.feverTime = 300;//フレーム数 実際にはちょっと長くなる
 	ennergy.damage = 0.2f;//攻撃していない時に敵に当たった時ダメージの代わりにゲージが減る
+	Vector2 plth{};
+	float Playerth = 0;
 
 	int shakeRadius = 10;
 	int shakeGaugeX = shakeRadius;
@@ -448,6 +450,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float gamestartPos2 = 0;
 	bool titleBackFlag = false;
 
+	int directionTexture = Novice::LoadTexture("./Resources/images/direction.png");
+	float directionTheta = 0;
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
@@ -464,7 +468,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
-		
+
 
 		switch (game)
 		{
@@ -949,6 +953,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				}
 
+				if (player.preDirection.x != 0 || player.preDirection.y != 0)
+				{
+					directionTheta = atan2f(float(player.preDirection.x), float(-player.preDirection.y));
+
+				}
+
 				///スティック入力ここまで
 #pragma endregion
 
@@ -1152,7 +1162,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (gamestartEaseT < 100)gamestartEaseT += 2;
 
 				}
-				
+
 
 
 
@@ -2251,6 +2261,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				else
 				{
 					player.velocity = { 0,0 };
+				}
+
+				if (player.preDirection.x != 0 || player.preDirection.y != 0)
+				{
+					directionTheta = atan2f(float(player.preDirection.x), float(-player.preDirection.y));
+
 				}
 				///スティック入力ここまで
 #pragma endregion
@@ -4045,7 +4061,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(1000, 60, "enemy9.hostIsAlive=%d enemy9.timer=%d", enemy9.hostIsAlive, enemy9.timer);
 		Novice::ScreenPrintf(1000, 80, "enemy13.hostIsAlive=%d", enemy13.hostIsAlive);*/
 		Novice::ScreenPrintf(1000, 100, "quickTimer=%d", quickTimer);
-		
+
 
 		//一番後ろの背景
 		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x222222ff, kFillModeSolid);
@@ -4074,13 +4090,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		for (int i = 0; i < kPreNum; i++)
 		{
-			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (i + 1) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i]);
+			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (kPreNum-i) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i]);
 		}
 		//プレイヤー
-		Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
+		//Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
 		//プレイヤーフリック時
 		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);//0x55ff5599
 		if (player.aim || player.triangulAttack)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x33ff33ff, kFillModeSolid);
+		if (player.preDirection.x != 0 || player.preDirection.y != 0)
+		{
+			if (player.flick) {
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x00ffffff);
+			}
+			else if (player.aim || player.triangulAttack)
+			{
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x33ff33ff);
+
+			}
+			else
+			{
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, WHITE);
+
+			}
+		}
+
+		plth.x = fabsf(player.velocity.x/2);
+		plth.y = fabsf(player.velocity.y/2);
+		Playerth += plth.x + plth.y;
+		Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth/180.0f)*3.1415f, 0, 0, 1, 1, kWhiteTexture, RED);
 
 		//仮敵描画
 #pragma region enemy
@@ -4422,11 +4459,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 		case kTypeGameTitle:
 			Novice::DrawBox(1800, 700, 100, 100, 0, WHITE, kFillModeSolid);
-			if (titleCount==0)
+			if (titleCount == 0)
 			{
 				Novice::ScreenPrintf(700, 540, "Walk");
 
-			}else if (titleCount == 1)
+			}
+			else if (titleCount == 1)
 			{
 				Novice::ScreenPrintf(700, 540, "Dash");
 
@@ -4472,7 +4510,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case kTypeGameGame:
 			Novice::DrawBox(1800, 700, 100, 100, 0, RED, kFillModeSolid);
 			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE);
-			if(quickTimer>=150)Novice::ScreenPrintf(900, 600, "EXCELLENT");
+			if (quickTimer >= 150)Novice::ScreenPrintf(900, 600, "EXCELLENT");
 
 			break;
 
