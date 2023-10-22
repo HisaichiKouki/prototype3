@@ -36,6 +36,16 @@ bool AttackAreaObject::TriangleCollision(Vector2 _targetPosition)
 		Vector2 ap = { attArea.position[0].x - _targetPosition.x, attArea.position[0].y - _targetPosition.y };
 		Vector2 bp = { attArea.position[1].x - _targetPosition.x, attArea.position[1].y - _targetPosition.y };
 		Vector2 cp = { attArea.position[2].x - _targetPosition.x, attArea.position[2].y - _targetPosition.y };
+
+		if (
+			attArea.position[0].x == attArea.position[1].x 
+			&& attArea.position[1].x == attArea.position[2].x 
+			&& attArea.position[0].y == attArea.position[1].y 
+			&& attArea.position[1].y == attArea.position[2].y
+			)
+		{
+			return 0;
+		}
 		
 		// それぞれ外積を計算する
 		float cross01 = CrossProduct(ap, bp);

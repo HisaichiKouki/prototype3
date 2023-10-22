@@ -6,7 +6,17 @@ class ScoreObject
 {
 public:
 	
+	enum DrawPattern
+	{
+		DPATTERN_FILLED_BY_ZERO,
+		DPATTERN_ONLY_DIGIT
+	};
+
+	/// <summary>
+	/// インストラクタ
+	/// </summary>
 	ScoreObject();
+
 	/// <summary>
 	/// スコア用の数字画像のテクスチャハンドルを記憶します。テクスチャハンドルを配列に0～9の順で入れてください。
 	/// </summary>
@@ -20,6 +30,29 @@ public:
 	/// <param name="height">画像の高さ</param>
 	void SetSize(int _width, int _height);
 
+	/// <summary>
+	/// ０埋め時の最大桁数を設定します。
+	/// </summary>
+	/// <param name="_maxDigit"></param>
+	void SetMaxDigit(int _maxDigit);
+
+	/// <summary>
+	/// パターンを設定します。
+	/// </summary>
+	/// <param name="_dPattern">パターン</param>
+	void SetPattern(DrawPattern _dPattern);
+
+	/// <summary>
+	/// スケールを設定します。
+	/// </summary>
+	/// <param name="_scaleX">横方向</param>
+	/// <param name="_scaleY">縦方向</param>
+	void SetScale(float _scaleX, float _scaleY);
+
+	/// <summary>
+	/// 画像の色を設定します。
+	/// </summary>
+	/// <param name="_color"></param>
 	void SetColor(unsigned int _color);
 
 	/// <summary>
@@ -34,7 +67,10 @@ public:
 private:
 	ScoreData score;
 	static int PowI(int _x, int _y);
+	int maxDigit;
 	Func func;
+	DrawPattern dPattern;
 	int textureHandles[10];
 	int handleCnt;
+	
 };

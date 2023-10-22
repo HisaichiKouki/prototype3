@@ -25,22 +25,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.anchorRadius = 10;
 
 	int scoreNumsHandle[10] = {
-		Novice::LoadTexture("./Resources/Images/testNums/0.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/1.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/2.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/3.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/4.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/5.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/6.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/7.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/8.png"),
-		Novice::LoadTexture("./Resources/Images/testNums/9.png")
+		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_1.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_2.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_3.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_4.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_5.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_6.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_7.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_8.png"),
+		Novice::LoadTexture("./Resources/Images/number/num_9.png")
 	};
 
+	// スコア用のクラス変数 ### ScoreClass
 	ScoreObject scoreObj;
+
+	// 色設定
 	scoreObj.SetColor(0xffffffff);
-	scoreObj.SetSize(240, 240);
+	// サイズ設定
+	scoreObj.SetSize(108, 168);
+	// テクスチャハンドルセット
 	scoreObj.SetScoreTextureHandle(scoreNumsHandle);
+	// スケール設定
+	scoreObj.SetScale(0.5f, 0.5f);
+	// 
+	scoreObj.SetMaxDigit(6);
+	scoreObj.SetPattern(scoreObj.DPATTERN_FILLED_BY_ZERO);
+
 	Vector2 cameraEasePos{};
 	float cameraEaseT = 0.3f;
 	const int kPreNum = 15;
@@ -502,6 +513,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
+	// デバッグ用 ### MustDelete
+	game = kTypeGameGame;
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -515,6 +529,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
 
+		
 
 		switch (game)
 		{
@@ -2329,14 +2344,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				///スティック入力ここまで
 #pragma endregion
-		/// キー入力（デバッグ) ここから
+				// キー入力（デバッグ) ここから ### MustDelete
 
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE])
 				{
 					Functions.ToggleDebugMode();
 				}
 
-				/// キー入力（デバッグ）ここまで
+				// キー入力（デバッグ）ここまで
 
 				//ポジション移動
 				player.pos.x += player.velocity.x;
@@ -4162,16 +4177,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (player.preDirection.x != 0 || player.preDirection.y != 0)
 		{
 			if (player.flick) {
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x00ffffff);
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x00ffffff, "center");
 			}
 			else if (player.aim || player.triangulAttack)
 			{
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x33ff33ff);
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x33ff33ff, "center");
 
 			}
 			else
 			{
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, WHITE);
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, WHITE, "center");
 
 			}
 		}
@@ -4181,16 +4196,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Playerth += plth.x + plth.y;
 
 		if (player.flick) {
-			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x00ffffff);
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x00ffffff, "center");
 		}
 		else if (player.aim || player.triangulAttack)
 		{
-			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x33ff33ff);
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x33ff33ff, "center");
 
 		}
 		else
 		{
-			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, WHITE);
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, WHITE, "center");
 
 		}
 
@@ -4553,8 +4568,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (enemy1.childIsAlive[i])
 				{
-					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
+					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
 				}
 			}
 
@@ -4565,18 +4580,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				if (enemy1.childIsAlive[i])
 				{
-					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff);
-					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE);
+					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
+					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
 				}
 			}
 			if (titleCount == 0)
 			{
 				Novice::ScreenPrintf(700, 540, "Walk");
-				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[0], WHITE);
+				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[0], WHITE, "center");
 				informationEase = easeOutElastic(informationEaseT / 100);
 				if (informationEaseT < 100)informationEaseT += 2;
 
-				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[0], WHITE);
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[0], WHITE, "center");
 
 				infoFontEase = easeOutElastic(infoFontEaseT / 100);
 				if (infoFontEaseT < 100)infoFontEaseT += 2;
@@ -4585,10 +4600,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			else if (titleCount == 1)
 			{
 				Novice::ScreenPrintf(700, 540, "Dash");
-				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[1], WHITE);
+				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[1], WHITE, "center");
 				informationEase = easeOutElastic(informationEaseT / 100);
 				if (informationEaseT < 100)informationEaseT += 2;
-				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[1], WHITE);
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[1], WHITE, "center");
 
 				infoFontEase = easeOutElastic(infoFontEaseT / 100);
 				if (infoFontEaseT < 100)infoFontEaseT += 2;
@@ -4597,10 +4612,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			else if (titleCount == 2)
 			{
 				Novice::ScreenPrintf(700, 540, "Triangle");
-				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[2], WHITE);
+				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[2], WHITE, "center");
 				informationEase = easeOutElastic(informationEaseT / 100);
 				if (informationEaseT < 100)informationEaseT += 2;
-				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[2], WHITE);
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[2], WHITE, "center");
 
 				infoFontEase = easeOutElastic(infoFontEaseT / 100);
 				if (infoFontEaseT < 100)infoFontEaseT += 2;
@@ -4609,7 +4624,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			else if (titleCount == 3)
 			{
 				Novice::ScreenPrintf(700, 540, "kill to gamestart");
-				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[3], WHITE);
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[3], WHITE, "center");
 				
 				if (!startNewGame)
 				{
@@ -4627,12 +4642,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE);
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
 			break;
 
 		case kTypeGameGame:
 			Novice::DrawBox(1800, 700, 100, 100, 0, RED, kFillModeSolid);
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE);
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
 			if (quickTimer >= 150)Novice::ScreenPrintf(900, 600, "EXCELLENT");
 
 			break;
@@ -4649,7 +4664,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
 			Novice::ScreenPrintf(500, 500, "-H- Title -J- NewGame");
 
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE);
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
 
 			break;
 		}
@@ -4660,10 +4675,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		Novice::ScreenPrintf(700, 700, "bigNumEaseT=%f", bigNumEaseT);
-		Functions.DrawQuadPlus(960, 540, 800, 800, bigNumSize, bigNumSize, 0, 0, 0, 800, 800, bigNumTexture[bigNumCount], bigNumColor[bigNumCount]);
-		Functions.DrawQuadPlus(960, 540, 1600, 800, finishSize - finishSize2, finishSize - finishSize2, 0, 0, 0, 1600, 800, finishTexture, 0xffffffff);
+		Functions.DrawQuadPlus(960, 540, 800, 800, bigNumSize, bigNumSize, 0, 0, 0, 800, 800, bigNumTexture[bigNumCount], bigNumColor[bigNumCount], "center");
+		Functions.DrawQuadPlus(960, 540, 1600, 800, finishSize - finishSize2, finishSize - finishSize2, 0, 0, 0, 1600, 800, finishTexture, 0xffffffff, "center");
 
 		Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
+		
+		// スコア (大きさ調整は [### ScoreClass] で検索)
+		scoreObj.Draw(score, 0, 0, 0);
+		
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       

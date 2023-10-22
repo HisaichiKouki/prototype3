@@ -9,6 +9,8 @@ enum DebugMode {
 class Func {
 public:
 
+	Func(bool _b = true);
+
 	/// @brief デバッグモードを設定する
 	/// @param _mode デバッグモード
 	void SetDebugMode(DebugMode _mode);
@@ -19,6 +21,12 @@ public:
 	/// @param _y y座標
 	/// @param _theta 角度
 	void rotate(int& _x, int& _y, float _theta);
+
+	/// <summary>
+	/// デバッグ状態のフラグを返す
+	/// </summary>
+	/// <returns></returns>
+	bool isDebug();
 
 	/// @brief スプライトを描画する
 	/// @param _x 画面上のx座標
@@ -50,4 +58,5 @@ private:
 	bool isDebugMode = false;
 	/// @brief ToggleDebugModeの呼び出し回数
 	int callCnt = 0;
+	int kWhiteCircleHandle;
 };

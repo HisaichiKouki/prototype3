@@ -65,6 +65,9 @@
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="randPlus.cpp" />
+    <ClCompile Include="Source\Score.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -164,5 +167,11 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="randPlus.h" />
+    <ClInclude Include="Header\Score.h">
+      <Filter>Headers\Class</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="LineJumpCodes.txt" />
   </ItemGroup>
 </Project>

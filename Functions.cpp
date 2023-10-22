@@ -2,6 +2,11 @@
 #include <assert.h>
 #include <math.h>
 
+Func::Func(bool _b)
+{
+	if (_b) kWhiteCircleHandle = Novice::LoadTexture("./resources/images/whiteCir.png");
+}
+
 void Func::SetDebugMode(DebugMode mode)
 {
 	switch (mode)
@@ -39,6 +44,11 @@ void Func::rotate(int& _x, int& _y, float _theta)
 
 	_x = newX;
 	_y = newY;
+}
+
+bool Func::isDebug()
+{
+	return isDebugMode;
 }
 
 void Func::DrawQuadPlus(
@@ -110,10 +120,54 @@ void Func::DrawQuadPlus(
 	if (isDebugMode)
 	{
 		// 4頂点の確認
-		Novice::DrawEllipse(_x + leftTop[0], _y + leftTop[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
-		Novice::DrawEllipse(_x + rightTop[0], _y + rightTop[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
-		Novice::DrawEllipse(_x + leftBottom[0], _y + leftBottom[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
-		Novice::DrawEllipse(_x + rightBottom[0], _y + rightBottom[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
+		Novice::DrawQuad(
+			_x + leftTop[0] - 5, _y + leftTop[1] - 5,
+			_x + leftTop[0] + 5, _y + leftTop[1] - 5,
+			_x + leftTop[0] - 5, _y + leftTop[1] + 5,
+			_x + leftTop[0] + 5, _y + leftTop[1] + 5,
+			0, 0,
+			10, 10,
+			kWhiteCircleHandle,
+			0x2f76ffff
+		);
+
+		Novice::DrawQuad(
+			_x + rightTop[0] - 5, _y + rightTop[1] - 5,
+			_x + rightTop[0] + 5, _y + rightTop[1] - 5,
+			_x + rightTop[0] - 5, _y + rightTop[1] + 5,
+			_x + rightTop[0] + 5, _y + rightTop[1] + 5,
+			0, 0,
+			10, 10,
+			kWhiteCircleHandle,
+			0x2f76ffff
+		);
+
+		Novice::DrawQuad(
+			_x + leftBottom[0] - 5, _y + leftBottom[1] - 5,
+			_x + leftBottom[0] + 5, _y + leftBottom[1] - 5,
+			_x + leftBottom[0] - 5, _y + leftBottom[1] + 5,
+			_x + leftBottom[0] + 5, _y + leftBottom[1] + 5,
+			0, 0,
+			10, 10,
+			kWhiteCircleHandle,
+			0x2f76ffff
+		);
+
+		Novice::DrawQuad(
+			_x + rightBottom[0] - 5, _y + rightBottom[1] - 5,
+			_x + rightBottom[0] + 5, _y + rightBottom[1] - 5,
+			_x + rightBottom[0] - 5, _y + rightBottom[1] + 5,
+			_x + rightBottom[0] + 5, _y + rightBottom[1] + 5,
+			0, 0,
+			10, 10,
+			kWhiteCircleHandle,
+			0x2f76ffff
+		);
+
+		// Novice::DrawEllipse(_x + leftTop[0], _y + leftTop[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
+		// Novice::DrawEllipse(_x + rightTop[0], _y + rightTop[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
+		// Novice::DrawEllipse(_x + leftBottom[0], _y + leftBottom[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
+		// Novice::DrawEllipse(_x + rightBottom[0], _y + rightBottom[1], 5, 5, 0.0f, 0x2f76ffff, kFillModeSolid);
 
 		// 中心点の確認
 		Novice::DrawEllipse(_x, _y, 5, 5, 0.0f, 0xff0000ff, kFillModeSolid);
