@@ -321,7 +321,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 #pragma endregion
 	testEnemy7 enemy13{};
-	enemy13.length = 1340;
+	enemy13.length = 1360;
 
 
 
@@ -461,6 +461,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int gaugeHeidth = 288;
 	float gaugeEaseT = 0;
 	float gaugeEasePos = 0;
+	int playerTexture = Novice::LoadTexture("./Resources/images/player.png");
+
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -889,7 +891,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				length = clump(sqrtf(xy.x * xy.x + xy.y * xy.y), 0, 100);
 
 				//長さがデッドゾーンを超えたら方向を代入
-				if (length >= dedZone)
+				if (length >= dedZone && !player.flick)
 				{
 					//方向を正規化。速度をかけるだけで使えるようにするため
 					player.direction = vectorNormalize(player.joystick, { 0,0 });
@@ -1643,10 +1645,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					for (int j = 0; j < 4; j++)
 					{
 						enemy2.parentIsAlive[j] = true;
-						enemy2.centorPos[0] = { -400,1200 };
-						enemy2.centorPos[1] = { -1200,-400 };
-						enemy2.centorPos[2] = { 400,-1200 };
-						enemy2.centorPos[3] = { 1200,400 };
+						enemy2.centorPos[0] = { -350,1200 };
+						enemy2.centorPos[1] = { -1200,-350 };
+						enemy2.centorPos[2] = { 350,-1200 };
+						enemy2.centorPos[3] = { 1200,350 };
 						for (int i = 0; i < kEnemy2Num; i++)
 						{
 							enemy2.countFlag[j][i] = false;
@@ -2196,7 +2198,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				length = clump(sqrtf(xy.x * xy.x + xy.y * xy.y), 0, 100);
 
 				//長さがデッドゾーンを超えたら方向を代入
-				if (length >= dedZone)
+				if (length >= dedZone && !player.flick)
 				{
 					//方向を正規化。速度をかけるだけで使えるようにするため
 					player.direction = vectorNormalize(player.joystick, { 0,0 });
@@ -4109,17 +4111,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//スポーン地点
 		Novice::DrawBox(int(-50 / screenSize + scroll.x), int(-50 / screenSize + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);
 		//プレイヤーの方向表示
-		Novice::DrawLine(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.pos.x / screenSize + scroll.x + player.preDirection.x / screenSize * 150), int(player.pos.y / screenSize + scroll.y + player.preDirection.y / screenSize * 150), WHITE);
+		//Novice::DrawLine(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.pos.x / screenSize + scroll.x + player.preDirection.x / screenSize * 150), int(player.pos.y / screenSize + scroll.y + player.preDirection.y / screenSize * 150), WHITE);
 
 		for (int i = 0; i < kPreNum; i++)
 		{
-			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (kPreNum - i) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i]);
+			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.4f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.4f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (kPreNum - i) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i]);
 		}
 		//プレイヤー
 		//Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
 		//プレイヤーフリック時
-		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);//0x55ff5599
-		if (player.aim || player.triangulAttack)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x33ff33ff, kFillModeSolid);
+		//if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);//0x55ff5599
+		//if (player.aim || player.triangulAttack)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x33ff33ff, kFillModeSolid);
 		if (player.preDirection.x != 0 || player.preDirection.y != 0)
 		{
 			if (player.flick) {
@@ -4140,7 +4142,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		plth.x = fabsf(player.velocity.x / 2);
 		plth.y = fabsf(player.velocity.y / 2);
 		Playerth += plth.x + plth.y;
-		Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, RED);
+
+		if (player.flick) {
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x00ffffff);
+		}
+		else if (player.aim || player.triangulAttack)
+		{
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x33ff33ff);
+
+		}
+		else
+		{
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, WHITE);
+
+		}
+
 
 		//仮敵描画
 #pragma region enemy
@@ -4307,14 +4323,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//ミニマップ
 		Novice::DrawEllipse(int(50 + fieldRadius / miniMap), int(1020 - fieldRadius / miniMap), int(fieldRadius / miniMap), int(fieldRadius / miniMap), 0, GREEN, kFillModeWireFrame);
-		for (int i = 0; i < 3; i++)
-		{//ミニマップ三角形の点
-			if (player.prepos[i].x != 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.prepos[i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[i].y / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), 0, 0x00ff00ff, kFillModeSolid);
-		}
-		//ミニマップ範囲
-		if (player.aimTimer > 0)Novice::DrawTriangle(int((50 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), 0x55cc5577, kFillModeSolid);
-		//ミニマッププレイヤー
-		Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, GREEN, kFillModeSolid);
 
 		//ミニマップシシカク
 		if (enemy2.hostIsAlive)
@@ -4455,6 +4463,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
+		for (int i = 0; i < 3; i++)
+		{//ミニマップ三角形の点
+			if (player.prepos[i].x != 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.prepos[i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[i].y / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), int(player.anchorRadius * miniMapPlayerSize / miniMap), 0, 0x00ff00ff, kFillModeSolid);
+		}
+		if (player.prepos[0].x != 0 && player.prepos[1].x != 0)Novice::DrawLine(int((50 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int((1020 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int((1020 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), 0x00ff00ff);
+		if (player.prepos[1].x != 0 && player.prepos[2].x != 0)Novice::DrawLine(int((50 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int((1020 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int((1020 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), 0x00ff00ff);
+		if (player.prepos[2].x != 0 && player.prepos[0].x != 0)Novice::DrawLine(int((50 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int((1020 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int((1020 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), 0x00ff00ff);
+
+		//ミニマップ範囲
+		if (player.aimTimer > 0)Novice::DrawTriangle(int((50 + fieldRadius / miniMap) + player.prepos[0].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[0].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[1].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[1].y / miniMap), int((50 + fieldRadius / miniMap) + player.prepos[2].x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.prepos[2].y / miniMap), 0x55cc5577, kFillModeSolid);
+		//ミニマッププレイヤー
+		Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, WHITE, kFillModeSolid);
+		if (player.triangulAttack)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, 0x00ff00ff, kFillModeSolid);
+		if (player.dashAttack)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, 0x00ffffff, kFillModeSolid);
 
 		//攻撃有効時間を表示
 		if (player.triangulAttack)
