@@ -1145,6 +1145,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (gamestartEaseT >= 100)
 
 					{
+						Playerth = 0;
+
 						game = 1;
 						setScreenEaseTChange = -1;
 						player.preDirection = { 0,0 };
@@ -1189,7 +1191,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					allReset = true;
 					startNewGame = false;
-
 
 				}
 				//スクリーン拡縮処理
@@ -3674,6 +3675,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (allReset)
 			{
+				Playerth = 0;
 				gamestartEaseT = 0;
 				gamestartEaseT2 = 0;
 				gamestartPos = 0;
