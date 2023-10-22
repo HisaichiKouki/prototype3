@@ -23,7 +23,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.pos.x = 0;
 	player.pos.y = 0;
 	player.anchorRadius = 10;
-
+	Vector2 cameraEasePos{};
+	float cameraEaseT = 0.3f;
 	const int kPreNum = 15;
 	Vector2 playerPrePos[kPreNum]{};
 	unsigned int prePosColor[kPreNum]{};
@@ -431,7 +432,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (allReset)
 		{
-
+			fieldToPlayer = { 0,0 };
+			cameraEasePos = { 0,0 };
+			for (int i = 0; i < kPreNum; i++)
+			{
+				playerPrePos[i] = { 0,0 };
+			}
+			player.preDirection = { 0,0 };
 			enemy2.timer = 0;
 			enemy7.timer = 0;
 			enemy8.timer = 0;
@@ -930,7 +937,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
-		if (gameTimer == 120 || gameTimer == 840 || gameTimer == 2100 || gameTimer == 3300 || gameTimer == 4500 || gameTimer == 5100 || gameTimer == 5250&&!quickFlag)
+		if (gameTimer == 120 || gameTimer == 840 || gameTimer == 2100 || gameTimer == 3300 || gameTimer == 4500 || gameTimer == 5100 || gameTimer == 5250 && !quickFlag)
 		{
 			for (int i = 0; i < 10; i++)
 			{
@@ -1387,7 +1394,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			prePosColor[0] = 0x00ffff99;
 
 		}
-		else if (player.triangulAttack||player.aim)
+		else if (player.triangulAttack || player.aim)
 		{
 			prePosColor[0] = 0x55ff5577;
 
@@ -1447,28 +1454,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
 			{
 				//移動入力がされている時
-				if (player.direction.x != 0 || player.direction.y != 0)
-				{
 
 					//点がプレイヤーの位置に番号順で設置される
-					player.prepos[player.count] = player.pos;
-					//点の座標を番号順に記録
-					attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
-					//プレイヤーの速度を等倍に
-					player.velocityRatio = 1;
-					player.aim = true;
-					//点を出したら次の点を出すためにカウントを足す
-					player.count++;
-					if (player.count >= 3)
-					{
-						//三点設置したら設置フェーズをおわる
-						player.count = 0;
-						player.aim = false;
-						player.aimTimer = 30;//攻撃時間を代入
-						player.triangulAttack = true;//三角形攻撃を有効に
+				player.prepos[player.count] = player.pos;
+				//点の座標を番号順に記録
+				attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
+				//プレイヤーの速度を等倍に
+				player.velocityRatio = 1;
+				player.aim = true;
+				//点を出したら次の点を出すためにカウントを足す
+				player.count++;
+				if (player.count >= 3)
+				{
+					//三点設置したら設置フェーズをおわる
+					player.count = 0;
+					player.aim = false;
+					player.aimTimer = 30;//攻撃時間を代入
+					player.triangulAttack = true;//三角形攻撃を有効に
 
-					}
 				}
+
 
 
 			}
@@ -1477,21 +1482,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (player.aimTimer > 0)
 		{
 			player.aimTimer--;
-		}
-		else if (player.aimTimer <= 0)
-		{
-			player.aimTimer = 0;
-			player.triangulAttack = false;
-			if (player.count == 0)
+			if (player.aimTimer <= 0)
 			{
+				player.aimTimer = 0;
+				player.triangulAttack = false;
+
 				for (int i = 0; i < 3; i++)
 				{
 					//三角形の点
 					//今は原点に戻してるけど意味はない
 					player.prepos[i] = { 0,0 };
 				}
+
 			}
 		}
+
 		//ボタン入力ここまで
 
 
@@ -1507,13 +1512,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//円の当たり判定的な。
 		xy = vectorLength(player.joystick, { 0,0 });
-		length = sqrtf(xy.x * xy.x + xy.y * xy.y);
+		//length = sqrtf(xy.x * xy.x + xy.y * xy.y);
+		length = clump(sqrtf(xy.x * xy.x + xy.y * xy.y), 0, 100);
 
 		//長さがデッドゾーンを超えたら方向を代入
 		if (length >= dedZone)
 		{
 			//方向を正規化。速度をかけるだけで使えるようにするため
 			player.direction = vectorNormalize(player.joystick, { 0,0 });
+			player.preDirection = player.direction;
 		}
 		else
 		{
@@ -1522,6 +1529,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		if (gameTimer > 0 && gameTimer < 6000)
 		{
+			//スティックのポジションがデッドゾーンの中の時
+			if (length <= 17)//preJoyStickX<dedZone * 50 && preJoyStickX > -dedZone * 50 && preJoyStickY<dedZone * 50 && preJoyStickY > -dedZone * 50
+			{
+				//フリック判定フレをリセット
+				if (!player.flick && player.flickCT == 0)player.flickTimer = 3;
+			}
 
 
 			//はじき判定
@@ -1530,7 +1543,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				player.flickTimer--;
 				//スティックが端に行ったら
-				if (player.flickLength > 32000 && !player.aim && !player.triangulAttack)
+				if (length >= 90 && !player.aim && !player.triangulAttack)
 				{
 					//フリックをTRUEに
 					player.flick = true;
@@ -1541,22 +1554,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 			}
 		}
-		//スティックのポジションがデッドゾーンの中の時
-		if (preJoyStickX<dedZone * 50 && preJoyStickX > -dedZone * 50 && preJoyStickY<dedZone * 50 && preJoyStickY > -dedZone * 50)
-		{
-			//フリック判定フレをリセット
-			if (!player.flick && player.flickCT == 0)player.flickTimer = 2;
-		}
 		if (gameTimer < 6000)
 		{
 
 
 			//Aボタンまたはフリックしたとき
-			if (player.trigerA || player.flick && player.flickCT == 0)
+			if (player.trigerA && player.aim || player.flick && player.flickCT == 0)
 			{
 				//方向に発射速度をかける
-				player.velocity.x = player.direction.x * player.shotSpeed;
-				player.velocity.y = player.direction.y * player.shotSpeed;
+				player.velocity.x = player.preDirection.x * player.shotSpeed;
+				player.velocity.y = player.preDirection.y * player.shotSpeed;
 
 				if (ennergy.fever)
 				{
@@ -1576,7 +1583,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			//フリックも三角形も作っていないとき
-			if (!player.aim && !player.flick && player.aimTimer <= 5)
+			if (!player.aim && !player.flick)//&& player.aimTimer <= 5
 			{
 				if (length >= dedZone)
 				{
@@ -2617,7 +2624,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						{
 							enemy8.parentIsAlive[j] = false;
 						}
-						
+
 					}
 				}
 			}
@@ -2748,13 +2755,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
-		
+
 #pragma endregion
 
 		//敵がちゃんと死んでいるか確認
 		if (enemy2.hostIsAlive)
 		{
-			
+
 			for (int j = 0; j < 4; j++)
 			{
 				for (int i = 0; i < 16; i++)
@@ -2800,7 +2807,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy9.hostIsAlive)
 		{
-			
+
 			for (int j = 0; j < 2; j++)
 			{
 				for (int i = 0; i < 8; i++)
@@ -2816,7 +2823,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		if (enemy13.hostIsAlive)
 		{
-			
+
 			for (int i = 0; i < 60; i++)
 			{
 				if (!enemy13.childIsAlive[i] && !enemy13.countFlag[i])
@@ -2886,9 +2893,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		//ここまでいじらなくてOK
 
+		if (keys[DIK_W] && !preKeys[DIK_W])
+		{
+			if (cameraEaseT < 1.0f)cameraEaseT += 0.1f;
+			if (cameraEaseT > 1.0f)cameraEaseT = 1.0f;
+		}
+		else if (keys[DIK_S] && !preKeys[DIK_S])
+		{
+			if (cameraEaseT > 0.1f)cameraEaseT -= 0.1f;
+			if (cameraEaseT < 0.1f)cameraEaseT = 0.1f;
+
+		}
+		cameraEasePos.x = (1.0f - cameraEaseT) * cameraEasePos.x + float(player.pos.x) * cameraEaseT;
+		cameraEasePos.y = (1.0f - cameraEaseT) * cameraEasePos.y + float(player.pos.y) * cameraEaseT;
+
+
 		//スクロールの値を代入
-		scroll.x = (-playerPrePos[2].x / screenSize + 960);
-		scroll.y = (-playerPrePos[2].y / screenSize + 540);
+		scroll.x = (-cameraEasePos.x / screenSize + 960);
+		scroll.y = (-cameraEasePos.y / screenSize + 540);
 
 
 
@@ -2915,7 +2937,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, 340, "World.X=%f World.Y=%f", player.pos.x, player.pos.y);
 		//Novice::ScreenPrintf(0, 360, "player.playTime=%d player.flick=%d", player.flickTimer, player.flick);
 		//Novice::ScreenPrintf(0, 380, "player.flickLength=%f", player.flickLength);
-		//Novice::ScreenPrintf(0, 400, "length=%f", length);
+		Novice::ScreenPrintf(0, 400, "length=%f", length);
 		//Novice::ScreenPrintf(0, 420, "player.flickCT=%d", player.flickCT);
 		Novice::ScreenPrintf(0, 440, "count=%f endCount=%f", count, endCount);
 		Novice::ScreenPrintf(0, 460, " dash.endcount=%f dash.endCount=%f", dash.count, dash.endCount);
@@ -2924,6 +2946,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(0, 520, "screenSize=%f", screenSize);
 		Novice::ScreenPrintf(0, 540, "gameTimer=%d seconds=%d", gameTimer, gameTimer / 60);
 		Novice::ScreenPrintf(0, 560, "score=%d", score);
+		Novice::ScreenPrintf(0, 580, "cameraEaseT=%0.3f", cameraEaseT);
 
 		for (int i = 0; i < variation; i++)
 		{
@@ -2941,11 +2964,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(1000, 60, "enemy9.hostIsAlive=%d enemy9.timer=%d", enemy9.hostIsAlive, enemy9.timer);
 		Novice::ScreenPrintf(1000, 80, "enemy13.hostIsAlive=%d", enemy13.hostIsAlive);
 		Novice::ScreenPrintf(1000, 100, "quickTimer=%d", quickTimer);
-
-		for (int i = 0; i < kPreNum; i++)
-		{
-			Novice::ScreenPrintf(500, 500 + i * 20, "prepos[%d].x=%f prepos[%d].y=%f", i, playerPrePos[i].x, i, playerPrePos[i].y);
-		}
+		
 		//一番後ろの背景
 		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x222222ff, kFillModeSolid);
 		//フィールドの画像表示
@@ -2969,7 +2988,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//スポーン地点
 		Novice::DrawBox(int(-50 / screenSize + scroll.x), int(-50 / screenSize + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);
 		//プレイヤーの方向表示
-		Novice::DrawLine(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.pos.x / screenSize + scroll.x + player.direction.x / screenSize * 150), int(player.pos.y / screenSize + scroll.y + player.direction.y / screenSize * 150), WHITE);
+		Novice::DrawLine(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.pos.x / screenSize + scroll.x + player.preDirection.x / screenSize * 150), int(player.pos.y / screenSize + scroll.y + player.preDirection.y / screenSize * 150), WHITE);
 
 		for (int i = 0; i < kPreNum; i++)
 		{
@@ -2979,7 +2998,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
 		//プレイヤーフリック時
 		if (player.flick)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x00ffffff, kFillModeSolid);//0x55ff5599
-		if(player.aim||player.triangulAttack)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x33ff33ff, kFillModeSolid);
+		if (player.aim || player.triangulAttack)Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0x33ff33ff, kFillModeSolid);
 
 		//仮敵描画
 #pragma region enemy
@@ -3133,7 +3152,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//三角形の点
 		for (int i = 0; i < 3; i++)
 		{
-			if (player.prepos[i].x != 0)Functions.DrawQuadPlus(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius * 2 / screenSize), int(player.anchorRadius * 2 / screenSize),1, 1, ((gameTimer*3 + 1)%360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, 0x00ff00ff);
+			if (player.prepos[i].x != 0)Functions.DrawQuadPlus(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius * 2 / screenSize), int(player.anchorRadius * 2 / screenSize), 1, 1, ((gameTimer * 3 + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, 0x00ff00ff);
 			//if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, 0x00ff00ff, kFillModeSolid);
 		}
 		//フィーバーゲージ仮

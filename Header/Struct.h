@@ -19,6 +19,7 @@ typedef struct PlayerData
 	Vector2 direction;
 	Vector2 velocity;
 	Vector2 radius;
+	Vector2 preDirection;
 
 	Vector2 joystick;
 
