@@ -32,8 +32,18 @@ public:
 	/// @param _srcH 画像ファイルの高さ
 	/// @param _textureHandle 描画するテクスチャハンドル
 	/// @param _hexColor 16進数でのカラーコード
-	void DrawQuadPlus(int _x, int _y, int _horizontal, int _vertical, float _scaleX, float _scaleY, float _theta, int _srcX, int _srcY, int _srcW, int _srcH, int _textureHandle, unsigned int _hexColor);
-
+	/// @param _mode[] 基準点モード ("center" or "leftTop")
+	void DrawQuadPlus(
+		int _x, int _y, 
+		int _horizontal, int _vertical,
+		float _scaleX, float _scaleY,
+		float _theta,
+		int _srcX, int _srcY,
+		int _srcW, int _srcH,
+		int _textureHandle,
+		unsigned int _hexColor,
+		const char _mode[]
+	);
 
 private:
 	/// @brief デバッグ状態かどうか

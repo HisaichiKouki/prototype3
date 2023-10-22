@@ -6,3 +6,4 @@
 #include "./Header/AttackArea.h"
 #include "./Header/Various.h"
 #include "Functions.h"
+#include "./Header/Score.h"

@@ -216,6 +216,5 @@ struct ScoreData
 	Vector2 position;
 	int width;
 	int height;
-	int textureHandle;
 	unsigned int color;
 };
