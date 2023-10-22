@@ -36,7 +36,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int joystickY = 0;
 	int preJoyStickX = 0;
 	int preJoyStickY = 0;
-	Novice::SetJoystickDeadZone(0, 0, 0);
 
 	Vector2 xy{};
 	float length = 0;
@@ -452,6 +451,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int directionTexture = Novice::LoadTexture("./Resources/images/direction.png");
 	float directionTheta = 0;
+
+	int gaugeBackTexture = Novice::LoadTexture("./Resources/images/gauge_back.png");
+	int gaugeTexture = Novice::LoadTexture("./Resources/images/gauge.png");
+
+	int gaugex = 1330;
+	int gaugey = 730 + 600;
+	int gaugeWidth = 512;
+	int gaugeHeidth = 288;
+	float gaugeEaseT = 0;
+	float gaugeEasePos = 0;
+
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
@@ -496,6 +506,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (allReset)
 				{
+					gaugeEaseT = 0;
+					gaugeEasePos = 0;
+
+					Novice::SetJoystickDeadZone(0, 0, 0);
+					gaugey = 730 + 600;
 					gamestartEaseT = 0;
 					gamestartEaseT2 = 0;
 					gamestartPos = 0;
@@ -1204,6 +1219,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				gamestartPos2 = easeOutQuart(gamestartEaseT2 / 100) * 1760;
 				if (gamestartEaseT2 < 100)gamestartEaseT2 += 2;
 
+
+				gaugeEasePos = easeOutQuint(gaugeEaseT / 100) * 600;
+				if (gaugeEaseT < 100)gaugeEaseT += 2;
 			}
 			else
 			{
@@ -1213,6 +1231,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					Novice::SetJoystickDeadZone(0, 0, 0);
 
 					gamestartEaseT = 0;
 					gamestartEaseT2 = 0;
@@ -3988,6 +4007,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					if (blackEaseT2 >= 100)
 					{
+						gaugeEaseT = 0;
+						gaugeEasePos = 0;
 						screenSize = 1.0f;
 						player.pos = { 0,0 };
 						for (int i = 0; i < kPreNum; i++)
@@ -4092,7 +4113,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		for (int i = 0; i < kPreNum; i++)
 		{
-			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (kPreNum-i) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i]);
+			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (kPreNum - i) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i]);
 		}
 		//プレイヤー
 		//Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
@@ -4116,10 +4137,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 		}
 
-		plth.x = fabsf(player.velocity.x/2);
-		plth.y = fabsf(player.velocity.y/2);
+		plth.x = fabsf(player.velocity.x / 2);
+		plth.y = fabsf(player.velocity.y / 2);
 		Playerth += plth.x + plth.y;
-		Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth/180.0f)*3.1415f, 0, 0, 1, 1, kWhiteTexture, RED);
+		Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, RED);
 
 		//仮敵描画
 #pragma region enemy
@@ -4277,10 +4298,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, 0x00ff00ff, kFillModeSolid);
 		}
 		//フィーバーゲージ仮
-		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 450, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
-		Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), int(450 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
+		//Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 500, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
+		//Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), int(500 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
 
+		Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, gaugeWidth, gaugeHeidth, gaugeBackTexture, WHITE);
 
+		Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, int(gaugeWidth * (ennergy.count / ennergy.max)), gaugeHeidth, gaugeTexture, WHITE);
 
 		//ミニマップ
 		Novice::DrawEllipse(int(50 + fieldRadius / miniMap), int(1020 - fieldRadius / miniMap), int(fieldRadius / miniMap), int(fieldRadius / miniMap), 0, GREEN, kFillModeWireFrame);
