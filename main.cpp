@@ -894,6 +894,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+
 			//ポジション移動
 			player.pos.x += player.velocity.x;
 			player.pos.y += player.velocity.y;
@@ -3751,6 +3752,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 		case kTypeGameTitle:
 			Novice::DrawBox(1800, 700, 100, 100, 0, WHITE, kFillModeSolid);
+			Novice::ScreenPrintf(500, 500, "-K- NewGame");
+
 			break;
 
 		case kTypeGameGame:
@@ -3760,7 +3763,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		case kTypeGameResult:
 			Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
-
+			Novice::ScreenPrintf(500, 500, "-J- Title -L- NewGame");
 			break;
 		}
 
