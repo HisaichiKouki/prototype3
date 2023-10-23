@@ -10,7 +10,6 @@ ScoreObject::ScoreObject()
 	score.color = 0;
 	handleCnt = 0;
 	for (int i = 0; i < 10; i++) textureHandles[i] = 0;
-	dPattern = DPATTERN_FILLED_BY_ZERO;
 	maxDigit = 0;
 }
 
@@ -33,17 +32,12 @@ void ScoreObject::SetMaxDigit(int _maxDigit)
 	maxDigit = _maxDigit;
 }
 
-void ScoreObject::SetPattern(DrawPattern _dPattern)
-{
-	dPattern = _dPattern;
-}
-
 void ScoreObject::SetColor(unsigned int _color)
 {
 	score.color = _color;
 }
 
-void ScoreObject::Draw(int _decimalNum, int _posX, int _posY, float _scaleX, float _scaleY, int _margin)
+void ScoreObject::Draw(int _decimalNum, int _posX, int _posY, float _scaleX, float _scaleY, int _margin, DrawPattern _dPattern)
 {
 	int digit = 0;
 	int intervalCnt = 0;
@@ -59,7 +53,7 @@ void ScoreObject::Draw(int _decimalNum, int _posX, int _posY, float _scaleX, flo
 	} while (decNumCpy != 0);
 
 	// パターン分岐
-	switch (dPattern)
+	switch (_dPattern)
 	{
 	case ScoreObject::DPATTERN_FILLED_BY_ZERO:
 		intervalCnt = maxDigit;

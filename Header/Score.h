@@ -32,13 +32,6 @@ public:
 	/// <param name="_maxDigit"></param>
 	void SetMaxDigit(int _maxDigit);
 
-
-	/// <summary>
-	/// パターンを設定します。
-	/// </summary>
-	/// <param name="_dPattern">パターン</param>
-	void SetPattern(DrawPattern _dPattern);
-
 	/// <summary>
 	/// 画像の色を設定します。
 	/// </summary>
@@ -54,14 +47,13 @@ public:
 	/// <param name="_width">画像ソースの横幅</param>
 	/// <param name="_height">画像ソースの高さ</param>
 	/// <param name="_margin">文字と文字の間隔</param>
-	void Draw(int _decimalNum, int _posX, int _posY, float _scaleX, float _scaleY, int _margin);
+	void Draw(int _decimalNum, int _posX, int _posY, float _scaleX, float _scaleY, int _margin, DrawPattern _dPattern);
 
 private:
 	ScoreData score;
 	static int PowI(int _x, int _y);
 	int maxDigit;
 	Func func;
-	DrawPattern dPattern;
 	int textureHandles[10];
 	int handleCnt;
 	

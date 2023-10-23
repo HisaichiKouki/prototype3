@@ -48,8 +48,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scoreObj.SetScoreTextureHandle(scoreNumsHandle);
 	// 最大桁数を指定
 	scoreObj.SetMaxDigit(6);
-	// パターンを指定
-	scoreObj.SetPattern(scoreObj.DPATTERN_FILLED_BY_ZERO);
 
 	Vector2 cameraEasePos{};
 	float cameraEaseT = 0.3f;
@@ -4681,9 +4679,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 		/// UIなど (一番手前になるように)
 		// スコア (大きさ調整は [### ScoreClass] で検索)
-		scoreObj.Draw(score, 1550, 50, 0.5f, 0.5f, 0);
+		scoreObj.Draw(score, 1550, 50, 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 		// タイマー 修正よろしく
-		scoreObj.Draw(gameTimer / 60, 0, 0, 0.3f, 0.3f, 0);
+		scoreObj.Draw(gameTimer / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 		
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
