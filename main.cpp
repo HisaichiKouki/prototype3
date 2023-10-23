@@ -4736,7 +4736,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			//Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
-			Novice::ScreenPrintf(500, 500, "-H- Title -J- NewGame");
+		//	Novice::ScreenPrintf(500, 500, "-H- Title -J- NewGame");
 
 			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
 
