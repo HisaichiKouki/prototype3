@@ -3656,7 +3656,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					gameTimer += 600;
 				}
 
-				gameTimer++;
+				if (gameTimer <= 6000)gameTimer++;
 
 #pragma endregion
 			}
