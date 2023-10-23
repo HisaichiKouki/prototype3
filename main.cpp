@@ -520,6 +520,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float UIBackPos = 0;
 
 	int choice = 0;//0ならリスタート1ならタイトルに戻る
+	int prechoice = 0;//0ならリスタート1ならタイトルに戻る
+	int choiceTimer = 0;//スティックの跳ね返りで反対に行かないように
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -4023,20 +4025,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//長さがデッドゾーンを超えたら方向を代入
 				
 
-
+				prechoice = choice;
+				
 				if (!transitionFlag)
 				{
 					if (length >= dedZone)
 					{
-						if (player.joystick.x > 0)
+						if (choiceTimer > 0)
 						{
-							choice = 1;
+							choiceTimer--;
 						}
-						else if (player.joystick.x < 0)
+						if (choiceTimer==0)
 						{
-							choice = 0;
+							if (player.joystick.x > 0)
+							{
+								choice = 1;
+							}
+							else if (player.joystick.x < 0)
+							{
+								choice = 0;
+							}
 						}
+						
+						if (prechoice!=choice)
+						{
+							choiceTimer = 5;
+						}
+						
 					}
+					
 					if (choice == 0 && player.trigerA)
 					{
 						UIBackPos = 0;
