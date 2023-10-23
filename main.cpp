@@ -514,7 +514,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = { 0 };
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameGame;
+	game = kTypeGameTitle;
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -4681,7 +4681,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
 		
 		// スコア (大きさ調整は [### ScoreClass] で検索)
-		scoreObj.Draw(score, 0, 0, 0);
+		scoreObj.Draw(score, 1550, 50, 0);
 		
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
