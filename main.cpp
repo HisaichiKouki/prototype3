@@ -457,7 +457,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameGame;
+	game = kTypeGameTitle;
 
 	// クラス変数の宣言
 	Func Functions;
