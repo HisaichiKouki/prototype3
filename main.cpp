@@ -4057,6 +4057,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (blackEaseT == 0)
 			{
+				Novice::SetJoystickDeadZone(0, 7000, 0);
 
 
 				//ボタン入力ここから
@@ -4083,7 +4084,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				//長さがデッドゾーンを超えたら方向を代入
 
-
 				prechoice = choice;
 
 				if (!transitionFlag)
@@ -4096,11 +4096,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 						if (choiceTimer == 0)
 						{
-							if (player.joystick.x > 0)
+							if (player.joystick.x > 0.3f)
 							{
 								choice = 1;
 							}
-							else if (player.joystick.x < 0)
+							else if (player.joystick.x < -0.3f)
 							{
 								choice = 0;
 							}
@@ -4202,6 +4202,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
+		Novice::ScreenPrintf(0, 0, "player.joystick.x=%f player.joystick.y=%f", player.joystick.x, player.joystick.y);
 
 
 
