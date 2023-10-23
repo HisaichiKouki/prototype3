@@ -214,7 +214,6 @@ struct testEnemy7
 struct ScoreData
 {
 	Vector2 position;
-	Vector2 scale;
 	int width;
 	int height;
 	unsigned int color;

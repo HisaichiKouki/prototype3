@@ -23,11 +23,7 @@ public:
 	/// <param name="textureHandle">テクスチャハンドル</param>
 	void SetScoreTextureHandle(int _textureHandle[10]);
 
-	/// <summary>
-	/// スコア画像のサイズを設定します。
-	/// </summary>
-	/// <param name="width">画像の幅</param>
-	/// <param name="height">画像の高さ</param>
+
 	void SetSize(int _width, int _height);
 
 	/// <summary>
@@ -36,18 +32,12 @@ public:
 	/// <param name="_maxDigit"></param>
 	void SetMaxDigit(int _maxDigit);
 
+
 	/// <summary>
 	/// パターンを設定します。
 	/// </summary>
 	/// <param name="_dPattern">パターン</param>
 	void SetPattern(DrawPattern _dPattern);
-
-	/// <summary>
-	/// スケールを設定します。
-	/// </summary>
-	/// <param name="_scaleX">横方向</param>
-	/// <param name="_scaleY">縦方向</param>
-	void SetScale(float _scaleX, float _scaleY);
 
 	/// <summary>
 	/// 画像の色を設定します。
@@ -61,8 +51,10 @@ public:
 	/// <param name="_decimalNum">数字</param>
 	/// <param name="_posX">x座標</param>
 	/// <param name="_posY">y座標</param>
+	/// <param name="_width">画像ソースの横幅</param>
+	/// <param name="_height">画像ソースの高さ</param>
 	/// <param name="_margin">文字と文字の間隔</param>
-	void Draw(int _decimalNum, int _posX, int _posY, int _margin);
+	void Draw(int _decimalNum, int _posX, int _posY, float _scaleX, float _scaleY, int _margin);
 
 private:
 	ScoreData score;

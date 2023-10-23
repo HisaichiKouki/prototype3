@@ -10,6 +10,7 @@ ScoreObject::ScoreObject()
 	score.color = 0;
 	handleCnt = 0;
 	for (int i = 0; i < 10; i++) textureHandles[i] = 0;
+	dPattern = DPATTERN_FILLED_BY_ZERO;
 	maxDigit = 0;
 }
 
@@ -19,7 +20,6 @@ void ScoreObject::SetScoreTextureHandle(int _textureHandle[10])
 	{
 		textureHandles[i] = _textureHandle[i];
 	}
-	dPattern = DPATTERN_FILLED_BY_ZERO;
 }
 
 void ScoreObject::SetSize(int _width, int _height)
@@ -38,18 +38,12 @@ void ScoreObject::SetPattern(DrawPattern _dPattern)
 	dPattern = _dPattern;
 }
 
-void ScoreObject::SetScale(float _scaleX, float _scaleY)
-{
-	score.scale.x = _scaleX;
-	score.scale.y = _scaleY;
-}
-
 void ScoreObject::SetColor(unsigned int _color)
 {
 	score.color = _color;
 }
 
-void ScoreObject::Draw(int _decimalNum, int _posX, int _posY, int _margin)
+void ScoreObject::Draw(int _decimalNum, int _posX, int _posY, float _scaleX, float _scaleY, int _margin)
 {
 	int digit = 0;
 	int intervalCnt = 0;
@@ -84,8 +78,8 @@ void ScoreObject::Draw(int _decimalNum, int _posX, int _posY, int _margin)
 
 		// 描画
 		func.DrawQuadPlus(
-			_posX + static_cast<int>(score.width * score.scale.x) * i + _margin, _posY,
-			static_cast<int>(score.width * score.scale.x), static_cast<int>(score.height * score.scale.y),
+			_posX + static_cast<int>(score.width * _scaleX) * i + _margin, _posY,
+			static_cast<int>(score.width * _scaleX), static_cast<int>(score.height * _scaleY),
 			1.0f, 1.0f, 0.0f,
 			0, 0, score.width, score.height,
 			textureHandles[result[intervalCnt - 1 - i]],
@@ -96,10 +90,10 @@ void ScoreObject::Draw(int _decimalNum, int _posX, int _posY, int _margin)
 		if (func.isDebug())
 		{
 			Novice::DrawBox(
-				_posX + static_cast<int>(score.width * score.scale.x) * i + _margin,
+				_posX + static_cast<int>(score.width * _scaleX) * i + _margin,
 				_posY,
-				static_cast<int>(score.width * score.scale.x),
-				static_cast<int>(score.height * score.scale.y),
+				static_cast<int>(score.width * _scaleX),
+				static_cast<int>(score.height * _scaleY),
 				0.0f,
 				0xdf0000ff,
 				kFillModeWireFrame

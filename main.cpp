@@ -46,10 +46,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scoreObj.SetSize(108, 168);
 	// テクスチャハンドルセット
 	scoreObj.SetScoreTextureHandle(scoreNumsHandle);
-	// スケール設定
-	scoreObj.SetScale(0.5f, 0.5f);
-	// 
+	// 最大桁数を指定
 	scoreObj.SetMaxDigit(6);
+	// パターンを指定
 	scoreObj.SetPattern(scoreObj.DPATTERN_FILLED_BY_ZERO);
 
 	Vector2 cameraEasePos{};
@@ -4680,8 +4679,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
 		
+		/// UIなど (一番手前になるように)
 		// スコア (大きさ調整は [### ScoreClass] で検索)
-		scoreObj.Draw(score, 1550, 50, 0);
+		scoreObj.Draw(score, 1550, 50, 0.5f, 0.5f, 0);
+		// タイマー 修正よろしく
+		scoreObj.Draw(gameTimer / 60, 0, 0, 0.3f, 0.3f, 0);
 		
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
