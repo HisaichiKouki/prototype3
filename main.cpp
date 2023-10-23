@@ -23,6 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.pos.x = 0;
 	player.pos.y = 0;
 	player.anchorRadius = 10;
+	bool triFlag = false;
 
 	int scoreNumsHandle[10] = {
 		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
@@ -866,9 +867,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (player.velocityRatio < 0)
 					{
 						player.velocityRatio = 0;
+						
+
+					}
+					
+					if (player.aim && player.count >= 2&& player.velocityRatio<= 0.80f)
+					{
+						triFlag = true;
+					}
+					if (player.aim && player.count >= 1 && player.velocityRatio <= 0.78f)
+					{
+						player.prepos[player.count] = player.pos;
 					}
 				}
 
+				//Novice::ScreenPrintf(0, 0, "player.velocityRatio=%f", player.velocityRatio);
 				//フリックを検知したら
 				if (player.flick && player.flickCT == 0)player.flickCT = 20;//CTをつけてすぐ減速しないように
 
@@ -899,7 +912,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 				//攻撃終わりにAボタンを押した時
-				if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
+				if (player.trigerA && player.aimTimer == 0 && !player.dashAttack|| triFlag)
 				{
 					//移動入力がされている時
 
@@ -919,6 +932,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.aim = false;
 						player.aimTimer = 30;//攻撃時間を代入
 						player.triangulAttack = true;//三角形攻撃を有効に
+						triFlag = false;
 
 					}
 
@@ -1246,7 +1260,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.pos = { 0,0 };
 					}
 					//スクリーン拡縮処理
-					screenSize = easeOutCubic(setScreenEaseT / 100) * (100 - 1) + 1;//easeOutBack
+					screenSize = easeOutCubic(setScreenEaseT / 100) * (70 - 1) + 1;//easeOutBack
 					if (setScreenEaseT < 100 || setScreenEaseT > 0)
 					{
 						setScreenEaseT += setScreenEaseTChange * 2;
@@ -1294,7 +1308,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				}
 				//スクリーン拡縮処理
-				screenSize = easeOutCubic(setScreenEaseT / 100) * (100 - 1) + 1;//easeOutBack
+				screenSize = easeOutCubic(setScreenEaseT / 100) * (70 - 1) + 1;//easeOutBack
 				if (setScreenEaseT < 100 || setScreenEaseT > 0)
 				{
 					setScreenEaseT += setScreenEaseTChange * 2;
@@ -2216,6 +2230,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						player.velocityRatio = 0;
 					}
+					if (player.aim && player.count >= 2 && player.velocityRatio <= 0.80f)
+					{
+						triFlag = true;
+					}
+					if (player.aim && player.count >= 1 && player.velocityRatio <= 0.78f)
+					{
+						player.prepos[player.count] = player.pos;
+					}
 				}
 
 				//フリックを検知したら
@@ -2249,7 +2271,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 					//攻撃終わりにAボタンを押した時
-					if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
+					if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
 					{
 						//移動入力がされている時
 
@@ -2269,7 +2291,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							player.aim = false;
 							player.aimTimer = 30;//攻撃時間を代入
 							player.triangulAttack = true;//三角形攻撃を有効に
-
+							triFlag = false;
 						}
 
 
@@ -3804,6 +3826,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (allReset)
 			{
+				triFlag = false;
 				Playerth = 0;
 				gamestartEaseT = 0;
 				gamestartEaseT2 = 0;
@@ -4155,7 +4178,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.pos = { 0,0 };
 					}
 					//スクリーン拡縮処理
-					screenSize = easeOutCubic(setScreenEaseT / 100) * (100 - 1) + 1;//easeOutBack
+					screenSize = easeOutCubic(setScreenEaseT / 100) * (70 - 1) + 1;//easeOutBack
 					if (setScreenEaseT < 100 || setScreenEaseT > 0)
 					{
 						setScreenEaseT += setScreenEaseTChange * 2;
@@ -4202,7 +4225,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 
-		Novice::ScreenPrintf(0, 0, "player.joystick.x=%f player.joystick.y=%f", player.joystick.x, player.joystick.y);
 
 
 
