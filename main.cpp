@@ -405,23 +405,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int bigNumTexture[5]{};
 	int bigNumCount = 0;
 	unsigned int bigNumColor[5]{};
-	bigNumColor[0] = 0xffffff44;
-	bigNumColor[1] = 0xffffff11;
-	bigNumColor[2] = 0xffffff22;
-	bigNumColor[3] = 0xffffff33;
-	bigNumColor[4] = 0xffffff55;
+	bigNumColor[0] = 0xffffff66;
+	bigNumColor[1] = 0xffffff22;
+	bigNumColor[2] = 0xffffff33;
+	bigNumColor[3] = 0xffffff44;
+	bigNumColor[4] = 0xffffff77;
 
-	bigNumTexture[0] = Novice::LoadTexture("./Resources/images/number_5.png");
-	bigNumTexture[1] = Novice::LoadTexture("./Resources/images/number_4.png");
-	bigNumTexture[2] = Novice::LoadTexture("./Resources/images/number_3.png");
-	bigNumTexture[3] = Novice::LoadTexture("./Resources/images/number_2.png");
-	bigNumTexture[4] = Novice::LoadTexture("./Resources/images/number_1.png");
+	bigNumTexture[0] = Novice::LoadTexture("./Resources/font/bignum_5.png");
+	bigNumTexture[1] = Novice::LoadTexture("./Resources/font/bignum_4.png");
+	bigNumTexture[2] = Novice::LoadTexture("./Resources/font/bignum_3.png");
+	bigNumTexture[3] = Novice::LoadTexture("./Resources/font/bignum_2.png");
+	bigNumTexture[4] = Novice::LoadTexture("./Resources/font/bignum_1.png");
 
 	float finishEaseT = 0;
 	float finishSize = 0;
 	float finishEaseT2 = 0;
 	float finishSize2 = 0;
-	int finishTexture = Novice::LoadTexture("./Resources/images/finish.png");
+	int finishTexture = Novice::LoadTexture("./Resources/font/finish.png");
 
 	float blackEaseT = 0;
 	float blackEaseT2 = 0;
@@ -439,6 +439,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		kTypeGameResult,
 	};
 
+	// デバッグ用 ### MustDelete
+	game = kTypeGameTitle;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -468,7 +470,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int walkTimer = 0;
 	int whileTime = 60;//最初のタスクの間と間の時間
 
-	int gamestartTexture = Novice::LoadTexture("./Resources/images/gamestart.png");
+	int gamestartTexture = Novice::LoadTexture("./Resources/font/gamestart.png");
 	float gamestartEaseT = 0;
 	float gamestartEaseT2 = 0;
 	float gamestartPos = 0;
@@ -490,15 +492,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int playerTexture = Novice::LoadTexture("./Resources/images/player.png");
 
 	int informationTexture[3]{};
-	informationTexture[0]= Novice::LoadTexture("./Resources/images/information_1.png");
-	informationTexture[1]= Novice::LoadTexture("./Resources/images/information_2.png");
-	informationTexture[2]= Novice::LoadTexture("./Resources/images/information_3.png");
+	informationTexture[0] = Novice::LoadTexture("./Resources/images/information_1.png");
+	informationTexture[1] = Novice::LoadTexture("./Resources/images/information_2.png");
+	informationTexture[2] = Novice::LoadTexture("./Resources/images/information_3.png");
 
 	int infoFont[4]{};
-	infoFont[0]= Novice::LoadTexture("./Resources/font/info_font_1.png");
-	infoFont[1]= Novice::LoadTexture("./Resources/font/info_font_2.png");
-	infoFont[2]= Novice::LoadTexture("./Resources/font/info_font_3.png");
-	infoFont[3]= Novice::LoadTexture("./Resources/font/info_font_4.png");
+	infoFont[0] = Novice::LoadTexture("./Resources/font/info_font_1.png");
+	infoFont[1] = Novice::LoadTexture("./Resources/font/info_font_2.png");
+	infoFont[2] = Novice::LoadTexture("./Resources/font/info_font_3.png");
+	infoFont[3] = Novice::LoadTexture("./Resources/font/info_font_4.png");
 
 	float informationEaseT = 0;
 	float informationEase = 0;
@@ -506,12 +508,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float infoFontEaseT = 0;
 	float infoFontEase = 0;
 
+	float UIPosy = 0;
+
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
-	// デバッグ用 ### MustDelete
-	game = kTypeGameTitle;
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -526,7 +528,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
 
-		
+
 
 		switch (game)
 		{
@@ -556,7 +558,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					gaugeEaseT = 0;
 					gaugeEasePos = 0;
-
+					UIPosy = 0;
 					Novice::SetJoystickDeadZone(0, 0, 0);
 					gaugey = 730 + 600;
 					gamestartEaseT = 0;
@@ -1226,7 +1228,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (setScreenEaseT > 100)setScreenEaseT = 100;
 						if (setScreenEaseT < 0)setScreenEaseT = 0;
 					}
-					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 1760;
+					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 2192;
 					if (gamestartEaseT < 100)gamestartEaseT += 2;
 
 				}
@@ -1236,14 +1238,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (gamestartEaseT == 100)
 				{
-					gamestartPos2 = easeInQuart(gamestartEaseT2 / 100) * 1760;
+					gamestartPos2 = easeInQuart(gamestartEaseT2 / 100) * 2192;
 
 					if (gamestartEaseT2 < 100)gamestartEaseT2 += 2;
 
 				}
 
 
-				gameTimer++;
 			}
 			break;
 
@@ -1267,11 +1268,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (setScreenEaseT > 100)setScreenEaseT = 100;
 					if (setScreenEaseT < 0)setScreenEaseT = 0;
 				}
-				gamestartPos2 = easeOutQuart(gamestartEaseT2 / 100) * 1760;
+				gamestartPos2 = easeOutQuart(gamestartEaseT2 / 100) * 2192;
 				if (gamestartEaseT2 < 100)gamestartEaseT2 += 2;
 
 
 				gaugeEasePos = easeOutQuint(gaugeEaseT / 100) * 600;
+				UIPosy = easeOutQuint(gaugeEaseT / 100) * 200;
 				if (gaugeEaseT < 100)gaugeEaseT += 2;
 			}
 			else
@@ -4043,7 +4045,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (setScreenEaseT > 100)setScreenEaseT = 100;
 						if (setScreenEaseT < 0)setScreenEaseT = 0;
 					}
-					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 1760;
+					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 2192;
 					if (gamestartEaseT < 100)gamestartEaseT += 2;
 
 				}
@@ -4060,6 +4062,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						gaugeEaseT = 0;
 						gaugeEasePos = 0;
+						UIPosy = 0;
 						screenSize = 1.0f;
 						player.pos = { 0,0 };
 						for (int i = 0; i < kPreNum; i++)
@@ -4557,7 +4560,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case kTypeGameTitle:
 			Novice::DrawBox(1800, 700, 100, 100, 0, WHITE, kFillModeSolid);
 
-			
+
 
 
 			for (int i = 0; i < 3; i++)
@@ -4622,7 +4625,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				Novice::ScreenPrintf(700, 540, "kill to gamestart");
 				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[3], WHITE, "center");
-				
+
 				if (!startNewGame)
 				{
 					infoFontEase = easeOutElastic(infoFontEaseT / 100);
@@ -4631,21 +4634,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				else
 				{
 					infoFontEase = easeInQuint(infoFontEaseT / 100);
-					 if(infoFontEaseT > 0)infoFontEaseT -= 2;
-					
+					if (infoFontEaseT > 0)infoFontEaseT -= 2;
+
 
 				}
-				
+
 
 			}
 
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
+			//	if (gameTimer < 5700 && gameTimer != 0)scoreObj.Draw((6060 - gameTimer) / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			//	if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
 			break;
 
 		case kTypeGameGame:
 			Novice::DrawBox(1800, 700, 100, 100, 0, RED, kFillModeSolid);
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
 			if (quickTimer >= 150)Novice::ScreenPrintf(900, 600, "EXCELLENT");
+
+			//タイマー
+			if (gameTimer < 5700 && gameTimer != 0)scoreObj.Draw((6060 - gameTimer) / 60, 50, 50, 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 50, 50 + -200 + int(UIPosy), 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			//スコア
+			if (gameTimer < 5700)scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 
 			break;
 
@@ -4661,28 +4673,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
 			Novice::ScreenPrintf(500, 500, "-H- Title -J- NewGame");
 
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
+			//タイマー
+			if (gameTimer < 5700 && gameTimer != 0)scoreObj.Draw((6060 - gameTimer) / 60, 50, 50, 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 50, 50 + -200 + int(UIPosy), 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 
 			break;
 		}
 
-		Novice::ScreenPrintf(700, 700, "bigNumEaseT=%f", bigNumEaseT);
-		Functions.DrawQuadPlus(960, 540, 800, 800, bigNumSize, bigNumSize, 0, 0, 0, 800, 800, bigNumTexture[bigNumCount], bigNumColor[bigNumCount], "center");
-		Functions.DrawQuadPlus(960, 540, 1600, 800, finishSize, finishSize, 0, 0, 0, 1600, 800, finishTexture, 0xffffffff, "center");
 
 
 		Novice::ScreenPrintf(700, 700, "bigNumEaseT=%f", bigNumEaseT);
 		Functions.DrawQuadPlus(960, 540, 800, 800, bigNumSize, bigNumSize, 0, 0, 0, 800, 800, bigNumTexture[bigNumCount], bigNumColor[bigNumCount], "center");
-		Functions.DrawQuadPlus(960, 540, 1600, 800, finishSize - finishSize2, finishSize - finishSize2, 0, 0, 0, 1600, 800, finishTexture, 0xffffffff, "center");
+		Functions.DrawQuadPlus(960, 540, 1248, 288, (finishSize - finishSize2), (finishSize - finishSize2), 0, 0, 0, 1248, 288, finishTexture, 0xffffffff, "center");
 
 		Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
-		
+
 		/// UIなど (一番手前になるように)
 		// スコア (大きさ調整は [### ScoreClass] で検索)
-		scoreObj.Draw(score, 1550, 50, 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
-		// タイマー 修正よろしく
-		scoreObj.Draw(gameTimer / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
-		
+		if (gameTimer < 5700)scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
+
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       
