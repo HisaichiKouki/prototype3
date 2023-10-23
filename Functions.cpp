@@ -5,6 +5,7 @@
 Func::Func(bool _b)
 {
 	if (_b) kWhiteCircleHandle = Novice::LoadTexture("./resources/images/whiteCir.png");
+	else kWhiteCircleHandle = Novice::LoadTexture("white1x1.png");
 }
 
 void Func::SetDebugMode(DebugMode mode)
