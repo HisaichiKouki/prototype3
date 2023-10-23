@@ -4803,10 +4803,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (!startNewGame)
 			{
 				Novice::DrawBox(0, 0, 1920, 1080, 0, 0x666666ff, kFillModeSolid);
-				Novice::ScreenPrintf(740, 500, "score=%d", score);
-				Novice::ScreenPrintf(740, 520, "count=%0.1f", count);
-				Novice::ScreenPrintf(740, 540, "dash.count=%0.1f", dash.count);
-				Novice::ScreenPrintf(740, 560, "triangle.count=%0.1f", triangle.count);
+				//Novice::ScreenPrintf(740, 500, "score=%d", score);
+				//Novice::ScreenPrintf(740, 520, "count=%0.1f", count);
+				//Novice::ScreenPrintf(740, 540, "dash.count=%0.1f", dash.count);
+				//Novice::ScreenPrintf(740, 560, "triangle.count=%0.1f", triangle.count);
 				//スコア
 				scoreObj.Draw(score, 700, 100, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 				scoreObj.Draw(int(count), 700, 250, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
