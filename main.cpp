@@ -4952,7 +4952,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		for (int i = 0; i < sizeof(enemy1.dedTimer) / sizeof(int); i++)
 		{
-			if (enemy1.dedTimer[i] == 1)
+			if (enemy1.dedTimer[i] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
 			}
@@ -4961,7 +4961,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			for (int j = 0; j < 16; j++)
 			{
-				if (enemy2.dedTimer[i][j] == 1)
+				if (enemy2.dedTimer[i][j] == kDedTimer - 1)
 				{
 					Original::SoundPlay("enemyDead");
 				}
@@ -4970,35 +4970,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy5.dedTimer) / sizeof(int); i++)
 		{
-			if (enemy5.dedTimer[i] == 1)
+			if (enemy5.dedTimer[i] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
 			}
 		}
 		for (int i = 0; i < sizeof(enemy6.dedTimer) / sizeof(int); i++)
 		{
-			if (enemy6.dedTimer[i] == 1)
+			if (enemy6.dedTimer[i] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
 			}
 		}
 		for (int i = 0; i < sizeof(enemy7.dedTimer) / sizeof(int); i++)
 		{
-			if (enemy7.dedTimer[i / 4][i % 4] == 1)
+			if (enemy7.dedTimer[i / 4][i % 4] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
 			}
 		}
 		for (int i = 0; i < sizeof(enemy8.dedTimer) / sizeof(int); i++)
 		{
-			if (enemy8.dedTimer[i / 12][i % 12] == 1)
+			if (enemy8.dedTimer[i / 12][i % 12] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
 			}
 		}
 		for (int i = 0; i < sizeof(enemy9.dedTimer) / sizeof(int); i++)
 		{
-			if (enemy9.dedTimer[i / 8][i % 8] == 1)
+			if (enemy9.dedTimer[i / 8][i % 8] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
 			}
@@ -5007,7 +5007,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			for (int j = 0; j < sizeof(enemy10[i].dedTimer) / sizeof(int); j++)
 			{
-				if (enemy10[i].dedTimer[j] == 1)
+				if (enemy10[i].dedTimer[j] == kDedTimer - 1)
 				{
 					Original::SoundPlay("enemyDead");
 				}
@@ -5018,7 +5018,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			for (int j = 0; j < sizeof(enemy11[i].dedTimer) / sizeof(int); j++)
 			{
-				if (enemy11[i].dedTimer[j] == 1)
+				if (enemy11[i].dedTimer[j] == kDedTimer - 1)
 				{
 					Original::SoundPlay("enemyDead");
 				}
@@ -5029,7 +5029,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			for (int j = 0; j < sizeof(enemy12[i].dedTimer) / sizeof(int); j++)
 			{
-				if (enemy12[i].dedTimer[j] == 1)
+				if (enemy12[i].dedTimer[j] == kDedTimer - 1)
 				{
 					Original::SoundPlay("enemyDead");
 				}
@@ -5038,7 +5038,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy13.dedTimer) / sizeof(unsigned int); i++)
 		{
-			if (enemy13.dedTimer[i] == 1)
+			if (enemy13.dedTimer[i] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
 			}
