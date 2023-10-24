@@ -29,6 +29,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Original::LoadAudio("./Resources/Sounds/boom.wav", "enemyDead", 0.3f);
 	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi", 0.3f);
+	Original::LoadAudio("./Resources/Sounds/lowSwing.wav", "enemySpawn", 0.3f);
 
 	int scoreNumsHandle[10] = {
 		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
@@ -4950,8 +4951,39 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		#pragma region EnemySounds
 
+		if (enemy1.easeT == 2)
+		{
+			Original::SoundPlay("enemySpawn");
+		}
+		if (enemy2.easeT == 2)
+		{
+			Original::SoundPlay("enemySpawn");
+		}
+		if (enemy5.easeT == 2)
+		{
+			Original::SoundPlay("enemySpawn");
+		}
+		if (enemy6.easeT == 2)
+		{
+			Original::SoundPlay("enemySpawn");
+		}
+		if (enemy7.easeT == 2)
+		{
+			Original::SoundPlay("enemySpawn");
+		}
+		if (enemy8.easeT == 2)
+		{
+			Original::SoundPlay("enemySpawn");
+		}
+		if (enemy9.easeT == 2)
+		{
+			Original::SoundPlay("enemySpawn");
+		}
+		
+
 		for (int i = 0; i < sizeof(enemy1.dedTimer) / sizeof(int); i++)
 		{
+			
 			if (enemy1.dedTimer[i] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
@@ -5005,6 +5037,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy10) / sizeof(testEnemy3); i++)
 		{
+			if (enemy10[i].easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
 			for (int j = 0; j < sizeof(enemy10[i].dedTimer) / sizeof(int); j++)
 			{
 				if (enemy10[i].dedTimer[j] == kDedTimer - 1)
@@ -5016,6 +5052,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy11) / sizeof(testEnemy1); i++)
 		{
+			if (enemy11[i].easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
 			for (int j = 0; j < sizeof(enemy11[i].dedTimer) / sizeof(int); j++)
 			{
 				if (enemy11[i].dedTimer[j] == kDedTimer - 1)
@@ -5027,6 +5067,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy12) / sizeof(testEnemy3); i++)
 		{
+			if (enemy12[i].easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
 			for (int j = 0; j < sizeof(enemy12[i].dedTimer) / sizeof(int); j++)
 			{
 				if (enemy12[i].dedTimer[j] == kDedTimer - 1)
@@ -5038,6 +5082,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy13.dedTimer) / sizeof(unsigned int); i++)
 		{
+			if (enemy13.easeT[i] == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
 			if (enemy13.dedTimer[i] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
