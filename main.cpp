@@ -1142,7 +1142,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//ダッシュ攻撃
 				if (titleCount == 1)
 				{
-					if (enemy1.parentIsAlive && player.dashAttack && !player.triangulAttack)
+					if (enemy1.parentIsAlive && player.dashAttack && !player.triangulAttack&&enemy1.easeT>2)
 					{
 						for (int i = 0; i < 3; i++)
 						{
@@ -1153,7 +1153,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}//三角攻撃
 				else if (titleCount == 2)
 				{
-					if (enemy1.parentIsAlive && player.triangulAttack && !player.dashAttack)
+					if (enemy1.parentIsAlive && player.triangulAttack && !player.dashAttack && enemy1.easeT > 2)
 					{
 						for (int i = 0; i < 3; i++)
 						{
@@ -2767,7 +2767,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (player.dashAttack)
 				{
 
-					if (enemy2.hostIsAlive)
+					if (enemy2.hostIsAlive && enemy2.easeT > 2)
 					{
 						for (int j = 0; j < 4; j++)
 						{
@@ -2782,21 +2782,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 
 
-					if (enemy5.parentIsAlive)
+					if (enemy5.parentIsAlive && enemy5.easeT > 2)
 					{
 						for (int i = 0; i < 4; i++)
 						{
 							if (!enemy5.isDed[i])enemy5.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy5.relativePos[i], enemy5.radius);
 						}
 					}
-					if (enemy6.parentIsAlive)
+					if (enemy6.parentIsAlive && enemy6.easeT > 2)
 					{
 						for (int i = 0; i < 4; i++)
 						{
 							if (!enemy6.isDed[i])enemy6.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy6.relativePos[i], enemy6.radius);
 						}
 					}
-					if (enemy7.hostIsAlive)
+					if (enemy7.hostIsAlive && enemy7.easeT > 2)
 					{
 						for (int j = 0; j < 8; j++)
 						{
@@ -2809,7 +2809,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							}
 						}
 					}
-					if (enemy8.hostIsAlive)
+					if (enemy8.hostIsAlive && enemy8.easeT > 2)
 					{
 						for (int j = 0; j < 4; j++)
 						{
@@ -2822,7 +2822,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							}
 						}
 					}
-					if (enemy9.hostIsAlive)
+					if (enemy9.hostIsAlive && enemy9.easeT > 2)
 					{
 						for (int j = 0; j < 2; j++)
 						{
@@ -2837,7 +2837,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int j = 0; j < kenemy10Num; j++)
 					{
-						if (enemy10[j].parentIsAlive)
+						if (enemy10[j].parentIsAlive && enemy10[j].easeT > 2)
 						{
 							for (int i = 0; i < 4; i++)
 							{
@@ -2847,7 +2847,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int j = 0; j < kenemy11Num; j++)
 					{
-						if (enemy11[j].parentIsAlive)
+						if (enemy11[j].parentIsAlive && enemy11[j].easeT > 2)
 						{
 							for (int i = 0; i < 3; i++)
 							{
@@ -2857,7 +2857,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int j = 0; j < kenemy12Num; j++)
 					{
-						if (enemy12[j].parentIsAlive)
+						if (enemy12[j].parentIsAlive && enemy12[j].easeT > 2)
 						{
 							for (int i = 0; i < 4; i++)
 							{
@@ -2867,7 +2867,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int i = 0; i < 60; i++)
 					{
-						if (!enemy13.isDed[i])enemy13.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy13.relativePos[i], enemy13.radius[i]);
+						if (!enemy13.isDed[i] && enemy13.easeT[i] > 2)enemy13.isDed[i] = EllipseCollision(player.pos, player.radius.x, enemy13.relativePos[i], enemy13.radius[i]);
 					}
 				}
 
@@ -2890,7 +2890,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							if (enemy2.parentIsAlive[j])
+							if (enemy2.parentIsAlive[j]&& enemy2.easeT > 2)
 							{
 								for (int i = 0; i < kEnemy2Num; i++)
 								{
@@ -2901,21 +2901,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					}
 
-					if (enemy5.parentIsAlive)
+					if (enemy5.parentIsAlive && enemy5.easeT > 2)
 					{
 						for (int i = 0; i < 4; i++)
 						{
 							if (!enemy5.isDed[i])enemy5.isDed[i] = attAreaObj.TriangleCollision(enemy5.relativePos[i]);
 						}
 					}
-					if (enemy6.parentIsAlive)
+					if (enemy6.parentIsAlive && enemy6.easeT > 2)
 					{
 						for (int i = 0; i < 4; i++)
 						{
 							if (!enemy6.isDed[i])enemy6.isDed[i] = attAreaObj.TriangleCollision(enemy6.relativePos[i]);
 						}
 					}
-					if (enemy7.hostIsAlive)
+					if (enemy7.hostIsAlive && enemy7.easeT > 2)
 					{
 						for (int j = 0; j < 8; j++)
 						{
@@ -2928,7 +2928,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							}
 						}
 					}
-					if (enemy8.hostIsAlive)
+					if (enemy8.hostIsAlive && enemy8.easeT > 2)
 					{
 						for (int j = 0; j < 4; j++)
 						{
@@ -2941,7 +2941,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							}
 						}
 					}
-					if (enemy9.hostIsAlive)
+					if (enemy9.hostIsAlive && enemy9.easeT > 2)
 					{
 						for (int j = 0; j < 2; j++)
 						{
@@ -2956,7 +2956,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int j = 0; j < kenemy10Num; j++)
 					{
-						if (enemy10[j].parentIsAlive)
+						if (enemy10[j].parentIsAlive && enemy10[j].easeT > 2)
 						{
 							for (int i = 0; i < 4; i++)
 							{
@@ -2966,7 +2966,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int j = 0; j < kenemy11Num; j++)
 					{
-						if (enemy11[j].parentIsAlive)
+						if (enemy11[j].parentIsAlive && enemy11[j].easeT > 2)
 						{
 							for (int i = 0; i < 3; i++)
 							{
@@ -2976,7 +2976,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int j = 0; j < kenemy12Num; j++)
 					{
-						if (enemy12[j].parentIsAlive)
+						if (enemy12[j].parentIsAlive && enemy12[j].easeT > 2)
 						{
 							for (int i = 0; i < 4; i++)
 							{
@@ -2986,7 +2986,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 					for (int i = 0; i < 60; i++)
 					{
-						if (!enemy13.isDed[i])enemy13.isDed[i] = attAreaObj.TriangleCollision(enemy13.relativePos[i]);
+						if (!enemy13.isDed[i] && enemy13.easeT[i] > 2)enemy13.isDed[i] = attAreaObj.TriangleCollision(enemy13.relativePos[i]);
 					}
 				}
 #pragma endregion
@@ -4115,7 +4115,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				blackColor = int(easeInExpo(blackEaseT / 100) * 255);
 
 			}
-			if (blackEaseT == 0)
+			if (blackEaseT <= 50)
 			{
 				Novice::SetJoystickDeadZone(0, 7000, 0);
 
@@ -4173,7 +4173,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					}
 
-					if (choice == 0 && player.trigerA)
+					if (choice == 0 && player.trigerA&& resultEaseT[3]>=90)
 					{
 						UIBackPos = 0;
 						transitionFlag = true;
@@ -4400,7 +4400,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy10[j].childIsAlive[i])
 					{
 						if (!enemy10[j].isDed[i])Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
-						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int((enemy10[j].radius * 2 - (kDedTimer - enemy10[j].dedTimer[i]) * 3) / screenSize), int((enemy10[j].radius * 2 - (kDedTimer - enemy10[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0) {
+							Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int((enemy10[j].radius * 2 - (kDedTimer - enemy10[j].dedTimer[i]) * 3) / screenSize), int((enemy10[j].radius * 2 - (kDedTimer - enemy10[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+							Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy10[j].dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+						}
 					}
 				}
 			}
@@ -4414,7 +4418,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy11[j].childIsAlive[i])
 					{
 						if (!enemy11[j].isDed[i])Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
-						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int((enemy11[j].radius * 2 - (kDedTimer - enemy11[j].dedTimer[i]) * 3) / screenSize), int((enemy11[j].radius * 2 - (kDedTimer - enemy11[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0) {
+							Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int((enemy11[j].radius * 2 - (kDedTimer - enemy11[j].dedTimer[i]) * 3) / screenSize), int((enemy11[j].radius * 2 - (kDedTimer - enemy11[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+							Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy11[j].dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+						}
 					}
 				}
 			}
@@ -4428,7 +4435,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy12[j].childIsAlive[i])
 					{
 						if (!enemy12[j].isDed[i])Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
-						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int((enemy12[j].radius * 2 - (kDedTimer - enemy12[j].dedTimer[i]) * 3) / screenSize), int((enemy12[j].radius * 2 - (kDedTimer - enemy12[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0) {
+							Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int((enemy12[j].radius * 2 - (kDedTimer - enemy12[j].dedTimer[i]) * 3) / screenSize), int((enemy12[j].radius * 2 - (kDedTimer - enemy12[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+							Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy12[j].dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+						}
 					}
 				}
 			}
@@ -4441,7 +4452,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (enemy5.childIsAlive[i])
 			{
 				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int(enemy5.radius * 2 / screenSize), int(enemy5.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
-				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int((enemy5.radius * 2 - (kDedTimer - enemy5.dedTimer[i]) * 3) / screenSize), int((enemy5.radius * 2 - (kDedTimer - enemy5.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0) {
+					Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int((enemy5.radius * 2 - (kDedTimer - enemy5.dedTimer[i]) * 3) / screenSize), int((enemy5.radius * 2 - (kDedTimer - enemy5.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+					Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy5.dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+				}
 			}
 		}
 
@@ -4450,7 +4465,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (enemy6.childIsAlive[i])
 			{
 				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int(enemy6.radius * 2 / screenSize), int(enemy6.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
-				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int((enemy6.radius * 2 - (kDedTimer - enemy6.dedTimer[i]) * 3) / screenSize), int((enemy6.radius * 2 - (kDedTimer - enemy6.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0) {
+					Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int((enemy6.radius * 2 - (kDedTimer - enemy6.dedTimer[i]) * 3) / screenSize), int((enemy6.radius * 2 - (kDedTimer - enemy6.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+					Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy6.dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+				}
 			}
 		}
 		if (enemy2.hostIsAlive)
@@ -4462,7 +4481,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy2.childIsAlive[j][i])
 					{
 						if (!enemy2.isDed[j][i])Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[1], WHITE, "center");
-						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int((enemy2.radius * 2 - (kDedTimer - enemy2.dedTimer[j][i]) * 3) / screenSize), int((enemy2.radius * 2 - (kDedTimer - enemy2.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[1], BLUE, "center");
+						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0) {
+							Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int((enemy2.radius * 2 - (kDedTimer - enemy2.dedTimer[j][i]) * 3) / screenSize), int((enemy2.radius * 2 - (kDedTimer - enemy2.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[1], BLUE, "center");
+							Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy2.dedTimer[j][i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+						}
 					}
 				}
 			}
@@ -4477,8 +4500,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy8.childIsAlive[j][i])
 					{
 						if (!enemy8.isDed[j][i])Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[2], 0xffffffff, "center");
-						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int((enemy8.radius * 2 - (kDedTimer - enemy8.dedTimer[j][i])) / screenSize), int((enemy8.radius * 2 - (kDedTimer - enemy8.dedTimer[j][i])) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[2], BLUE, "center");
+						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0) {
+							Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int((enemy8.radius * 2 - (kDedTimer - enemy8.dedTimer[j][i])) / screenSize), int((enemy8.radius * 2 - (kDedTimer - enemy8.dedTimer[j][i])) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[2], BLUE, "center");
+							Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy8.dedTimer[j][i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
 
+						}
 					}
 				}
 			}
@@ -4493,7 +4519,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy7.childIsAlive[j][i])
 					{
 						if (!enemy7.isDed[j][i])Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[3], 0xffffffff, "center");
-						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int((enemy7.radius * 2 - (kDedTimer - enemy7.dedTimer[j][i]) * 3) / screenSize), int((enemy7.radius * 2 - (kDedTimer - enemy7.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[3], BLUE, "center");
+						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0) {
+							Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int((enemy7.radius * 2 - (kDedTimer - enemy7.dedTimer[j][i]) * 3) / screenSize), int((enemy7.radius * 2 - (kDedTimer - enemy7.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[3], BLUE, "center");
+							Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy7.dedTimer[j][i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+						}
 					}
 				}
 			}
@@ -4507,8 +4537,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (enemy9.childIsAlive[j][i])
 					{
 						if (!enemy9.isDed[j][i])Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[4], 0xffffffff, "center");
-						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int((enemy9.radius * 2 - (kDedTimer - enemy9.dedTimer[j][i]) * 3) / screenSize), int((enemy9.radius * 2 - (kDedTimer - enemy9.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[4], BLUE, "center");
+						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0) {
+							Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int((enemy9.radius * 2 - (kDedTimer - enemy9.dedTimer[j][i]) * 3) / screenSize), int((enemy9.radius * 2 - (kDedTimer - enemy9.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[4], BLUE, "center");
+							Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy9.dedTimer[j][i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
 
+						}
 					}
 				}
 			}
@@ -4522,7 +4555,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (enemy13.childIsAlive[i])
 			{
 				if (!enemy13.isDed[i])Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[5], 0xffffffff, "center");
-				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int((enemy13.radius[i] * 2 - (kDedTimer - enemy13.dedTimer[i]) * 3) / screenSize), int((enemy13.radius[i] * 2 - (kDedTimer - enemy13.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[5], BLUE, "center");
+				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0) {
+					Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int((enemy13.radius[i] * 2 - (kDedTimer - enemy13.dedTimer[i]) * 3) / screenSize), int((enemy13.radius[i] * 2 - (kDedTimer - enemy13.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[5], BLUE, "center");
+					Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy13.dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+				}
 			}
 		}
 #pragma endregion
@@ -4766,7 +4803,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy1.dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
 
-						if (enemy1.dedTimer[i] > 15)vibeVolume = 30000;
+						
 					}
 				}
 			}
@@ -4861,7 +4898,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 
 		case kTypeGameResult:
-			if (blackEaseT == 0)
+			if (blackEaseT <= 50)
 			{
 				for (int i = 0; i < 2; i++)
 				{
@@ -4988,39 +5025,43 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		#pragma region EnemySounds
 
-		if (enemy1.easeT == 2)
+		if (gameTimer<6000)
 		{
-			Original::SoundPlay("enemySpawn");
-		}
-		if (enemy2.easeT == 2)
-		{
-			Original::SoundPlay("enemySpawn");
-		}
-		if (enemy5.easeT == 2)
-		{
-			Original::SoundPlay("enemySpawn");
-		}
-		if (enemy6.easeT == 2)
-		{
-			Original::SoundPlay("enemySpawn");
-		}
-		if (enemy7.easeT == 2)
-		{
-			Original::SoundPlay("enemySpawn");
-		}
-		if (enemy8.easeT == 2)
-		{
-			Original::SoundPlay("enemySpawn");
-		}
-		if (enemy9.easeT == 2)
-		{
-			Original::SoundPlay("enemySpawn");
-		}
-		
+			if (enemy1.easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
+			if (enemy2.easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
+			if (enemy5.easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
+			if (enemy6.easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
+			if (enemy7.easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
+			if (enemy8.easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
+			if (enemy9.easeT == 2)
+			{
+				Original::SoundPlay("enemySpawn");
+			}
 
+
+			
+		}
 		for (int i = 0; i < sizeof(enemy1.dedTimer) / sizeof(int); i++)
 		{
-			
+
 			if (enemy1.dedTimer[i] == kDedTimer - 1)
 			{
 				Original::SoundPlay("enemyDead");
@@ -5035,7 +5076,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					Original::SoundPlay("enemyDead");
 				}
 			}
-			
+
 		}
 		for (int i = 0; i < sizeof(enemy5.dedTimer) / sizeof(int); i++)
 		{
@@ -5074,7 +5115,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy10) / sizeof(testEnemy3); i++)
 		{
-			if (enemy10[i].easeT == 2)
+			if (enemy10[i].easeT == 2&&gameTimer<6000)
 			{
 				Original::SoundPlay("enemySpawn");
 			}
@@ -5089,7 +5130,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy11) / sizeof(testEnemy1); i++)
 		{
-			if (enemy11[i].easeT == 2)
+			if (enemy11[i].easeT == 2 && gameTimer < 6000)
 			{
 				Original::SoundPlay("enemySpawn");
 			}
@@ -5104,7 +5145,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy12) / sizeof(testEnemy3); i++)
 		{
-			if (enemy12[i].easeT == 2)
+			if (enemy12[i].easeT == 2 && gameTimer < 6000)
 			{
 				Original::SoundPlay("enemySpawn");
 			}
@@ -5119,7 +5160,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy13.dedTimer) / sizeof(unsigned int); i++)
 		{
-			if (enemy13.easeT[i] == 2)
+			if (enemy13.easeT[i] == 2 && gameTimer < 6000)
 			{
 				Original::SoundPlay("enemySpawn");
 			}
