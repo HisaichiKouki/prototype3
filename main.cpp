@@ -120,7 +120,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int preScore = 0;
 	Vector2 cameraEasePos{};
-	float cameraEaseT = 0.3f;
+	float cameraEaseT = 0.35f;
 	const int kPreNum = 15;
 	Vector2 playerPrePos[kPreNum]{};
 	unsigned int prePosColor[kPreNum]{};
