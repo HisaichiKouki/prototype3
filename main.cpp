@@ -4683,6 +4683,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// タイマー 修正よろしく
 		scoreObj.Draw(gameTimer / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 		
+
+		Functions.DrawScreenB();
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       

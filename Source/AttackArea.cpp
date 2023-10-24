@@ -37,6 +37,7 @@ bool AttackAreaObject::TriangleCollision(Vector2 _targetPosition)
 		Vector2 bp = { attArea.position[1].x - _targetPosition.x, attArea.position[1].y - _targetPosition.y };
 		Vector2 cp = { attArea.position[2].x - _targetPosition.x, attArea.position[2].y - _targetPosition.y };
 
+		// ３点とも同じ座標だったら return false;
 		if (
 			attArea.position[0].x == attArea.position[1].x 
 			&& attArea.position[1].x == attArea.position[2].x 
