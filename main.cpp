@@ -4971,13 +4971,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 
 		case kTypeGameResult:
+			for (int i = 0; i < 2; i++)
+			{
+				if (resultBackPos[i] >= 1080)resultBackPos[i] = -1080;
+				resultBackPos[i]++;
+			}
 			if (blackEaseT <= 50)
 			{
-				for (int i = 0; i < 2; i++)
-				{
-					if (resultBackPos[i] >= 1080)resultBackPos[i] = -1080;
-					resultBackPos[i]++;
-				}
+				
 				for (int i = 0; i < 4; i++)
 				{
 					resultEasePos[i] = easeOutQuart(resultEaseT[i] / 100) * 1920;
