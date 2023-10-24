@@ -362,7 +362,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	testEnemy7 enemy13{};
 	enemy13.length = 1360;
 
-
+	int enemyDeadTexture = Novice::LoadTexture("./Resources/Images/enemyDead.png");
 
 	Count dash{};//ダッシュ攻撃で倒した数
 	Count triangle{};//三角攻撃で倒した数
@@ -458,7 +458,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameResult;
+	game = kTypeGameTitle;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -546,7 +546,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float resultEaseT[4]{};//スコア　キル数　	CONTENUE　YESNO	
 	float resultEasePos[4]{};
 
-	int resultBackTexture= Novice::LoadTexture("./Resources/images/resultBack.png");
+	int resultBackTexture = Novice::LoadTexture("./Resources/images/resultBack.png");
 	int resultBackPos[2] = { 0,-1080 };
 
 	// キー入力結果を受け取る箱
@@ -4742,7 +4742,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (enemy1.childIsAlive[i])
 				{
 					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
-					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)
+					{
+						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy1.dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+					}
 				}
 			}
 
@@ -4845,14 +4849,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				for (int i = 0; i < 4; i++)
 				{
-					resultEasePos[i] = easeOutQuart(resultEaseT[i]/100) * 1920;
+					resultEasePos[i] = easeOutQuart(resultEaseT[i] / 100) * 1920;
 				}
-				
-					if (resultEaseT[0] > 40 && resultEaseT[1] < 100)resultEaseT[1]++;
-					if (resultEaseT[1] > 70 && resultEaseT[2] < 100)resultEaseT[2]++;
-					if (resultEaseT[2] > 30 && resultEaseT[3] < 100)resultEaseT[3]++;
 
-				
+				if (resultEaseT[0] > 40 && resultEaseT[1] < 100)resultEaseT[1]++;
+				if (resultEaseT[1] > 70 && resultEaseT[2] < 100)resultEaseT[2]++;
+				if (resultEaseT[2] > 30 && resultEaseT[3] < 100)resultEaseT[3]++;
+
+
 
 				if (resultEaseT[0] < 100)resultEaseT[0]++;
 
@@ -4869,7 +4873,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//Novice::DrawBox(0, 0, 1920, 1080, 0, 0x444444ff, kFillModeSolid);
 				for (int i = 0; i < 2; i++)
 				{
-					Functions.DrawQuadPlus( 0, resultBackPos[i], 1920, 1080, 1, 1, 0, 0, 0, 1920, 1080, resultBackTexture, 0xffffffff, "leftTop");
+					Functions.DrawQuadPlus(0, resultBackPos[i], 1920, 1080, 1, 1, 0, 0, 0, 1920, 1080, resultBackTexture, 0xffffffff, "leftTop");
 
 				}
 				//スコア
