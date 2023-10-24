@@ -4985,7 +4985,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		case kTypeGameGame:
 			//Novice::DrawBox(1800, 700, 100, 100, 0, RED, kFillModeSolid);
 			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
-			if (quickTimer >= 150)Novice::ScreenPrintf(900, 600, "EXCELLENT");
+			//if (quickTimer >= 150)Novice::ScreenPrintf(900, 600, "EXCELLENT");
 
 			//タイマー
 			if (gameTimer < 5700 && gameTimer != 0)scoreObj.Draw((6060 - gameTimer) / 60, 50, 50, 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
