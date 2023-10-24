@@ -17,12 +17,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, 1920, 1080);
 
 	PlayerData player{};
-	player.radius = { 32,32 };
+	player.radius = { 40,40 };
 	player.shotSpeed = 60;
 	player.moveSpeed = 20;
 	player.pos.x = 0;
 	player.pos.y = 0;
 	player.anchorRadius = 10;
+	bool triFlag = false;
 
 	int scoreNumsHandle[10] = {
 		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
@@ -50,7 +51,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scoreObj.SetMaxDigit(6);
 
 	Vector2 cameraEasePos{};
-	float cameraEaseT = 0.3f;
+	float cameraEaseT = 0.4f;
 	const int kPreNum = 15;
 	Vector2 playerPrePos[kPreNum]{};
 	unsigned int prePosColor[kPreNum]{};
@@ -62,6 +63,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int joystickY = 0;
 	int preJoyStickX = 0;
 	int preJoyStickY = 0;
+	int flickRength = 70;
 
 	Vector2 xy{};
 	float length = 0;
@@ -77,7 +79,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float miniMapPlayerSize = 2;//ミニマップに表示されるプレイヤー関係のサイズ　1が等倍　数字が大きくなるほど大きく表示
 
 	int fieldTexture = Novice::LoadTexture("./Resources/images/field_1.png");
-	int enemyTexture = Novice::LoadTexture("./Resources/images/enemy_1.png");
+	//int enemyTexture = Novice::LoadTexture("./Resources/images/enemy_1.png");
+	//int enemyTexture2 = Novice::LoadTexture("./Resources/images/enemy_2.png");
+
+	int enemyTexture[6]{};
+	enemyTexture[0] = Novice::LoadTexture("./Resources/enemy/enemy_6.png");
+	enemyTexture[1] = Novice::LoadTexture("./Resources/enemy/enemy_5.png");
+	enemyTexture[2] = Novice::LoadTexture("./Resources/enemy/enemy_4.png");
+	enemyTexture[3] = Novice::LoadTexture("./Resources/enemy/enemy_3.png");
+	enemyTexture[4] = Novice::LoadTexture("./Resources/enemy/enemy_2.png");
+	enemyTexture[5] = Novice::LoadTexture("./Resources/enemy/enemy_1.png");
+
+	int enemyTextureSize = 128;
 
 	float enemyRadius = 64;//敵全体の半径
 	const int kDedTimer = 30;
@@ -305,7 +318,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 #pragma endregion
 #pragma region enemy10//ランダムに横一列の４体が出る
-	const int kenemy10Num = 4;
+	const int kenemy10Num = 8;
 	testEnemy3 enemy10[kenemy10Num]{};//ランダムに横一列の４体が出る
 	for (int j = 0; j < kenemy10Num; j++)
 	{
@@ -319,7 +332,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 #pragma endregion
 #pragma region enemy11//ランダムに三角形が出る
-	const int kenemy11Num = 10;
+	const int kenemy11Num = 15;
 	testEnemy1 enemy11[kenemy11Num]{};
 
 	for (int j = 0; j < kenemy11Num; j++)
@@ -333,7 +346,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 #pragma endregion
 #pragma region enemy12//ランダムに縦一列の４体が出る
-	const int kenemy12Num = 4;
+	const int kenemy12Num = 8;
 	testEnemy3 enemy12[kenemy12Num]{};//ランダムに横一列の４体が出る
 	for (int j = 0; j < kenemy12Num; j++)
 	{
@@ -356,6 +369,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float count = 0;//全体で倒した数
 	float endCount = 0;//フィーバーごとにリセット
 	float precount = 0;
+
+	int dashCount = 0;
+	int trieCount = 0;
 
 	Ennergy ennergy{};
 	ennergy.dashRate = 3;//ダッシュは三角の数字倍貯まる
@@ -405,23 +421,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int bigNumTexture[5]{};
 	int bigNumCount = 0;
 	unsigned int bigNumColor[5]{};
-	bigNumColor[0] = 0xffffff44;
-	bigNumColor[1] = 0xffffff11;
-	bigNumColor[2] = 0xffffff22;
-	bigNumColor[3] = 0xffffff33;
-	bigNumColor[4] = 0xffffff55;
+	bigNumColor[0] = 0xffffff66;
+	bigNumColor[1] = 0xffffff22;
+	bigNumColor[2] = 0xffffff33;
+	bigNumColor[3] = 0xffffff44;
+	bigNumColor[4] = 0xffffff77;
 
-	bigNumTexture[0] = Novice::LoadTexture("./Resources/images/number_5.png");
-	bigNumTexture[1] = Novice::LoadTexture("./Resources/images/number_4.png");
-	bigNumTexture[2] = Novice::LoadTexture("./Resources/images/number_3.png");
-	bigNumTexture[3] = Novice::LoadTexture("./Resources/images/number_2.png");
-	bigNumTexture[4] = Novice::LoadTexture("./Resources/images/number_1.png");
+	bigNumTexture[0] = Novice::LoadTexture("./Resources/font/bignum_5.png");
+	bigNumTexture[1] = Novice::LoadTexture("./Resources/font/bignum_4.png");
+	bigNumTexture[2] = Novice::LoadTexture("./Resources/font/bignum_3.png");
+	bigNumTexture[3] = Novice::LoadTexture("./Resources/font/bignum_2.png");
+	bigNumTexture[4] = Novice::LoadTexture("./Resources/font/bignum_1.png");
 
 	float finishEaseT = 0;
 	float finishSize = 0;
 	float finishEaseT2 = 0;
 	float finishSize2 = 0;
-	int finishTexture = Novice::LoadTexture("./Resources/images/finish.png");
+	float finishEase = 0;
+	float finishEase2 = 0;
+	int finishTexture = Novice::LoadTexture("./Resources/font/finish.png");
 
 	float blackEaseT = 0;
 	float blackEaseT2 = 0;
@@ -439,6 +457,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		kTypeGameResult,
 	};
 
+	// デバッグ用 ### MustDelete
+	game = kTypeGameTitle;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -468,7 +488,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int walkTimer = 0;
 	int whileTime = 60;//最初のタスクの間と間の時間
 
-	int gamestartTexture = Novice::LoadTexture("./Resources/images/gamestart.png");
+	int gamestartTexture = Novice::LoadTexture("./Resources/font/gamestart.png");
 	float gamestartEaseT = 0;
 	float gamestartEaseT2 = 0;
 	float gamestartPos = 0;
@@ -490,15 +510,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int playerTexture = Novice::LoadTexture("./Resources/images/player.png");
 
 	int informationTexture[3]{};
-	informationTexture[0]= Novice::LoadTexture("./Resources/images/information_1.png");
-	informationTexture[1]= Novice::LoadTexture("./Resources/images/information_2.png");
-	informationTexture[2]= Novice::LoadTexture("./Resources/images/information_3.png");
+	informationTexture[0] = Novice::LoadTexture("./Resources/images/information_1.png");
+	informationTexture[1] = Novice::LoadTexture("./Resources/images/information_2.png");
+	informationTexture[2] = Novice::LoadTexture("./Resources/images/information_3.png");
 
-	int infoFont[4]{};
-	infoFont[0]= Novice::LoadTexture("./Resources/font/info_font_1.png");
-	infoFont[1]= Novice::LoadTexture("./Resources/font/info_font_2.png");
-	infoFont[2]= Novice::LoadTexture("./Resources/font/info_font_3.png");
-	infoFont[3]= Novice::LoadTexture("./Resources/font/info_font_4.png");
+	int infoFont[5]{};
+	infoFont[0] = Novice::LoadTexture("./Resources/font/info_font_1.png");
+	infoFont[1] = Novice::LoadTexture("./Resources/font/info_font_2.png");
+	infoFont[2] = Novice::LoadTexture("./Resources/font/info_font_3.png");
+	infoFont[3] = Novice::LoadTexture("./Resources/font/info_font_4.png");
+	infoFont[4] = Novice::LoadTexture("./Resources/font/info_font_5.png");
 
 	float informationEaseT = 0;
 	float informationEase = 0;
@@ -506,12 +527,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float infoFontEaseT = 0;
 	float infoFontEase = 0;
 
+	float UIPosy = 0;
+	bool transitionFlag = false;//リザルト画面でタイトルに戻るかゲームスタートかを一度のみ判定をとるため
+	float UIBackEaseT = 0;
+	float UIBackPos = 0;
+
+	int choice = 0;//0ならリスタート1ならタイトルに戻る
+	int prechoice = 0;//0ならリスタート1ならタイトルに戻る
+	int choiceTimer = 0;//スティックの跳ね返りで反対に行かないように
+
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
-	// デバッグ用 ### MustDelete
-	game = kTypeGameTitle;
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -526,7 +554,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
 
-		
+
 
 		switch (game)
 		{
@@ -556,7 +584,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					gaugeEaseT = 0;
 					gaugeEasePos = 0;
-
+					UIPosy = 0;
 					Novice::SetJoystickDeadZone(0, 0, 0);
 					gaugey = 730 + 600;
 					gamestartEaseT = 0;
@@ -839,9 +867,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (player.velocityRatio < 0)
 					{
 						player.velocityRatio = 0;
+						
+
+					}
+					
+					if (player.aim && player.count >= 2&& player.velocityRatio<= 0.80f)
+					{
+						triFlag = true;
+					}
+					if (player.aim && player.count >= 1 && player.velocityRatio <= 0.78f)
+					{
+						player.prepos[player.count] = player.pos;
 					}
 				}
 
+				//Novice::ScreenPrintf(0, 0, "player.velocityRatio=%f", player.velocityRatio);
 				//フリックを検知したら
 				if (player.flick && player.flickCT == 0)player.flickCT = 20;//CTをつけてすぐ減速しないように
 
@@ -872,7 +912,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 				//攻撃終わりにAボタンを押した時
-				if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
+				if (player.trigerA && player.aimTimer == 0 && !player.dashAttack|| triFlag)
 				{
 					//移動入力がされている時
 
@@ -892,6 +932,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.aim = false;
 						player.aimTimer = 30;//攻撃時間を代入
 						player.triangulAttack = true;//三角形攻撃を有効に
+						triFlag = false;
 
 					}
 
@@ -963,7 +1004,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					player.flickTimer--;
 					//スティックが端に行ったら
-					if (length >= 90 && !player.aim && !player.triangulAttack)
+					if (length >= flickRength && !player.aim && !player.triangulAttack)
 					{
 						//フリックをTRUEに
 						player.flick = true;
@@ -1219,14 +1260,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.pos = { 0,0 };
 					}
 					//スクリーン拡縮処理
-					screenSize = easeOutCubic(setScreenEaseT / 100) * (100 - 1) + 1;//easeOutBack
+					screenSize = easeOutCubic(setScreenEaseT / 100) * (70 - 1) + 1;//easeOutBack
 					if (setScreenEaseT < 100 || setScreenEaseT > 0)
 					{
 						setScreenEaseT += setScreenEaseTChange * 2;
 						if (setScreenEaseT > 100)setScreenEaseT = 100;
 						if (setScreenEaseT < 0)setScreenEaseT = 0;
 					}
-					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 1760;
+					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 2192;
 					if (gamestartEaseT < 100)gamestartEaseT += 2;
 
 				}
@@ -1236,14 +1277,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (gamestartEaseT == 100)
 				{
-					gamestartPos2 = easeInQuart(gamestartEaseT2 / 100) * 1760;
+					gamestartPos2 = easeInQuart(gamestartEaseT2 / 100) * 2192;
 
 					if (gamestartEaseT2 < 100)gamestartEaseT2 += 2;
 
 				}
 
+				if (startNewGame)
+				{
+					gameTimer = 0;
 
-				gameTimer++;
+				}
+				else
+				{
+					gameTimer++;
+				}
 			}
 			break;
 
@@ -1260,18 +1308,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				}
 				//スクリーン拡縮処理
-				screenSize = easeOutCubic(setScreenEaseT / 100) * (100 - 1) + 1;//easeOutBack
+				screenSize = easeOutCubic(setScreenEaseT / 100) * (70 - 1) + 1;//easeOutBack
 				if (setScreenEaseT < 100 || setScreenEaseT > 0)
 				{
 					setScreenEaseT += setScreenEaseTChange * 2;
 					if (setScreenEaseT > 100)setScreenEaseT = 100;
 					if (setScreenEaseT < 0)setScreenEaseT = 0;
 				}
-				gamestartPos2 = easeOutQuart(gamestartEaseT2 / 100) * 1760;
+				gamestartPos2 = easeOutQuart(gamestartEaseT2 / 100) * 2192;
 				if (gamestartEaseT2 < 100)gamestartEaseT2 += 2;
 
 
 				gaugeEasePos = easeOutQuint(gaugeEaseT / 100) * 600;
+				UIPosy = easeOutQuint(gaugeEaseT / 100) * 200;
 				if (gaugeEaseT < 100)gaugeEaseT += 2;
 			}
 			else
@@ -1282,8 +1331,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					dashCount = 0;
+					trieCount = 0;
+					choice = 0;
+					transitionFlag = false;
 					Novice::SetJoystickDeadZone(0, 0, 0);
-
+					UIBackEaseT = 0;
+					UIBackPos = 0;
 					gamestartEaseT = 0;
 					gamestartEaseT2 = 0;
 					gamestartPos = 0;
@@ -1301,6 +1355,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					finishSize2 = 0;
 					finishEaseT2 = 0;
+					finishEase = 0;
+					finishEase2 = 0;
 					clearTimer = 0;
 					fieldToPlayer = { 0,0 };
 					cameraEasePos = { 0,0 };
@@ -1590,16 +1646,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							screenSize = 1.0f;
 						}
 					}
-					if (!ennergy.dash && dash.endCount != 0)
+					if (gameTimer < 6000)
 					{
-						ennergy.count += dash.endCount * ennergy.dashRate * (dash.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
-						ennergy.dash = true;
+						if (!ennergy.dash && dash.endCount != 0)
+						{
+							ennergy.count += dash.endCount * ennergy.dashRate * (dash.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
+							ennergy.dash = true;
+						}
+						if (!ennergy.triangle && triangle.endCount != 0)
+						{
+							ennergy.count += triangle.endCount * ennergy.triangleRate * (triangle.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
+							ennergy.triangle = true;
+						}
 					}
-					if (!ennergy.triangle && triangle.endCount != 0)
-					{
-						ennergy.count += triangle.endCount * ennergy.triangleRate * (triangle.endCount / 50 + 1);//撃破数×倍率×一度に倒した数の倍率
-						ennergy.triangle = true;
-					}
+
 
 					if (ennergy.count >= ennergy.max)
 					{
@@ -1668,7 +1728,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 					}
 				}
-				if (gameTimer == 120 || gameTimer == 660 || gameTimer == 1800 || gameTimer == 2700 || gameTimer == 3800 || gameTimer == 4700 || gameTimer == 5400 && quickTimer == 0 || gameTimer == 5640)
+				if (gameTimer == 120 || gameTimer == 1400 || gameTimer == 2700 || gameTimer == 3800 || gameTimer == 4700 || gameTimer == 5400 && quickTimer == 0 || gameTimer == 5640)
 				{
 					for (int i = 0; i < 10; i++)
 					{
@@ -1683,6 +1743,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							break;
 						}
 					}
+				}
+
+				if (!patterrnIsAlive[0] && !patterrnIsAlive[1] && !patterrnIsAlive[2] && !patterrnIsAlive[3] && !patterrnIsAlive[4] && quickTimer > 200)
+				{
+					for (int i = 0; i < 10; i++)
+					{
+						if (ennergy.fever)
+						{
+							randSpown = RandomNum(i + 1 + i * 3) % variation;
+							if (randSpown != preRandSpown && randSpown != prepreRandSpown && randSpown != pre3RandSpown && !patterrnIsAlive[randSpown])
+							{
+
+								patterrnIsAlive[randSpown] = true;
+								pre3RandSpown = prepreRandSpown;
+								prepreRandSpown = preRandSpown;
+								preRandSpown = randSpown;
+								break;
+							}
+						}
+					}
+
 				}
 
 				if (patterrnIsAlive[0] && !enemy2.hostIsAlive)
@@ -1795,7 +1876,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 				//横一列
-				if (gameTimer != 0 && gameTimer % 630 == 0 || gameTimer != 0 && gameTimer % 2400 == 0)
+				if (gameTimer != 0 && gameTimer % 530 == 0 || gameTimer >= 1900 && gameTimer % 320 == 0 || gameTimer != 0 && gameTimer % 2400 == 0)
 				{
 					for (int j = 0; j < kenemy10Num; j++)
 					{
@@ -1827,7 +1908,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 				//三角形
-				if (gameTimer != 0 && gameTimer % 330 == 0 || gameTimer >= 3000 && gameTimer % 730 == 0)
+				if (gameTimer != 0 && gameTimer % 240 == 0 || gameTimer >= 1900 && gameTimer % 700 == 0 || gameTimer >= 3500 && gameTimer % 300 == 0)
 				{
 					for (int j = 0; j < kenemy11Num; j++)
 					{
@@ -1865,7 +1946,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 				//縦一列
-				if (gameTimer >= 1800 && gameTimer % 600 == 0 || gameTimer >= 1800 && gameTimer % 900 == 0 || gameTimer != 0 && gameTimer % 2400 == 0)
+				if (gameTimer >= 1800 && gameTimer % 430 == 0 || gameTimer >= 1800 && gameTimer % 900 == 0 || gameTimer != 0 && gameTimer % 2400 == 0)
 				{
 					for (int j = 0; j < kenemy12Num; j++)
 					{
@@ -2149,6 +2230,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						player.velocityRatio = 0;
 					}
+					if (player.aim && player.count >= 2 && player.velocityRatio <= 0.80f)
+					{
+						triFlag = true;
+					}
+					if (player.aim && player.count >= 1 && player.velocityRatio <= 0.78f)
+					{
+						player.prepos[player.count] = player.pos;
+					}
 				}
 
 				//フリックを検知したら
@@ -2182,7 +2271,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 					//攻撃終わりにAボタンを押した時
-					if (player.trigerA && player.aimTimer == 0 && !player.dashAttack)
+					if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
 					{
 						//移動入力がされている時
 
@@ -2202,7 +2291,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							player.aim = false;
 							player.aimTimer = 30;//攻撃時間を代入
 							player.triangulAttack = true;//三角形攻撃を有効に
-
+							triFlag = false;
 						}
 
 
@@ -2274,7 +2363,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						player.flickTimer--;
 						//スティックが端に行ったら
-						if (length >= 90 && !player.aim && !player.triangulAttack)
+						if (length >= flickRength && !player.aim && !player.triangulAttack)
 						{
 							//フリックをTRUEに
 							player.flick = true;
@@ -2299,8 +2388,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (ennergy.fever)
 						{
 							//フィーバーの倍率をかける
-							player.velocity.x = player.direction.x * player.shotSpeed * ennergy.powerUp;
-							player.velocity.y = player.direction.y * player.shotSpeed * ennergy.powerUp;
+							player.velocity.x = player.preDirection.x * player.shotSpeed * ennergy.powerUp;
+							player.velocity.y = player.preDirection.y * player.shotSpeed * ennergy.powerUp;
 
 						}
 
@@ -2899,8 +2988,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 									{
 										if (ennergy.count > 0)
 										{
-											ennergy.count -= ennergy.damage;
-											ennergy.damageFlag = true;
+											if (!ennergy.fever) {
+												ennergy.count -= ennergy.damage;
+												ennergy.damageFlag = true;
+											}
 										}
 										else
 										{
@@ -2921,8 +3012,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							{
 								if (ennergy.count > 0)
 								{
-									ennergy.count -= ennergy.damage;
-									ennergy.damageFlag = true;
+									if (!ennergy.fever) {
+										ennergy.count -= ennergy.damage;
+										ennergy.damageFlag = true;
+									}
 								}
 								else
 								{
@@ -2939,8 +3032,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							{
 								if (ennergy.count > 0)
 								{
-									ennergy.count -= ennergy.damage;
-									ennergy.damageFlag = true;
+									if (!ennergy.fever) {
+										ennergy.count -= ennergy.damage;
+										ennergy.damageFlag = true;
+									}
 								}
 								else
 								{
@@ -2961,8 +3056,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 									{
 										if (ennergy.count > 0)
 										{
-											ennergy.count -= ennergy.damage;
-											ennergy.damageFlag = true;
+											if (!ennergy.fever) {
+												ennergy.count -= ennergy.damage;
+												ennergy.damageFlag = true;
+											}
 										}
 										else
 										{
@@ -2985,8 +3082,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 									{
 										if (ennergy.count > 0)
 										{
-											ennergy.count -= ennergy.damage;
-											ennergy.damageFlag = true;
+											if (!ennergy.fever) {
+												ennergy.count -= ennergy.damage;
+												ennergy.damageFlag = true;
+											}
 										}
 										else
 										{
@@ -3009,8 +3108,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 									{
 										if (ennergy.count > 0)
 										{
-											ennergy.count -= ennergy.damage;
-											ennergy.damageFlag = true;
+											if (!ennergy.fever) {
+												ennergy.count -= ennergy.damage;
+												ennergy.damageFlag = true;
+											}
 										}
 										else
 										{
@@ -3031,8 +3132,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								{
 									if (ennergy.count > 0)
 									{
-										ennergy.count -= ennergy.damage;
-										ennergy.damageFlag = true;
+										if (!ennergy.fever) {
+											ennergy.count -= ennergy.damage;
+											ennergy.damageFlag = true;
+										}
 									}
 									else
 									{
@@ -3052,8 +3155,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								{
 									if (ennergy.count > 0)
 									{
-										ennergy.count -= ennergy.damage;
-										ennergy.damageFlag = true;
+										if (!ennergy.fever) {
+											ennergy.count -= ennergy.damage;
+											ennergy.damageFlag = true;
+										}
 									}
 									else
 									{
@@ -3073,8 +3178,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								{
 									if (ennergy.count > 0)
 									{
-										ennergy.count -= ennergy.damage;
-										ennergy.damageFlag = true;
+										if (!ennergy.fever) {
+											ennergy.count -= ennergy.damage;
+											ennergy.damageFlag = true;
+										}
 									}
 									else
 									{
@@ -3090,8 +3197,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						{
 							if (ennergy.count > 0)
 							{
-								ennergy.count -= ennergy.damage;
-								ennergy.damageFlag = true;
+								if (!ennergy.fever) {
+									ennergy.count -= ennergy.damage;
+									ennergy.damageFlag = true;
+								}
 							}
 							else
 							{
@@ -3165,48 +3274,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					}
 				}
 
-				/*if (enemy3.parentIsAlive)
-				{
-					for (int i = 0; i < 4; i++)
-					{
-						if (enemy3.isDed[i])
-						{
-							if (enemy3.dedTimer[i] == kDedTimer)
-							{
-								count++;
-								if (player.dashAttack)dash.count++;
-								if (player.triangulAttack)triangle.count++;
-							}
-							if (enemy3.dedTimer[i] > 0)enemy3.dedTimer[i]--;
-							if (enemy3.dedTimer[i] <= 0)enemy3.childIsAlive[i] = false;
-						}
-						if (enemy3.dedTimer[0] <= 0 && enemy3.dedTimer[1] <= 0 && enemy3.dedTimer[2] <= 0 && enemy3.dedTimer[3] <= 0)
-						{
-							enemy3.parentIsAlive = false;
-						}
-					}
-				}
-				if (enemy4.parentIsAlive)
-				{
-					for (int i = 0; i < 4; i++)
-					{
-						if (enemy4.isDed[i])
-						{
-							if (enemy4.dedTimer[i] == kDedTimer)
-							{
-								count++;
-								if (player.dashAttack)dash.count++;
-								if (player.triangulAttack)triangle.count++;
-							}
-							if (enemy4.dedTimer[i] > 0)enemy4.dedTimer[i]--;
-							if (enemy4.dedTimer[i] <= 0)enemy4.childIsAlive[i] = false;
-						}
-						if (enemy4.dedTimer[0] <= 0 && enemy4.dedTimer[1] <= 0 && enemy4.dedTimer[2] <= 0 && enemy4.dedTimer[3] <= 0)
-						{
-							enemy4.parentIsAlive = false;
-						}
-					}
-				}*/
+
 				if (enemy5.parentIsAlive)
 				{
 					for (int i = 0; i < 4; i++)
@@ -3222,7 +3290,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							if (enemy5.dedTimer[i] > 0)enemy5.dedTimer[i]--;
 							if (enemy5.dedTimer[i] <= 0)enemy5.childIsAlive[i] = false;
 						}
-						if (enemy5.dedTimer[0] <= 0 && enemy5.dedTimer[1] <= 0 && enemy5.dedTimer[2] <= 0 && enemy5.dedTimer[3] <= 0)
+						if (!enemy5.childIsAlive[0] && !enemy5.childIsAlive[1] && !enemy5.childIsAlive[2] && !enemy5.childIsAlive[3])
 						{
 							enemy5.parentIsAlive = false;
 						}
@@ -3243,7 +3311,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							if (enemy6.dedTimer[i] > 0)enemy6.dedTimer[i]--;
 							if (enemy6.dedTimer[i] <= 0)enemy6.childIsAlive[i] = false;
 						}
-						if (enemy6.dedTimer[0] <= 0 && enemy6.dedTimer[1] <= 0 && enemy6.dedTimer[2] <= 0 && enemy6.dedTimer[3] <= 0)
+						if (!enemy6.childIsAlive[0] && !enemy6.childIsAlive[1] && !enemy6.childIsAlive[2] && !enemy6.childIsAlive[3])
 						{
 							enemy6.parentIsAlive = false;
 						}
@@ -3367,7 +3435,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								if (enemy10[j].dedTimer[i] > 0)enemy10[j].dedTimer[i]--;
 								if (enemy10[j].dedTimer[i] <= 0)enemy10[j].childIsAlive[i] = false;
 							}
-							if (enemy10[j].dedTimer[0] <= 0 && enemy10[j].dedTimer[1] <= 0 && enemy10[j].dedTimer[2] <= 0 && enemy10[j].dedTimer[3] <= 0)
+							if (!enemy10[j].childIsAlive[0] && !enemy10[j].childIsAlive[1] && !enemy10[j].childIsAlive[2] && !enemy10[j].childIsAlive[3])
 							{
 								enemy10[j].parentIsAlive = false;
 							}
@@ -3391,7 +3459,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								if (enemy11[j].dedTimer[i] > 0)enemy11[j].dedTimer[i]--;
 								if (enemy11[j].dedTimer[i] <= 0)enemy11[j].childIsAlive[i] = false;
 							}
-							if (enemy11[j].dedTimer[0] <= 0 && enemy11[j].dedTimer[1] <= 0 && enemy11[j].dedTimer[2] <= 0)
+							if (!enemy11[j].childIsAlive[0] && !enemy11[j].childIsAlive[1] && !enemy11[j].childIsAlive[2])
 							{
 								enemy11[j].parentIsAlive = false;
 							}
@@ -3415,7 +3483,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								if (enemy12[j].dedTimer[i] > 0)enemy12[j].dedTimer[i]--;
 								if (enemy12[j].dedTimer[i] <= 0)enemy12[j].childIsAlive[i] = false;
 							}
-							if (enemy12[j].dedTimer[0] <= 0 && enemy12[j].dedTimer[1] <= 0 && enemy12[j].dedTimer[2] <= 0 && enemy12[j].dedTimer[3] <= 0)
+							if (!enemy12[j].childIsAlive[0] && !enemy12[j].childIsAlive[1] && !enemy12[j].childIsAlive[2] && !enemy12[j].childIsAlive[3])
 							{
 								enemy12[j].parentIsAlive = false;
 							}
@@ -3516,7 +3584,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 					}
 
-					if (enemy13.count == 60)enemy13.hostIsAlive = false;
+					if (enemy13.count == 60)
+					{
+						enemy13.hostIsAlive = false;
+						quickFlag = true;
+					}
 				}
 				if (!enemy2.hostIsAlive)
 				{
@@ -3576,7 +3648,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 				//ここまでいじらなくてOK
 
-				if (keys[DIK_W] && !preKeys[DIK_W])
+				/*if (keys[DIK_W] && !preKeys[DIK_W])
 				{
 					if (cameraEaseT < 1.0f)cameraEaseT += 0.1f;
 					if (cameraEaseT > 1.0f)cameraEaseT = 1.0f;
@@ -3586,7 +3658,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (cameraEaseT > 0.1f)cameraEaseT -= 0.1f;
 					if (cameraEaseT < 0.1f)cameraEaseT = 0.1f;
 
-				}
+				}*/
 				cameraEasePos.x = (1.0f - cameraEaseT) * cameraEasePos.x + float(player.pos.x) * cameraEaseT;
 				cameraEasePos.y = (1.0f - cameraEaseT) * cameraEasePos.y + float(player.pos.y) * cameraEaseT;
 
@@ -3601,6 +3673,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (finishEaseT < 100)
 					{
 						finishSize = easeOutCirc(finishEaseT / 100);
+						finishEase = easeOutQuad(finishEaseT / 100);
 
 						finishEaseT += 2;
 					}
@@ -3610,6 +3683,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (clearTimer > 30)
 						{
 							finishSize2 = easeInCirc(finishEaseT2 / 100);
+							finishEase2 = easeOutQuad(finishEaseT2 / 100);
 							if (finishEaseT2 < 100)finishEaseT2 += 2;
 							if (blackEaseT < 100)
 							{
@@ -3651,6 +3725,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (keys[DIK_T] && !preKeys[DIK_T])
 				{
 					gameTimer += 600;
+				}
+
+				if (gameTimer > 5700 && UIBackEaseT < 100)
+				{
+					UIBackPos = easeInBack(UIBackEaseT / 100) * 200;
+					UIBackEaseT += 2;
+
 				}
 
 				if (gameTimer <= 6000)gameTimer++;
@@ -3745,6 +3826,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (allReset)
 			{
+				triFlag = false;
 				Playerth = 0;
 				gamestartEaseT = 0;
 				gamestartEaseT2 = 0;
@@ -3998,32 +4080,92 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (blackEaseT == 0)
 			{
-				if (keys[DIK_J])
-				{
-					if (!startNewGame)
-					{
-						score = 0;
-						ennergy.count = 0;
-						gamestartEaseT = 0;
-						setScreenEaseT = 0;
-						setScreenEaseTChange = 1;
-						screenSize = 1.0f;
-						player.pos = { 0,0 };
-						for (int i = 0; i < kPreNum; i++)
-						{
-							playerPrePos[i] = { 0,0 };
-						}
-						player.preDirection = { 0,0 };
-						scroll.x = (-player.pos.x / screenSize + 960);
-						scroll.y = (-player.pos.y / screenSize + 540);
-					}
-					startNewGame = true;
-				}
-				else if (keys[DIK_H])
-				{
-					titleBackFlag = true;
+				Novice::SetJoystickDeadZone(0, 7000, 0);
 
+
+				//ボタン入力ここから
+				player.trigerA = false;
+				if (Novice::IsTriggerButton(0, kPadButton10))
+				{
+					player.trigerA = true;
 				}
+
+				///スティック入力ここから
+				Novice::GetAnalogInputLeft(0, &joystickX, &joystickY);
+
+				//コントローラーの原点からの距離をはかる
+				player.flickLength = floatLength({ (float)joystickX, (float)joystickY }, { 0,0 });
+
+				//ジョイスティック入力を-100から100まで
+				player.joystick.x = (clump(float(joystickX / 32767.0f), -1, 1) * 100);
+				player.joystick.y = (clump(float(joystickY / 32767.0f), -1, 1) * 100);
+
+				//円の当たり判定的な。
+				xy = vectorLength(player.joystick, { 0,0 });
+				//length = sqrtf(xy.x * xy.x + xy.y * xy.y);
+				length = clump(sqrtf(xy.x * xy.x + xy.y * xy.y), 0, 100);
+
+				//長さがデッドゾーンを超えたら方向を代入
+
+				prechoice = choice;
+
+				if (!transitionFlag)
+				{
+					if (length >= dedZone)
+					{
+						if (choiceTimer > 0)
+						{
+							choiceTimer--;
+						}
+						if (choiceTimer == 0)
+						{
+							if (player.joystick.x > 0.3f)
+							{
+								choice = 1;
+							}
+							else if (player.joystick.x < -0.3f)
+							{
+								choice = 0;
+							}
+						}
+
+						if (prechoice != choice)
+						{
+							choiceTimer = 5;
+						}
+
+					}
+
+					if (choice == 0 && player.trigerA)
+					{
+						UIBackPos = 0;
+						transitionFlag = true;
+						if (!startNewGame)
+						{
+							score = 0;
+							ennergy.count = 0;
+							gamestartEaseT = 0;
+							setScreenEaseT = 0;
+							setScreenEaseTChange = 1;
+							screenSize = 1.0f;
+							player.pos = { 0,0 };
+							for (int i = 0; i < kPreNum; i++)
+							{
+								playerPrePos[i] = { 0,0 };
+							}
+							player.preDirection = { 0,0 };
+							scroll.x = (-player.pos.x / screenSize + 960);
+							scroll.y = (-player.pos.y / screenSize + 540);
+						}
+						startNewGame = true;
+					}
+					else if (choice == 1 && player.trigerA)
+					{
+						titleBackFlag = true;
+						transitionFlag = true;
+					}
+				}
+
 
 				if (startNewGame)
 				{
@@ -4036,14 +4178,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.pos = { 0,0 };
 					}
 					//スクリーン拡縮処理
-					screenSize = easeOutCubic(setScreenEaseT / 100) * (100 - 1) + 1;//easeOutBack
+					screenSize = easeOutCubic(setScreenEaseT / 100) * (70 - 1) + 1;//easeOutBack
 					if (setScreenEaseT < 100 || setScreenEaseT > 0)
 					{
 						setScreenEaseT += setScreenEaseTChange * 2;
 						if (setScreenEaseT > 100)setScreenEaseT = 100;
 						if (setScreenEaseT < 0)setScreenEaseT = 0;
 					}
-					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 1760;
+					gamestartPos = easeOutQuart(gamestartEaseT / 100) * 2192;
 					if (gamestartEaseT < 100)gamestartEaseT += 2;
 
 				}
@@ -4060,6 +4202,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						gaugeEaseT = 0;
 						gaugeEasePos = 0;
+						UIPosy = 0;
 						screenSize = 1.0f;
 						player.pos = { 0,0 };
 						for (int i = 0; i < kPreNum; i++)
@@ -4095,29 +4238,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///
 
 
-		//Novice::ScreenPrintf(0, 200, "joystickX=%d joystickY=%d", joystickX, joystickY);
-		//Novice::ScreenPrintf(0, 220, "Player.joystickX=%f Player.joystickY=%f", player.joystick.x, player.joystick.y);
-		//Novice::ScreenPrintf(0, 240, "Player.direction.x=%f Player.direction.y=%f", player.direction.x, player.direction.y);
-		//Novice::ScreenPrintf(0, 260, "player.vel.x=%f player.vel.y=%f", player.velocity.x, player.velocity.y);
-		//Novice::ScreenPrintf(0, 280, "player.TrigerA=%d", player.trigerA);
-		//Novice::ScreenPrintf(0, 300, "player.velocityRatio=%f", player.velocityRatio);
-		//Novice::ScreenPrintf(0, 320, "player.count=%d", player.count);
+	/*	Novice::ScreenPrintf(0, 200, "joystickX=%d joystickY=%d", joystickX, joystickY);
+		Novice::ScreenPrintf(0, 220, "Player.joystickX=%f Player.joystickY=%f", player.joystick.x, player.joystick.y);
+		Novice::ScreenPrintf(0, 240, "Player.direction.x=%f Player.direction.y=%f", player.direction.x, player.direction.y);
+		Novice::ScreenPrintf(0, 260, "player.vel.x=%f player.vel.y=%f", player.velocity.x, player.velocity.y);
+		Novice::ScreenPrintf(0, 280, "player.TrigerA=%d", player.trigerA);
+		Novice::ScreenPrintf(0, 300, "player.velocityRatio=%f", player.velocityRatio);
+		Novice::ScreenPrintf(0, 320, "player.count=%d", player.count);
 		Novice::ScreenPrintf(0, 340, "World.X=%f World.Y=%f", player.pos.x, player.pos.y);
-		//Novice::ScreenPrintf(0, 360, "player.playTime=%d player.flick=%d", player.flickTimer, player.flick);
-		//Novice::ScreenPrintf(0, 380, "player.flickLength=%f", player.flickLength);
+		Novice::ScreenPrintf(0, 360, "player.playTime=%d player.flick=%d", player.flickTimer, player.flick);
+		Novice::ScreenPrintf(0, 380, "player.flickLength=%f", player.flickLength);
 		Novice::ScreenPrintf(0, 400, "length=%f", length);
-		//Novice::ScreenPrintf(0, 420, "player.flickCT=%d", player.flickCT);
+		Novice::ScreenPrintf(0, 420, "player.flickCT=%d", player.flickCT);
 		Novice::ScreenPrintf(0, 440, "count=%f endCount=%f", count, endCount);
 		Novice::ScreenPrintf(0, 460, " dash.endcount=%f dash.endCount=%f", dash.count, dash.endCount);
 		Novice::ScreenPrintf(0, 480, "trian.endcount=%f tria.endCount=%f", triangle.count, triangle.endCount);
-		//Novice::ScreenPrintf(0, 500, "ennergy.count=%f", ennergy.count);
+		Novice::ScreenPrintf(0, 500, "ennergy.count=%f", ennergy.count);
 		Novice::ScreenPrintf(0, 520, "screenSize=%f", screenSize);
 		Novice::ScreenPrintf(0, 540, "setScreenEaseT=%f", setScreenEaseT);
 		Novice::ScreenPrintf(0, 560, "gameTimer=%d seconds=%d", gameTimer, gameTimer / 60);
 		Novice::ScreenPrintf(0, 580, "score=%d", score);
 		Novice::ScreenPrintf(0, 600, "cameraEaseT=%0.3f", cameraEaseT);
 		Novice::ScreenPrintf(0, 620, "game=%d", game);
-		//Novice::ScreenPrintf(0, 640, "blackColor=%d", blackColor);
+		Novice::ScreenPrintf(0, 640, "blackColor=%d", blackColor);*/
 
 		/*for (int i = 0; i < variation; i++)
 		{
@@ -4134,7 +4277,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Novice::ScreenPrintf(1000, 40, "enemy8.hostIsAlive=%d enemy8.timer=%d", enemy8.hostIsAlive, enemy9.timer);
 		Novice::ScreenPrintf(1000, 60, "enemy9.hostIsAlive=%d enemy9.timer=%d", enemy9.hostIsAlive, enemy9.timer);
 		Novice::ScreenPrintf(1000, 80, "enemy13.hostIsAlive=%d", enemy13.hostIsAlive);*/
-		Novice::ScreenPrintf(1000, 100, "quickTimer=%d", quickTimer);
+		//Novice::ScreenPrintf(1000, 100, "quickTimer=%d", quickTimer);
 
 
 		//一番後ろの背景
@@ -4142,29 +4285,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//フィールドの画像表示
 		Functions.DrawQuadPlus(int(scroll.x), int(scroll.y), int(fieldRadius * 2 / screenSize), int(fieldRadius * 2 / screenSize), 1.0f, 1.0f, 0, 0, 0, 4000, 4000, fieldTexture, 0x999999ff, "center");
 		//三角形を作った時
-		if (player.aim)Novice::DrawBox(0, 0, 1920, 1080, 0, 0x88888822, kFillModeSolid);
+		if (player.aim)Novice::DrawBox(0, 0, 1920, 1080, 0, 0x88888811, kFillModeSolid);
 		//三角形で攻撃時間
 		if (player.aimTimer > 0)Novice::DrawBox(0, 0, 1920, 1080, 0, 0xaa666611, kFillModeSolid);
 
 		//デバッグ用
-		Novice::DrawEllipse(int(100 + player.joystick.x), int(100 + player.joystick.y), 10, 10, 0, GREEN, kFillModeSolid);//直接入力
-		Novice::DrawEllipse(int(100 + player.direction.x * 100), int(100 + player.direction.y * 100), 10, 10, 0, RED, kFillModeSolid);//方向
-		Novice::DrawEllipse(int(100 + player.velocity.x), int(100 + player.velocity.y), 10, 10, 0, BLUE, kFillModeSolid);//速度
-		Novice::DrawEllipse(100, 100, 100, 100, 0, WHITE, kFillModeWireFrame);//最大範囲
-		Novice::DrawEllipse(100, 100, (int)dedZone, (int)dedZone, 0, GREEN, kFillModeWireFrame);//デッドゾーン
+		//Novice::DrawEllipse(int(100 + player.joystick.x), int(100 + player.joystick.y), 10, 10, 0, GREEN, kFillModeSolid);//直接入力
+		//Novice::DrawEllipse(int(100 + player.direction.x * 100), int(100 + player.direction.y * 100), 10, 10, 0, RED, kFillModeSolid);//方向
+		//Novice::DrawEllipse(int(100 + player.velocity.x), int(100 + player.velocity.y), 10, 10, 0, BLUE, kFillModeSolid);//速度
+		//Novice::DrawEllipse(100, 100, 100, 100, 0, WHITE, kFillModeWireFrame);//最大範囲
+		//Novice::DrawEllipse(100, 100, (int)dedZone, (int)dedZone, 0, GREEN, kFillModeWireFrame);//デッドゾーン
 
-		//フィールドの円周
-		Novice::DrawEllipse(int(scroll.x), int(scroll.y), (int)(fieldRadius / screenSize), (int)(fieldRadius / screenSize), 0, GREEN, kFillModeWireFrame);
+		////フィールドの円周
+		//Novice::DrawEllipse(int(scroll.x), int(scroll.y), (int)(fieldRadius / screenSize), (int)(fieldRadius / screenSize), 0, GREEN, kFillModeWireFrame);
 
 
 		//スポーン地点
-		Novice::DrawBox(int(-50 / screenSize + scroll.x), int(-50 / screenSize + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);
+		//Novice::DrawBox(int(-50 / screenSize + scroll.x), int(-50 / screenSize + scroll.y), 100, 100, 0, RED, kFillModeWireFrame);
 		//プレイヤーの方向表示
 		//Novice::DrawLine(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.pos.x / screenSize + scroll.x + player.preDirection.x / screenSize * 150), int(player.pos.y / screenSize + scroll.y + player.preDirection.y / screenSize * 150), WHITE);
 
 		for (int i = 0; i < kPreNum; i++)
 		{
-			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.5f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (i + 1) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i], "center");
+			Functions.DrawQuadPlus(int(playerPrePos[i].x / screenSize + scroll.x), int(playerPrePos[i].y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.x * 2 / screenSize), (0.4f * (float(kPreNum - i) / kPreNum) + 0.1f), (0.4f * (float(kPreNum - i) / kPreNum) + 0.1f), ((gameTimer * (kPreNum - i + 1) + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, prePosColor[i], "center");
 		}
 		//プレイヤー
 		//Novice::DrawEllipse(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x / screenSize), int(player.radius.y / screenSize), 0, 0xffffffff, kFillModeSolid);
@@ -4193,103 +4336,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Playerth += plth.x + plth.y;
 
 		if (player.flick) {
-			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x00ffffff, "center");
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1.0f, 1.0f, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x00ffffff, "center");
 		}
 		else if (player.aim || player.triangulAttack)
 		{
-			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x33ff33ff, "center");
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1.0f, 1.0f, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x33ff33ff, "center");
 
 		}
 		else
 		{
-			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1, 1, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, WHITE, "center");
+			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1.0f, 1.0f, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, WHITE, "center");
 
 		}
 
 
 		//仮敵描画
 #pragma region enemy
-
-		if (enemy2.hostIsAlive)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				for (int i = 0; i < kEnemy2Num; i++)
-				{
-					if (enemy2.childIsAlive[j][i])
-					{
-						if (!enemy2.isDed[j][i])Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
-					}
-				}
-			}
-		}
-
-
-		for (int i = 0; i < 4; i++)
-		{
-			if (enemy5.childIsAlive[i])
-			{
-				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int(enemy5.radius * 2 / screenSize), int(enemy5.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int(enemy5.radius * 2 / screenSize), int(enemy5.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
-			}
-		}
-
-		for (int i = 0; i < 4; i++)
-		{
-			if (enemy6.childIsAlive[i])
-			{
-				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int(enemy6.radius * 2 / screenSize), int(enemy6.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int(enemy6.radius * 2 / screenSize), int(enemy6.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
-			}
-		}
-
-		if (enemy7.hostIsAlive)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-
-				for (int i = 0; i < 4; i++)
-				{
-					if (enemy7.childIsAlive[j][i])
-					{
-						if (!enemy7.isDed[j][i])Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
-					}
-				}
-			}
-		}
-		if (enemy8.hostIsAlive)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				for (int i = 0; i < 12; i++)
-				{
-					if (enemy8.childIsAlive[j][i])
-					{
-						if (!enemy8.isDed[j][i])Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
-
-					}
-				}
-			}
-		}
-		if (enemy9.hostIsAlive)
-		{
-			for (int j = 0; j < 2; j++)
-			{
-				for (int i = 0; i < 8; i++)
-				{
-					if (enemy9.childIsAlive[j][i])
-					{
-						if (!enemy9.isDed[j][i])Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
-
-					}
-				}
-			}
-		}
-
 		for (int j = 0; j < kenemy10Num; j++)
 		{
 			if (enemy10[j].parentIsAlive)
@@ -4298,8 +4360,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy10[j].childIsAlive[i])
 					{
-						if (!enemy10[j].isDed[i])Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+						if (!enemy10[j].isDed[i])Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int(enemy10[j].radius * 2 / screenSize), int(enemy10[j].radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy10[j].relativePos[i].x / screenSize + scroll.x), int(enemy10[j].relativePos[i].y / screenSize + scroll.y), int((enemy10[j].radius * 2 - (kDedTimer - enemy10[j].dedTimer[i]) * 3) / screenSize), int((enemy10[j].radius * 2 - (kDedTimer - enemy10[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 					}
 				}
 			}
@@ -4312,8 +4374,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy11[j].childIsAlive[i])
 					{
-						if (!enemy11[j].isDed[i])Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+						if (!enemy11[j].isDed[i])Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int(enemy11[j].radius * 2 / screenSize), int(enemy11[j].radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy11[j].relativePos[i].x / screenSize + scroll.x), int(enemy11[j].relativePos[i].y / screenSize + scroll.y), int((enemy11[j].radius * 2 - (kDedTimer - enemy11[j].dedTimer[i]) * 3) / screenSize), int((enemy11[j].radius * 2 - (kDedTimer - enemy11[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 					}
 				}
 			}
@@ -4326,20 +4388,102 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy12[j].childIsAlive[i])
 					{
-						if (!enemy12[j].isDed[i])Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+						if (!enemy12[j].isDed[i])Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int(enemy12[j].radius * 2 / screenSize), int(enemy12[j].radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy12[j].relativePos[i].x / screenSize + scroll.x), int(enemy12[j].relativePos[i].y / screenSize + scroll.y), int((enemy12[j].radius * 2 - (kDedTimer - enemy12[j].dedTimer[i]) * 3) / screenSize), int((enemy12[j].radius * 2 - (kDedTimer - enemy12[j].dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 					}
 				}
 			}
 		}
 
 
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (enemy5.childIsAlive[i])
+			{
+				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int(enemy5.radius * 2 / screenSize), int(enemy5.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy5.relativePos[i].x / screenSize + scroll.x), int(enemy5.relativePos[i].y / screenSize + scroll.y), int((enemy5.radius * 2 - (kDedTimer - enemy5.dedTimer[i]) * 3) / screenSize), int((enemy5.radius * 2 - (kDedTimer - enemy5.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+			}
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (enemy6.childIsAlive[i])
+			{
+				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int(enemy6.radius * 2 / screenSize), int(enemy6.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy6.relativePos[i].x / screenSize + scroll.x), int(enemy6.relativePos[i].y / screenSize + scroll.y), int((enemy6.radius * 2 - (kDedTimer - enemy6.dedTimer[i]) * 3) / screenSize), int((enemy6.radius * 2 - (kDedTimer - enemy6.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+			}
+		}
+		if (enemy2.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < kEnemy2Num; i++)
+				{
+					if (enemy2.childIsAlive[j][i])
+					{
+						if (!enemy2.isDed[j][i])Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int(enemy2.radius * 2 / screenSize), int(enemy2.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[1], WHITE, "center");
+						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy2.relativePos[j][i].x / screenSize + scroll.x), int(enemy2.relativePos[j][i].y / screenSize + scroll.y), int((enemy2.radius * 2 - (kDedTimer - enemy2.dedTimer[j][i]) * 3) / screenSize), int((enemy2.radius * 2 - (kDedTimer - enemy2.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[1], BLUE, "center");
+					}
+				}
+			}
+		}
+
+		if (enemy8.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < 12; i++)
+				{
+					if (enemy8.childIsAlive[j][i])
+					{
+						if (!enemy8.isDed[j][i])Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int(enemy8.radius * 2 / screenSize), int(enemy8.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[2], 0xffffffff, "center");
+						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy8.relativePos[j][i].x / screenSize + scroll.x), int(enemy8.relativePos[j][i].y / screenSize + scroll.y), int((enemy8.radius * 2 - (kDedTimer - enemy8.dedTimer[j][i])) / screenSize), int((enemy8.radius * 2 - (kDedTimer - enemy8.dedTimer[j][i])) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[2], BLUE, "center");
+
+					}
+				}
+			}
+		}
+		if (enemy7.hostIsAlive)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy7.childIsAlive[j][i])
+					{
+						if (!enemy7.isDed[j][i])Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int(enemy7.radius * 2 / screenSize), int(enemy7.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[3], 0xffffffff, "center");
+						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy7.relativePos[j][i].x / screenSize + scroll.x), int(enemy7.relativePos[j][i].y / screenSize + scroll.y), int((enemy7.radius * 2 - (kDedTimer - enemy7.dedTimer[j][i]) * 3) / screenSize), int((enemy7.radius * 2 - (kDedTimer - enemy7.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[3], BLUE, "center");
+					}
+				}
+			}
+		}
+		if (enemy9.hostIsAlive)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					if (enemy9.childIsAlive[j][i])
+					{
+						if (!enemy9.isDed[j][i])Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int(enemy9.radius * 2 / screenSize), int(enemy9.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[4], 0xffffffff, "center");
+						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int(enemy9.relativePos[j][i].x / screenSize + scroll.x), int(enemy9.relativePos[j][i].y / screenSize + scroll.y), int((enemy9.radius * 2 - (kDedTimer - enemy9.dedTimer[j][i]) * 3) / screenSize), int((enemy9.radius * 2 - (kDedTimer - enemy9.dedTimer[j][i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[4], BLUE, "center");
+
+					}
+				}
+			}
+		}
+
+
+
+
 		for (int i = 0; i < 60; i++)
 		{
 			if (enemy13.childIsAlive[i])
 			{
-				if (!enemy13.isDed[i])Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+				if (!enemy13.isDed[i])Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int(enemy13.radius[i] * 2 / screenSize), int(enemy13.radius[i] * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[5], 0xffffffff, "center");
+				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy13.relativePos[i].x / screenSize + scroll.x), int(enemy13.relativePos[i].y / screenSize + scroll.y), int((enemy13.radius[i] * 2 - (kDedTimer - enemy13.dedTimer[i]) * 3) / screenSize), int((enemy13.radius[i] * 2 - (kDedTimer - enemy13.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[5], BLUE, "center");
 			}
 		}
 #pragma endregion
@@ -4363,78 +4507,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, 0x00ff00ff, kFillModeSolid);
 		}
 		//フィーバーゲージ仮
-		//Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 500, 100, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
+		//Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 500, enemyTextureSize, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
 		//Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), int(500 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
 
+		//後ろ
 		Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, gaugeWidth, gaugeHeidth, gaugeBackTexture, WHITE);
 
-		Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, int(gaugeWidth * (ennergy.count / ennergy.max)), gaugeHeidth, gaugeTexture, WHITE);
+		//変動するレイヤー
+		if (!ennergy.fever)
+		{
+			Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, int(gaugeWidth * (ennergy.count / ennergy.max)), gaugeHeidth, gaugeTexture, WHITE);
+
+		}
+		else
+		{
+			Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + int(gaugeWidth * (ennergy.count / ennergy.max)), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, int(gaugeWidth * (ennergy.count / ennergy.max)), gaugeHeidth, gaugeTexture, 0xffff00ff);
+
+		}
 
 		//ミニマップ
 		Novice::DrawEllipse(int(50 + fieldRadius / miniMap), int(1020 - fieldRadius / miniMap), int(fieldRadius / miniMap), int(fieldRadius / miniMap), 0, GREEN, kFillModeWireFrame);
 
-		//ミニマップシシカク
-		if (enemy2.hostIsAlive)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				for (int i = 0; i < kEnemy2Num; i++)
-				{
-					if (enemy2.childIsAlive[j][i])
-					{
-						if (!enemy2.isDed[j][i])Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
-					}
-				}
-			}
-		}
-		//ミニマップ８方向エネミー
-		if (enemy7.hostIsAlive)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				for (int i = 0; i < 4; i++)
-				{
-					if (enemy7.childIsAlive[j][i])
-					{
-						if (!enemy7.isDed[j][i])Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
-					}
-				}
-			}
-		}
-		//ミニマップジグザグ
-		if (enemy8.hostIsAlive)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				for (int i = 0; i < 12; i++)
-				{
-					if (enemy8.childIsAlive[j][i])
-					{
-						if (!enemy8.isDed[j][i])Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
-
-					}
-				}
-			}
-		}
-		//ミニマップセンターゴー
-		if (enemy9.hostIsAlive)
-		{
-			for (int j = 0; j < 2; j++)
-			{
-				for (int i = 0; i < 8; i++)
-				{
-					if (enemy9.childIsAlive[j][i])
-					{
-						if (!enemy9.isDed[j][i])Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy9.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy9.relativePos[j][i].y / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), 0, 0xff00ffff, kFillModeSolid);
-						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + enemy9.relativePos[j][i].x / miniMap), int(int(1020 - fieldRadius / miniMap) + enemy9.relativePos[j][i].y / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), 0, BLUE, kFillModeSolid);
-
-					}
-				}
-			}
-		}
 
 		//ミニマップランダム横一列
 		for (int j = 0; j < kenemy10Num; j++)
@@ -4445,8 +4538,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy10[j].childIsAlive[i])
 					{
-						if (!enemy10[j].isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy10[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy10[j].relativePos[i].y / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy10[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy10[j].relativePos[i].y / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+						if (!enemy10[j].isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy10[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy10[j].relativePos[i].y / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+						if (enemy10[j].isDed[i] && enemy10[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy10[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy10[j].relativePos[i].y / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), int(enemy10[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 					}
 				}
 			}
@@ -4460,8 +4553,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy11[j].childIsAlive[i])
 					{
-						if (!enemy11[j].isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy11[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy11[j].relativePos[i].y / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy11[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy11[j].relativePos[i].y / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+						if (!enemy11[j].isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy11[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy11[j].relativePos[i].y / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+						if (enemy11[j].isDed[i] && enemy11[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy11[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy11[j].relativePos[i].y / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), int(enemy11[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 					}
 				}
 			}
@@ -4475,8 +4568,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					if (enemy12[j].childIsAlive[i])
 					{
-						if (!enemy12[j].isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy12[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy12[j].relativePos[i].y / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy12[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy12[j].relativePos[i].y / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+						if (!enemy12[j].isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy12[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy12[j].relativePos[i].y / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+						if (enemy12[j].isDed[i] && enemy12[j].dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy12[j].relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy12[j].relativePos[i].y / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), int(enemy12[j].radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 					}
 				}
 			}
@@ -4487,8 +4580,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy5.childIsAlive[i])
 			{
-				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy5.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy5.relativePos[i].y / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy5.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy5.relativePos[i].y / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+				if (!enemy5.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy5.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy5.relativePos[i].y / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+				if (enemy5.isDed[i] && enemy5.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy5.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy5.relativePos[i].y / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), int(enemy5.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 			}
 		}
 		//ミニマップ右上
@@ -4496,8 +4589,71 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy6.childIsAlive[i])
 			{
-				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy6.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy6.relativePos[i].y / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy6.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy6.relativePos[i].y / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+				if (!enemy6.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy6.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy6.relativePos[i].y / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+				if (enemy6.isDed[i] && enemy6.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy6.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy6.relativePos[i].y / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), int(enemy6.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
+			}
+		}
+		//ミニマップシシカク
+		if (enemy2.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < kEnemy2Num; i++)
+				{
+					if (enemy2.childIsAlive[j][i])
+					{
+						if (!enemy2.isDed[j][i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[1], WHITE, "center");
+						if (enemy2.isDed[j][i] && enemy2.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy2.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy2.relativePos[j][i].y / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), int(enemy2.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[1], BLUE, "center");
+					}
+				}
+			}
+		}
+
+		//ミニマップジグザグ
+		if (enemy8.hostIsAlive)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int i = 0; i < 12; i++)
+				{
+					if (enemy8.childIsAlive[j][i])
+					{
+						if (!enemy8.isDed[j][i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[2], 0xffffffff, "center");
+						if (enemy8.isDed[j][i] && enemy8.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy8.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy8.relativePos[j][i].y / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), int(enemy8.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[2], BLUE, "center");
+
+					}
+				}
+			}
+		}
+		//ミニマップ８方向エネミー
+		if (enemy7.hostIsAlive)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					if (enemy7.childIsAlive[j][i])
+					{
+						if (!enemy7.isDed[j][i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[3], 0xffffffff, "center");
+						if (enemy7.isDed[j][i] && enemy7.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy7.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy7.relativePos[j][i].y / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), int(enemy7.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[3], BLUE, "center");
+					}
+				}
+			}
+		}
+		//ミニマップセンターゴー
+		if (enemy9.hostIsAlive)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+				for (int i = 0; i < 8; i++)
+				{
+					if (enemy9.childIsAlive[j][i])
+					{
+						if (!enemy9.isDed[j][i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy9.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy9.relativePos[j][i].y / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[4], 0xffffffff, "center");
+						if (enemy9.isDed[j][i] && enemy9.dedTimer[j][i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy9.relativePos[j][i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy9.relativePos[j][i].y / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), int(enemy9.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[4], BLUE, "center");
+
+					}
+				}
 			}
 		}
 
@@ -4507,8 +4663,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy13.childIsAlive[i])
 			{
-				if (!enemy13.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy13.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy13.relativePos[i].y / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy13.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy13.relativePos[i].y / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+				if (!enemy13.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy13.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy13.relativePos[i].y / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[5], 0xffffffff, "center");
+				if (enemy13.isDed[i] && enemy13.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy13.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy13.relativePos[i].y / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), int(enemy13.radius[i] * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[5], BLUE, "center");
 			}
 		}
 
@@ -4528,14 +4684,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (player.dashAttack)Novice::DrawEllipse(int((50 + fieldRadius / miniMap) + player.pos.x / miniMap), int(int(1020 - fieldRadius / miniMap) + player.pos.y / miniMap), int(player.radius.x * miniMapPlayerSize / miniMap), int(player.radius.y * miniMapPlayerSize / miniMap), 0, 0x00ffffff, kFillModeSolid);
 
 		//攻撃有効時間を表示
-		if (player.triangulAttack)
+		/*if (player.triangulAttack)
 		{
 			Novice::DrawBox(1820, 0, 100, 100, 0, RED, kFillModeSolid);
 		}
 		if (player.dashAttack)
 		{
 			Novice::DrawBox(1720, 0, 100, 100, 0, BLUE, kFillModeSolid);
-		}
+		}*/
 
 		/*if (!isEnemyDead)
 		{
@@ -4555,9 +4711,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		switch (game)
 		{
 		case kTypeGameTitle:
-			Novice::DrawBox(1800, 700, 100, 100, 0, WHITE, kFillModeSolid);
+			//Novice::DrawBox(1800, 700, 100, 100, 0, WHITE, kFillModeSolid);
 
-			
+
 
 
 			for (int i = 0; i < 3; i++)
@@ -4565,8 +4721,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (enemy1.childIsAlive[i])
 				{
-					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int(enemy1.radius * 2 / screenSize), int(enemy1.radius * 2 / screenSize), 1, 1, float(float(gameTimer * 2 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 				}
 			}
 
@@ -4577,13 +4733,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				if (enemy1.childIsAlive[i])
 				{
-					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, 0xffffffff, "center");
-					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, 100, 100, enemyTexture, BLUE, "center");
+					if (!enemy1.isDed[i])Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], 0xffffffff, "center");
+					if (enemy1.isDed[i] && enemy1.dedTimer[i] > 0)Functions.DrawQuadPlus(int((50 + fieldRadius / miniMap) + enemy1.relativePos[i].x / miniMap), int((1020 - fieldRadius / miniMap) + enemy1.relativePos[i].y / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), int(enemy1.radius * miniMapPlayerSize / miniMap), 1, 1, 0, 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 				}
 			}
 			if (titleCount == 0)
 			{
-				Novice::ScreenPrintf(700, 540, "Walk");
+				//Novice::ScreenPrintf(700, 540, "Walk");
 				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[0], WHITE, "center");
 				informationEase = easeOutElastic(informationEaseT / 100);
 				if (informationEaseT < 100)informationEaseT += 2;
@@ -4596,7 +4752,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (titleCount == 1)
 			{
-				Novice::ScreenPrintf(700, 540, "Dash");
+				//Novice::ScreenPrintf(700, 540, "Dash");
 				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[1], WHITE, "center");
 				informationEase = easeOutElastic(informationEaseT / 100);
 				if (informationEaseT < 100)informationEaseT += 2;
@@ -4608,11 +4764,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (titleCount == 2)
 			{
-				Novice::ScreenPrintf(700, 540, "Triangle");
+				//Novice::ScreenPrintf(700, 540, "Triangle");
 				Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[2], WHITE, "center");
 				informationEase = easeOutElastic(informationEaseT / 100);
 				if (informationEaseT < 100)informationEaseT += 2;
 				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[2], WHITE, "center");
+				Functions.DrawQuadPlus(1500, 700, 304, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 304, 32, infoFont[4], WHITE, "center");
 
 				infoFontEase = easeOutElastic(infoFontEaseT / 100);
 				if (infoFontEaseT < 100)infoFontEaseT += 2;
@@ -4620,9 +4777,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else if (titleCount == 3)
 			{
-				Novice::ScreenPrintf(700, 540, "kill to gamestart");
-				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[3], WHITE, "center");
-				
+				//Novice::ScreenPrintf(700, 540, "kill to gamestart");
+				Functions.DrawQuadPlus(1500, 670, 690, 32, 1.5f * infoFontEase, 1.5f * infoFontEase, 0, 0, 0, 690, 32, infoFont[3], WHITE, "center");
+
 				if (!startNewGame)
 				{
 					infoFontEase = easeOutElastic(infoFontEaseT / 100);
@@ -4631,60 +4788,95 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				else
 				{
 					infoFontEase = easeInQuint(infoFontEaseT / 100);
-					 if(infoFontEaseT > 0)infoFontEaseT -= 2;
-					
+					if (infoFontEaseT > 0)infoFontEaseT -= 2;
+
 
 				}
-				
+
 
 			}
 
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
+			//	if (gameTimer < 5700 && gameTimer != 0)scoreObj.Draw((6060 - gameTimer) / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			//	if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
 			break;
 
 		case kTypeGameGame:
-			Novice::DrawBox(1800, 700, 100, 100, 0, RED, kFillModeSolid);
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
+			//Novice::DrawBox(1800, 700, 100, 100, 0, RED, kFillModeSolid);
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
 			if (quickTimer >= 150)Novice::ScreenPrintf(900, 600, "EXCELLENT");
+
+			//タイマー
+			if (gameTimer < 5700 && gameTimer != 0)scoreObj.Draw((6060 - gameTimer) / 60, 50, 50, 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 50, 50 + -200 + int(UIPosy), 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			//スコア
+			scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy - UIBackPos), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 
 			break;
 
 		case kTypeGameResult:
+
+			dashCount = int(dash.count);
+			trieCount = int(triangle.count);
+			//タイマー
+			if (gameTimer < 5700 && gameTimer != 0)scoreObj.Draw((6060 - gameTimer) / 60, 50, 50, 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 50, 50 + -200 + int(UIPosy), 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+			scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 			if (!startNewGame)
 			{
 				Novice::DrawBox(0, 0, 1920, 1080, 0, 0x666666ff, kFillModeSolid);
-				Novice::ScreenPrintf(740, 500, "score=%d", score);
-				Novice::ScreenPrintf(740, 520, "count=%0.1f", count);
-				Novice::ScreenPrintf(740, 540, "dash.count=%0.1f", dash.count);
-				Novice::ScreenPrintf(740, 560, "triangle.count=%0.1f", triangle.count);
-			}
-			Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
-			Novice::ScreenPrintf(500, 500, "-H- Title -J- NewGame");
+				//Novice::ScreenPrintf(740, 500, "score=%d", score);
+				//Novice::ScreenPrintf(740, 520, "count=%0.1f", count);
+				//Novice::ScreenPrintf(740, 540, "dash.count=%0.1f", dash.count);
+				//Novice::ScreenPrintf(740, 560, "triangle.count=%0.1f", triangle.count);
+				//スコア
+				scoreObj.Draw(score, 700, 100, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
+				scoreObj.Draw(int(count), 700, 250, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+				scoreObj.Draw(dashCount, 700, 400, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+				scoreObj.Draw(trieCount, 700, 550, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 
-			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 800), 540, 1600, 400, 1, 1, 0, 0, 0, 1600, 400, gamestartTexture, WHITE, "center");
+				Novice::ScreenPrintf(740, 790, "CONTINUE?");
+				Novice::ScreenPrintf(710, 810, "YES");
+				Novice::ScreenPrintf(780, 810, "NO");
+
+				if (choice == 0)
+				{
+					Novice::DrawBox(710, 810, 60, 20, 0, RED, kFillModeSolid);
+				}
+				else if (choice == 1)
+				{
+					Novice::DrawBox(780, 810, 40, 20, 0, BLUE, kFillModeSolid);
+
+				}
+
+			}
+			//Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
+		//	Novice::ScreenPrintf(500, 500, "-H- Title -J- NewGame");
+
+			Functions.DrawQuadPlus(int(gamestartPos + gamestartPos2 - 1232), 540, 1232, 128, 1, 1, 0, 0, 0, 1232, 128, gamestartTexture, WHITE, "center");
+
+
 
 			break;
 		}
 
-		Novice::ScreenPrintf(700, 700, "bigNumEaseT=%f", bigNumEaseT);
+
+
 		Functions.DrawQuadPlus(960, 540, 800, 800, bigNumSize, bigNumSize, 0, 0, 0, 800, 800, bigNumTexture[bigNumCount], bigNumColor[bigNumCount], "center");
-		Functions.DrawQuadPlus(960, 540, 1600, 800, finishSize, finishSize, 0, 0, 0, 1600, 800, finishTexture, 0xffffffff, "center");
+
+		Functions.DrawQuadPlus(960, 540, 1920, 300, 1, -(finishEase - finishEase2), 0, 0, 0, 1, 1, kWhiteTexture, 0x00000066, "center");
+		Functions.DrawQuadPlus(960, 540, 1248, 288, (finishSize - finishSize2), (finishSize - finishSize2), 0, 0, 0, 1248, 288, finishTexture, 0xff0000ff, "center");
 
 
-		Novice::ScreenPrintf(700, 700, "bigNumEaseT=%f", bigNumEaseT);
-		Functions.DrawQuadPlus(960, 540, 800, 800, bigNumSize, bigNumSize, 0, 0, 0, 800, 800, bigNumTexture[bigNumCount], bigNumColor[bigNumCount], "center");
-		Functions.DrawQuadPlus(960, 540, 1600, 800, finishSize - finishSize2, finishSize - finishSize2, 0, 0, 0, 1600, 800, finishTexture, 0xffffffff, "center");
-
-		Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
-		
 		/// UIなど (一番手前になるように)
 		// スコア (大きさ調整は [### ScoreClass] で検索)
-		scoreObj.Draw(score, 1550, 50, 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
-		// タイマー 修正よろしく
-		scoreObj.Draw(gameTimer / 60, 0, 0, 0.3f, 0.3f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
-		
 
-		Functions.DrawScreenB();
+
+
+			//暗転用
+		Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
+
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
 		///                                                            ///       
