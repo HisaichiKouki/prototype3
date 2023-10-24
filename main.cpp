@@ -8,7 +8,7 @@
 #include<Xinput.h>
 
 
-const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
+const char kWindowTitle[] = "トライダッシュ";
 
 float clump(float a, float min, float max);
 
@@ -18,6 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
+	Novice::SetWindowMode(kFullscreen);
 
 	WORD vibeVolume = 0;
 	PlayerData player{};
@@ -119,7 +120,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int preScore = 0;
 	Vector2 cameraEasePos{};
-	float cameraEaseT = 0.4f;
+	float cameraEaseT = 0.3f;
 	const int kPreNum = 15;
 	Vector2 playerPrePos[kPreNum]{};
 	unsigned int prePosColor[kPreNum]{};
@@ -4408,9 +4409,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//一番後ろの背景
-		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x222222ff, kFillModeSolid);
+		Novice::DrawBox(0, 0, 1920, 1080, 0, 0x111111ff, kFillModeSolid);
 		//フィールドの画像表示
-		Functions.DrawQuadPlus(int(scroll.x), int(scroll.y), int(fieldRadius * 2 / screenSize), int(fieldRadius * 2 / screenSize), 1.0f, 1.0f, 0, 0, 0, 4000, 4000, fieldTexture, 0x999999ff, "center");
+		Functions.DrawQuadPlus(int(scroll.x), int(scroll.y), int(fieldRadius * 2 / screenSize), int(fieldRadius * 2 / screenSize), 1.0f, 1.0f, 0, 0, 0, 4000, 4000, fieldTexture, 0x777777ff, "center");
 		//三角形を作った時
 		if (player.aim)Novice::DrawBox(0, 0, 1920, 1080, 0, 0x88888811, kFillModeSolid);
 		//三角形で攻撃時間
@@ -5030,7 +5031,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//Novice::DrawBox(0, 0, 1920, 1080, 0, 0x444444ff, kFillModeSolid);
 				for (int i = 0; i < 2; i++)
 				{
-					Functions.DrawQuadPlus(0, resultBackPos[i], 1920, 1080, 1, 1, 0, 0, 0, 1920, 1080, resultBackTexture, 0xffffffff, "leftTop");
+					Functions.DrawQuadPlus(0, resultBackPos[i], 1920, 1080, 1, 1, 0, 0, 0, 1920, 1080, resultBackTexture, 0x999999ff, "leftTop");
 
 				}
 				//スコア
@@ -5045,13 +5046,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (choice == 0)
 				{
-					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, yesTexture, 0xff3333ff, "center");
+					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, yesTexture, 0xff6666ff, "center");
 					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, noTexture, WHITE, "center");
 
 				}
 				else if (choice == 1)
 				{
-					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, noTexture, 0x3333ffff, "center");
+					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, noTexture, 0x6666ffff, "center");
 					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, yesTexture, WHITE, "center");
 
 				}
