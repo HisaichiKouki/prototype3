@@ -32,7 +32,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool triFlag = false;
 
 	//BGM
-	int audioHandletitleBGM= Novice::LoadAudio("./Resources/Sounds/BGM/title.mp3");
+	int audioHandletitleBGM = Novice::LoadAudio("./Resources/Sounds/BGM/title.mp3");
 	int soundHandle = -1;
 	float setTitleBGMValume = 0.05f;//設定した音量になるまで音量が上がっていく
 	float titleBGMValume = 0;
@@ -42,11 +42,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float setResultBGMValume = 0.05f;//設定した音量になるまで音量が上がっていく
 	float ResultBGMValume = 0;
 
-	int gameBGM= Novice::LoadAudio("./Resources/Sounds/BGM/gameBGM.mp3");
-//	bool gameBGMFlag = false;
+	int gameBGM = Novice::LoadAudio("./Resources/Sounds/BGM/gameBGM.mp3");
+	//	bool gameBGMFlag = false;
 
-	//SE
-	//敵死亡
+		//SE
+		//敵死亡
 	int audioHandleDead = Novice::LoadAudio("./Resources/Sounds/boom.wav");
 	bool deadAudioFlag = false;
 	//敵リスポーン
@@ -87,8 +87,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool SelectAudioFlag = false;
 	//フィーバー始まり
 	int audioHandlFeverStart = Novice::LoadAudio("./Resources/Sounds/success.wav");
-//	bool FeverStartAudioFlag = false;
-	//フィーバー終わり
+	//	bool FeverStartAudioFlag = false;
+		//フィーバー終わり
 	int audioHandlFeverEnd = Novice::LoadAudio("./Resources/Sounds/success.wav");
 	bool FeverEndAudioFlag = false;
 
@@ -527,6 +527,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float finishEase = 0;
 	float finishEase2 = 0;
 	int finishTexture = Novice::LoadTexture("./Resources/font/finish.png");
+
+	int speedUpTexture = Novice::LoadTexture("./Resources/Images/speedup.png");
 
 	float blackEaseT = 0;
 	float blackEaseT2 = 0;
@@ -4695,13 +4697,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//エクセレント文字を
-		
+
 		if (quickFlag)
 		{
 			Functions.DrawQuadPlus(784, 660, quickTimer, 48, 1, 1, 0, 0, 0, quickTimer, 48, excellentTexture[quickNum], WHITE, "leftTop");
 		}
 		//フィーバーゲージ仮
-		
+
 
 		//後ろ
 		Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, gaugeWidth, gaugeHeidth, gaugeBackTexture, WHITE);
@@ -5011,7 +5013,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 50, 50 + -200 + int(UIPosy), 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 			//スコア
 			scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy - UIBackPos), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
-			Functions.DrawQuadPlus(1250, 45 - 200 +int(UIPosy - UIBackPos), 532, 118, 0.5f, 0.5f, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
+			Functions.DrawQuadPlus(1250, 45 - 200 + int(UIPosy - UIBackPos), 532, 118, 0.5f, 0.5f, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
+			Functions.DrawQuadPlus(985, 1160-int(UIPosy), 288, 48, 1.0f, 1.0f, 0, 0, 0, 288, 48, speedUpTexture, WHITE, "leftTop");
 
 			break;
 
@@ -5023,7 +5026,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (blackEaseT <= 50)
 			{
-				
+
 				for (int i = 0; i < 4; i++)
 				{
 					resultEasePos[i] = easeOutQuart(resultEaseT[i] / 100) * 1920;
@@ -5300,7 +5303,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		for (int i = 0; i < sizeof(enemy13.dedTimer) / sizeof(unsigned int); i++)
 		{
-			if (enemy13.easeT[i] == 2 && gameTimer < 6000)
+			if (enemy13.easeT[30] == 2 && gameTimer < 6000)
 			{
 				SpownAudioFlag = true;
 				//Original::SoundPlay("enemySpawn");
@@ -5314,7 +5317,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 #pragma endregion
-		
+
 		//敵死亡
 		if (deadAudioFlag)
 		{
@@ -5324,13 +5327,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//敵スポーン
 		if (SpownAudioFlag)
 		{
-			if (enemy13.easeT[0] > 0 && enemy13.easeT[59] < 100) {
+			/*if (enemy13.easeT[0] > 0 && enemy13.easeT[59] < 100) {
 				Novice::PlayAudio(audioHandleSpown, 0, 0.05f);
 			}
 			else
 			{
-				Novice::PlayAudio(audioHandleSpown, 0, 0.2f);
-			}
+				
+			}*/
+			Novice::PlayAudio(audioHandleSpown, 0, 0.2f);
 			SpownAudioFlag = false;
 
 		}
@@ -5407,7 +5411,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			SelectAudioFlag = false;
 		}
 		//フィーバー始まった時
-		if (ennergy.count==ennergy.max)
+		if (ennergy.count == ennergy.max)
 		{
 			Novice::PlayAudio(audioHandlFeverStart, 0, 0.5f);
 		}
@@ -5423,16 +5427,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//BGM
 
 		//タイトル
-		if (game==0)
+		if (game == 0)
 		{
-			if (soundHandle==-1)
+			if (soundHandle == -1)
 			{
-				soundHandle=Novice::PlayAudio(audioHandletitleBGM, 1, titleBGMValume);
+				soundHandle = Novice::PlayAudio(audioHandletitleBGM, 1, titleBGMValume);
 
 			}
-			if (titleBGMValume<setTitleBGMValume)
+			if (titleBGMValume < setTitleBGMValume)
 			{
-				titleBGMValume += setTitleBGMValume/60;
+				titleBGMValume += setTitleBGMValume / 60;
 			}
 		}
 
@@ -5440,7 +5444,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (startNewGame)
 		{
 			titleBGMValume -= setTitleBGMValume / 40;
-			if (titleBGMValume<=0)
+			if (titleBGMValume <= 0)
 			{
 				Novice::StopAudio(soundHandle);
 				soundHandle = -1;
@@ -5451,14 +5455,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//ゲーム中
-		if (game==1&&gameTimer>0&&gameTimer<2)
+		if (game == 1 && gameTimer > 0 && gameTimer < 2)
 		{
 			Novice::PlayAudio(gameBGM, 0, 0.05f);
 
 		}
 
 		//リザルト
-		if (game==2)
+		if (game == 2)
 		{
 			if (ResultsoundHandle == -1)
 			{
@@ -5470,7 +5474,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ResultBGMValume += setResultBGMValume / 60;
 			}
 		}
-		if (startNewGame||titleBackFlag)
+		if (startNewGame || titleBackFlag)
 		{
 			ResultBGMValume -= setResultBGMValume / 40;
 			if (ResultBGMValume <= 0)
