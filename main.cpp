@@ -458,7 +458,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameTitle;
+	game = kTypeGameResult;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -535,6 +535,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int choice = 0;//0ならリスタート1ならタイトルに戻る
 	int prechoice = 0;//0ならリスタート1ならタイトルに戻る
 	int choiceTimer = 0;//スティックの跳ね返りで反対に行かないように
+
+
+	int scoreTexture = Novice::LoadTexture("./Resources/font/SCORE.png");
+	int killTexture = Novice::LoadTexture("./Resources/font/KILL.png");
+	int continueTexture = Novice::LoadTexture("./Resources/font/CONTINUE.png");
+	int yesTexture = Novice::LoadTexture("./Resources/font/YES.png");
+	int noTexture = Novice::LoadTexture("./Resources/font/NO.png");
+
+	float resultEaseT[4]{};//スコア　キル数　	CONTENUE　YESNO	
+	float resultEasePos[4]{};
+
+	int resultBackTexture= Novice::LoadTexture("./Resources/images/resultBack.png");
+	int resultBackPos[2] = { 0,-1080 };
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -867,11 +880,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (player.velocityRatio < 0)
 					{
 						player.velocityRatio = 0;
-						
+
 
 					}
-					
-					if (player.aim && player.count >= 2&& player.velocityRatio<= 0.80f)
+
+					if (player.aim && player.count >= 2 && player.velocityRatio <= 0.80f)
 					{
 						triFlag = true;
 					}
@@ -912,7 +925,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 				//攻撃終わりにAボタンを押した時
-				if (player.trigerA && player.aimTimer == 0 && !player.dashAttack|| triFlag)
+				if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
 				{
 					//移動入力がされている時
 
@@ -1331,6 +1344,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					resultBackPos[0] = 0;
+					resultBackPos[1] = -1080;
+					for (int i = 0; i < 4; i++)
+					{
+						resultEasePos[i] = 0;
+						resultEaseT[i] = 0;
+					}
 					dashCount = 0;
 					trieCount = 0;
 					choice = 0;
@@ -4816,7 +4836,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 
 		case kTypeGameResult:
+			if (blackEaseT == 0)
+			{
+				for (int i = 0; i < 2; i++)
+				{
+					if (resultBackPos[i] >= 1080)resultBackPos[i] = -1080;
+					resultBackPos[i]++;
+				}
+				for (int i = 0; i < 4; i++)
+				{
+					resultEasePos[i] = easeOutQuart(resultEaseT[i]/100) * 1920;
+				}
+				
+					if (resultEaseT[0] > 40 && resultEaseT[1] < 100)resultEaseT[1]++;
+					if (resultEaseT[1] > 70 && resultEaseT[2] < 100)resultEaseT[2]++;
+					if (resultEaseT[2] > 30 && resultEaseT[3] < 100)resultEaseT[3]++;
 
+				
+
+				if (resultEaseT[0] < 100)resultEaseT[0]++;
+
+
+			}
 			dashCount = int(dash.count);
 			trieCount = int(triangle.count);
 			//タイマー
@@ -4825,30 +4866,37 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 			if (!startNewGame)
 			{
-				Novice::DrawBox(0, 0, 1920, 1080, 0, 0x666666ff, kFillModeSolid);
-				//Novice::ScreenPrintf(740, 500, "score=%d", score);
-				//Novice::ScreenPrintf(740, 520, "count=%0.1f", count);
-				//Novice::ScreenPrintf(740, 540, "dash.count=%0.1f", dash.count);
-				//Novice::ScreenPrintf(740, 560, "triangle.count=%0.1f", triangle.count);
-				//スコア
-				scoreObj.Draw(score, 700, 100, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
-				scoreObj.Draw(int(count), 700, 250, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
-				scoreObj.Draw(dashCount, 700, 400, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
-				scoreObj.Draw(trieCount, 700, 550, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+				//Novice::DrawBox(0, 0, 1920, 1080, 0, 0x444444ff, kFillModeSolid);
+				for (int i = 0; i < 2; i++)
+				{
+					Functions.DrawQuadPlus( 0, resultBackPos[i], 1920, 1080, 1, 1, 0, 0, 0, 1920, 1080, resultBackTexture, 0xffffffff, "leftTop");
 
-				Novice::ScreenPrintf(740, 790, "CONTINUE?");
-				Novice::ScreenPrintf(710, 810, "YES");
-				Novice::ScreenPrintf(780, 810, "NO");
+				}
+				//スコア
+				scoreObj.Draw(score, 1050 + int(1920 - resultEasePos[0]), 230, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
+				scoreObj.Draw(int(count), 1050 + int(1920 - resultEasePos[1]), 380, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
+
+				Novice::ScreenPrintf(0, 0, "resultBackPos[0]=%f", resultBackPos[0]);
+
+				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[0]), 230, 532, 118, 1, 1, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
+				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[1]), 380, 532, 118, 1, 1, 0, 0, 0, 528, 118, killTexture, WHITE, "leftTop");
+				Functions.DrawQuadPlus(960 + int(1920 - resultEasePos[2]), 720, 1056, 128, 1, 1, 0, 0, 0, 1056, 128, continueTexture, WHITE, "center");
 
 				if (choice == 0)
 				{
-					Novice::DrawBox(710, 810, 60, 20, 0, RED, kFillModeSolid);
+					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, yesTexture, 0xff3333ff, "center");
+					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, noTexture, WHITE, "center");
+
 				}
 				else if (choice == 1)
 				{
-					Novice::DrawBox(780, 810, 40, 20, 0, BLUE, kFillModeSolid);
+					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, noTexture, 0x3333ffff, "center");
+					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, yesTexture, WHITE, "center");
 
 				}
+
+
+
 
 			}
 			//Novice::DrawBox(1800, 700, 100, 100, 0, BLUE, kFillModeSolid);
