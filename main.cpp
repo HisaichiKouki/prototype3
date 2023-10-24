@@ -18,7 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
-	Novice::SetWindowMode(kFullscreen);
+	//Novice::SetWindowMode(kFullscreen);
 
 	WORD vibeVolume = 0;
 	PlayerData player{};
@@ -31,6 +31,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int directionMove = 0;
 	bool triFlag = false;
 
+	//BGM
+	int audioHandletitleBGM= Novice::LoadAudio("./Resources/Sounds/BGM/title.mp3");
+	int soundHandle = -1;
+	float setTitleBGMValume = 0.05f;//設定した音量になるまで音量が上がっていく
+	float titleBGMValume = 0;
+
+	int audioHandleResultBGM = Novice::LoadAudio("./Resources/Sounds/BGM/result.mp3");
+	int ResultsoundHandle = -1;
+	float setResultBGMValume = 0.05f;//設定した音量になるまで音量が上がっていく
+	float ResultBGMValume = 0;
+
+	int gameBGM= Novice::LoadAudio("./Resources/Sounds/BGM/gameBGM.mp3");
+//	bool gameBGMFlag = false;
+
+	//SE
 	//敵死亡
 	int audioHandleDead = Novice::LoadAudio("./Resources/Sounds/boom.wav");
 	bool deadAudioFlag = false;
@@ -1431,6 +1446,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					startNewGame = false;
+					titleBackFlag = false;
 					choice = 0;
 					prechoice = 0;
 					SelectAudioFlag = false;
@@ -3951,6 +3968,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (allReset)
 			{
+				titleBackFlag = false;
 				directionMove = 0;
 				triFlag = false;
 				Playerth = 0;
@@ -5398,6 +5416,74 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Novice::PlayAudio(audioHandlFeverEnd, 0, 0.5f);
 			FeverEndAudioFlag = false;
 		}
+
+
+
+		//BGM
+
+		//タイトル
+		if (game==0)
+		{
+			if (soundHandle==-1)
+			{
+				soundHandle=Novice::PlayAudio(audioHandletitleBGM, 1, titleBGMValume);
+
+			}
+			if (titleBGMValume<setTitleBGMValume)
+			{
+				titleBGMValume += setTitleBGMValume/60;
+			}
+		}
+
+		//ゲームスタートしたら
+		if (startNewGame)
+		{
+			titleBGMValume -= setTitleBGMValume / 40;
+			if (titleBGMValume<=0)
+			{
+				Novice::StopAudio(soundHandle);
+				soundHandle = -1;
+				titleBGMValume = 0;
+			}
+		}
+		Novice::SetAudioVolume(soundHandle, titleBGMValume);
+
+
+		//ゲーム中
+		if (game==1&&gameTimer>0&&gameTimer<2)
+		{
+			Novice::PlayAudio(gameBGM, 0, 0.05f);
+
+		}
+
+		//リザルト
+		if (game==2)
+		{
+			if (ResultsoundHandle == -1)
+			{
+				ResultsoundHandle = Novice::PlayAudio(audioHandleResultBGM, 1, ResultBGMValume);
+
+			}
+			if (ResultBGMValume < setResultBGMValume)
+			{
+				ResultBGMValume += setResultBGMValume / 60;
+			}
+		}
+		if (startNewGame||titleBackFlag)
+		{
+			ResultBGMValume -= setResultBGMValume / 40;
+			if (ResultBGMValume <= 0)
+			{
+				Novice::StopAudio(ResultsoundHandle);
+				ResultsoundHandle = -1;
+				ResultBGMValume = 0;
+			}
+		}
+		Novice::SetAudioVolume(ResultsoundHandle, ResultBGMValume);
+
+		Novice::ScreenPrintf(0, 0, "ResultsoundHandle=%d ResultBGMValume=%0.3f ", ResultsoundHandle, ResultBGMValume);
+		Novice::ScreenPrintf(0, 20, "startNewGame=%d titleBackFlag=%d ",startNewGame, titleBackFlag);
+
 		// フレームの終了
 		Novice::EndFrame();
 
