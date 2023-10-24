@@ -53,10 +53,12 @@ public:
 		const char _mode[]
 	);
 
+	void DrawScreenB();
 private:
 	/// @brief デバッグ状態かどうか
 	bool isDebugMode = false;
 	/// @brief ToggleDebugModeの呼び出し回数
 	int callCnt = 0;
 	int kWhiteCircleHandle;
+	int bgsTexture;
 };
