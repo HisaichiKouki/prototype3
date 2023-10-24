@@ -27,7 +27,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.anchorRadius = 10;
 	bool triFlag = false;
 
-	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi");
+	Original::LoadAudio("./Resources/Sounds/boom.wav", "enemyDead", 0.3f);
+	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi", 0.3f);
 
 	int scoreNumsHandle[10] = {
 		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
@@ -462,7 +463,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameTitle;
+	game = kTypeGameGame;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -1203,6 +1204,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 					}
 				}
+
+
 
 				//フェーズが終わった時すぐに次が出ないように１秒時間を開ける
 				if (whileFlag)
@@ -4936,8 +4939,112 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
-		///                                                            ///       
+		///                                                            ///
 
+
+		/// ---------------------------------------------------------- ///
+		/// --------------------		音		  -------------------- ///
+		/// ---------------------------------------------------------- ///
+		
+		// 10 , 11, 12 は enemy[0]でやる
+
+		#pragma region EnemySounds
+
+		for (int i = 0; i < sizeof(enemy1.dedTimer) / sizeof(int); i++)
+		{
+			if (enemy1.dedTimer[i] == 1)
+			{
+				Original::SoundPlay("enemyDead");
+			}
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 16; j++)
+			{
+				if (enemy2.dedTimer[i][j] == 1)
+				{
+					Original::SoundPlay("enemyDead");
+				}
+			}
+			
+		}
+		for (int i = 0; i < sizeof(enemy5.dedTimer) / sizeof(int); i++)
+		{
+			if (enemy5.dedTimer[i] == 1)
+			{
+				Original::SoundPlay("enemyDead");
+			}
+		}
+		for (int i = 0; i < sizeof(enemy6.dedTimer) / sizeof(int); i++)
+		{
+			if (enemy6.dedTimer[i] == 1)
+			{
+				Original::SoundPlay("enemyDead");
+			}
+		}
+		for (int i = 0; i < sizeof(enemy7.dedTimer) / sizeof(int); i++)
+		{
+			if (enemy7.dedTimer[i / 4][i % 4] == 1)
+			{
+				Original::SoundPlay("enemyDead");
+			}
+		}
+		for (int i = 0; i < sizeof(enemy8.dedTimer) / sizeof(int); i++)
+		{
+			if (enemy8.dedTimer[i / 12][i % 12] == 1)
+			{
+				Original::SoundPlay("enemyDead");
+			}
+		}
+		for (int i = 0; i < sizeof(enemy9.dedTimer) / sizeof(int); i++)
+		{
+			if (enemy9.dedTimer[i / 8][i % 8] == 1)
+			{
+				Original::SoundPlay("enemyDead");
+			}
+		}
+		for (int i = 0; i < sizeof(enemy10) / sizeof(testEnemy3); i++)
+		{
+			for (int j = 0; j < sizeof(enemy10[i].dedTimer) / sizeof(int); j++)
+			{
+				if (enemy10[i].dedTimer[j] == 1)
+				{
+					Original::SoundPlay("enemyDead");
+				}
+			}
+			
+		}
+		for (int i = 0; i < sizeof(enemy11) / sizeof(testEnemy1); i++)
+		{
+			for (int j = 0; j < sizeof(enemy11[i].dedTimer) / sizeof(int); j++)
+			{
+				if (enemy11[i].dedTimer[j] == 1)
+				{
+					Original::SoundPlay("enemyDead");
+				}
+			}
+
+		}
+		for (int i = 0; i < sizeof(enemy12) / sizeof(testEnemy3); i++)
+		{
+			for (int j = 0; j < sizeof(enemy12[i].dedTimer) / sizeof(int); j++)
+			{
+				if (enemy12[i].dedTimer[j] == 1)
+				{
+					Original::SoundPlay("enemyDead");
+				}
+			}
+
+		}
+		for (int i = 0; i < sizeof(enemy13.dedTimer) / sizeof(unsigned int); i++)
+		{
+			if (enemy13.dedTimer[i] == 1)
+			{
+				Original::SoundPlay("enemyDead");
+			}
+		}
+
+		#pragma endregion
 		// フレームの終了
 		Novice::EndFrame();
 
