@@ -5,6 +5,8 @@
 #include "collision.h"
 #include "Easing.h"
 #include "randPlus.h"
+
+
 const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
 
 float clump(float a, float min, float max);
