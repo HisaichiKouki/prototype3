@@ -27,6 +27,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.anchorRadius = 10;
 	bool triFlag = false;
 
+	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi");
+
 	int scoreNumsHandle[10] = {
 		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
 		Novice::LoadTexture("./Resources/Images/number/num_1.png"),
@@ -2457,6 +2459,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (keys[DIK_SPACE] && !preKeys[DIK_SPACE])
 				{
 					Functions.ToggleDebugMode();
+					Original::SoundPlay("pi");
 				}
 
 				// キー入力（デバッグ）ここまで

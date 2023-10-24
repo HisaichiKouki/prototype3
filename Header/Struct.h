@@ -112,7 +112,6 @@ struct testEnemy2//四角に配置される敵
 	int count;
 	bool countFlag[4][16];
 	int timer;
-
 };
 
 struct testEnemy3//１列に配置される敵
