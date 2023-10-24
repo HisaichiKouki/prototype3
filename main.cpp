@@ -30,9 +30,57 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int directionMove = 0;
 	bool triFlag = false;
 
-	Original::LoadAudio("./Resources/Sounds/boom.wav", "enemyDead", 0.3f);
+	//敵死亡
+	int audioHandleDead = Novice::LoadAudio("./Resources/Sounds/boom.wav");
+	bool deadAudioFlag = false;
+	//敵リスポーン
+	int audioHandleSpown = Novice::LoadAudio("./Resources/Sounds/spown.mp3");
+	bool SpownAudioFlag = false;
+	//三角形の点設置
+	int audioHandlePointSet = Novice::LoadAudio("./Resources/Sounds/pointSet.mp3");
+	bool pointsetAudioFlag = false;
+	//三角攻撃時
+	int audioHandleTriangle = Novice::LoadAudio("./Resources/Sounds/triangle.mp3");
+	bool TriangleAudioFlag = false;
+	//エクセレント出した時
+	int audioHandlesuccess = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	bool successAudioFlag = false;
+	//チュートリアルのイラスト表示
+	int audioHandlTaskClear = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//bool TaskClearAudioFlag = false;
+	//ゲームスタート
+	int audioHandlGameStart = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//bool TaskClearAudioFlag = false;
+	//スコア(ゲージ)増えた時
+	int audioHandlScoreUP = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//bool TaskClearAudioFlag = false;
+	//カウントダウン
+	int audioHandlCountDown = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//	bool CountDownAudioFlag = false;
+	//フィニッシュの時
+	int audioHandlFinish = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//	bool CountDownAudioFlag = false;
+	//リザルトで文字を表示する時
+	int audioHandlScoreDisplay = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//	bool CountDownAudioFlag = false;
+	//リザルトでYESNO選択してる時
+	int audioHandlYESNO = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//	bool CountDownAudioFlag = false;
+	//YESNO確定したとき
+	int audioHandlSelect = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	bool SelectAudioFlag = false;
+	//フィーバー始まり
+	int audioHandlFeverStart = Novice::LoadAudio("./Resources/Sounds/success.wav");
+//	bool FeverStartAudioFlag = false;
+	//フィーバー終わり
+	int audioHandlFeverEnd = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	bool FeverEndAudioFlag = false;
+
+
+	Original::LoadAudio("./Resources/Sounds/boom.wav", "enemyDead", 0.03f);
 	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi", 0.3f);
-	Original::LoadAudio("./Resources/Sounds/lowSwing.wav", "enemySpawn", 0.3f);
+	Original::LoadAudio("./Resources/Sounds/spown.mp3", "enemySpawn", 0.1f);
+	Original::LoadAudio("./Resources/Sounds/dash.mp3", "playerDash", 0.1f);
 
 	int scoreNumsHandle[10] = {
 		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
@@ -59,6 +107,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 最大桁数を指定
 	scoreObj.SetMaxDigit(6);
 
+	int preScore = 0;
 	Vector2 cameraEasePos{};
 	float cameraEaseT = 0.4f;
 	const int kPreNum = 15;
@@ -390,6 +439,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ennergy.fever = false;
 	ennergy.feverTime = 300;//フレーム数 実際にはちょっと長くなる
 	ennergy.damage = 0.2f;//攻撃していない時に敵に当たった時ダメージの代わりにゲージが減る
+
 	Vector2 plth{};
 	float Playerth = 0;
 
@@ -467,7 +517,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameGame;
+	game = kTypeGameResult;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -577,7 +627,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///       
 		XINPUT_VIBRATION vibration;
 		vibeVolume = 0;
-
+		preScore = score;
 
 		switch (game)
 		{
@@ -605,6 +655,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (allReset)
 				{
+					choice = 0;
+					prechoice = 0;
+					for (int i = 0; i < 4; i++)
+					{
+						resultEasePos[i] = 0;
+						resultEaseT[i] = 0;
+					}
+					SelectAudioFlag = false;
+					preScore = 0;
 					directionMove = 0;
 					gaugeEaseT = 0;
 					gaugeEasePos = 0;
@@ -939,8 +998,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
 				{
 					//移動入力がされている時
-
-						//点がプレイヤーの位置に番号順で設置される
+					pointsetAudioFlag = true;
+					//点がプレイヤーの位置に番号順で設置される
 					player.prepos[player.count] = player.pos;
 					//点の座標を番号順に記録
 					attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
@@ -951,6 +1010,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					player.count++;
 					if (player.count >= 3)
 					{
+						TriangleAudioFlag = true;
 						//三点設置したら設置フェーズをおわる
 						player.count = 0;
 						player.aim = false;
@@ -1142,7 +1202,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//ダッシュ攻撃
 				if (titleCount == 1)
 				{
-					if (enemy1.parentIsAlive && player.dashAttack && !player.triangulAttack&&enemy1.easeT>2)
+					if (enemy1.parentIsAlive && player.dashAttack && !player.triangulAttack && enemy1.easeT > 2)
 					{
 						for (int i = 0; i < 3; i++)
 						{
@@ -1358,6 +1418,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					choice = 0;
+					prechoice = 0;
+					SelectAudioFlag = false;
+					preScore = 0;
 					directionMove = 0;
 					resultBackPos[0] = 0;
 					resultBackPos[1] = -1080;
@@ -1713,6 +1777,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						ennergy.count = 0;
 						ennergy.fever = false;
+						FeverEndAudioFlag = true;
+
 					}
 
 
@@ -1739,7 +1805,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//大グループ
 				if (quickFlag)
 				{
-					if (quickTimer == 0)quickTimer = 350;
+					if (quickTimer == 0)
+					{
+						successAudioFlag = true;
+						quickTimer = 350;
+					}
 
 				}
 				if (quickTimer > 0)
@@ -2309,8 +2379,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
 					{
 						//移動入力がされている時
-
-							//点がプレイヤーの位置に番号順で設置される
+						pointsetAudioFlag = true;
+						//点がプレイヤーの位置に番号順で設置される
 						player.prepos[player.count] = player.pos;
 						//点の座標を番号順に記録
 						attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
@@ -2321,6 +2391,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						player.count++;
 						if (player.count >= 3)
 						{
+							TriangleAudioFlag = true;
 							//三点設置したら設置フェーズをおわる
 							player.count = 0;
 							player.aim = false;
@@ -2890,7 +2961,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						for (int j = 0; j < 4; j++)
 						{
-							if (enemy2.parentIsAlive[j]&& enemy2.easeT > 2)
+							if (enemy2.parentIsAlive[j] && enemy2.easeT > 2)
 							{
 								for (int i = 0; i < kEnemy2Num; i++)
 								{
@@ -4146,7 +4217,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				prechoice = choice;
 
-				if (!transitionFlag)
+				if (!transitionFlag && game == kTypeGameResult)
 				{
 					if (length >= dedZone)
 					{
@@ -4154,7 +4225,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						{
 							choiceTimer--;
 						}
-						if (choiceTimer == 0)
+						if (choiceTimer == 0 && resultEasePos[3] > 50)
 						{
 							if (player.joystick.x > 0.3f)
 							{
@@ -4173,7 +4244,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					}
 
-					if (choice == 0 && player.trigerA&& resultEaseT[3]>=90)
+					if (choice == 0 && player.trigerA && resultEaseT[3] >= 90)
 					{
 						UIBackPos = 0;
 						transitionFlag = true;
@@ -4195,9 +4266,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							scroll.y = (-player.pos.y / screenSize + 540);
 						}
 						startNewGame = true;
+						SelectAudioFlag = true;
 					}
-					else if (choice == 1 && player.trigerA)
+					else if (choice == 1 && player.trigerA && resultEaseT[3] >= 90)
 					{
+						SelectAudioFlag = true;
 						titleBackFlag = true;
 						transitionFlag = true;
 					}
@@ -4354,7 +4427,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (player.preDirection.x != 0 || player.preDirection.y != 0)
 		{
 			if (player.flick) {
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 *(directionMove/2), 0, 310, 310, directionTexture, 0x00ffffff, "center");
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 * (directionMove / 2), 0, 310, 310, directionTexture, 0x00ffffff, "center");
 			}
 			else if (player.aim || player.triangulAttack)
 			{
@@ -4369,7 +4442,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		directionMove++;
 		if (directionMove >= 46)directionMove = 0;
-		
+
 		plth.x = fabsf(player.velocity.x / 2);
 		plth.y = fabsf(player.velocity.y / 2);
 		Playerth += plth.x + plth.y;
@@ -4803,7 +4876,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy1.dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
 
-						
+
 					}
 				}
 			}
@@ -4938,7 +5011,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				scoreObj.Draw(score, 1050 + int(1920 - resultEasePos[0]), 230, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 				scoreObj.Draw(int(count), 1050 + int(1920 - resultEasePos[1]), 380, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 
-				
+
 
 				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[0]), 230, 532, 118, 1, 1, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
 				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[1]), 380, 532, 118, 1, 1, 0, 0, 0, 528, 118, killTexture, WHITE, "leftTop");
@@ -5000,7 +5073,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 
 
-			vibeVolume = WORD(4000 * (bigNumCount+1));
+			vibeVolume = WORD(4000 * (bigNumCount + 1));
 
 
 
@@ -5020,51 +5093,59 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ---------------------------------------------------------- ///
 		/// --------------------		音		  -------------------- ///
 		/// ---------------------------------------------------------- ///
-		
+
 		// 10 , 11, 12 は enemy[0]でやる
 
-		#pragma region EnemySounds
+#pragma region EnemySounds
 
-		if (gameTimer<6000)
+		if (gameTimer < 6000)
 		{
 			if (enemy1.easeT == 2)
 			{
-				Original::SoundPlay("enemySpawn");
+				//	Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
 			}
 			if (enemy2.easeT == 2)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			if (enemy5.easeT == 2)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			if (enemy6.easeT == 2)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			if (enemy7.easeT == 2)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			if (enemy8.easeT == 2)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			if (enemy9.easeT == 2)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 
 
-			
+
 		}
 		for (int i = 0; i < sizeof(enemy1.dedTimer) / sizeof(int); i++)
 		{
 
 			if (enemy1.dedTimer[i] == kDedTimer - 1)
 			{
-				Original::SoundPlay("enemyDead");
+				//Original::SoundPlay("enemyDead");
+				deadAudioFlag = true;
 			}
 		}
 		for (int i = 0; i < 4; i++)
@@ -5073,7 +5154,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{
 				if (enemy2.dedTimer[i][j] == kDedTimer - 1)
 				{
-					Original::SoundPlay("enemyDead");
+					//Original::SoundPlay("enemyDead");
+					deadAudioFlag = true;
 				}
 			}
 
@@ -5082,63 +5164,73 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy5.dedTimer[i] == kDedTimer - 1)
 			{
-				Original::SoundPlay("enemyDead");
+				//Original::SoundPlay("enemyDead");
+				deadAudioFlag = true;
 			}
 		}
 		for (int i = 0; i < sizeof(enemy6.dedTimer) / sizeof(int); i++)
 		{
 			if (enemy6.dedTimer[i] == kDedTimer - 1)
 			{
-				Original::SoundPlay("enemyDead");
+				//Original::SoundPlay("enemyDead");
+				deadAudioFlag = true;
 			}
 		}
 		for (int i = 0; i < sizeof(enemy7.dedTimer) / sizeof(int); i++)
 		{
 			if (enemy7.dedTimer[i / 4][i % 4] == kDedTimer - 1)
 			{
-				Original::SoundPlay("enemyDead");
+				//Original::SoundPlay("enemyDead");
+				deadAudioFlag = true;
 			}
 		}
 		for (int i = 0; i < sizeof(enemy8.dedTimer) / sizeof(int); i++)
 		{
 			if (enemy8.dedTimer[i / 12][i % 12] == kDedTimer - 1)
 			{
-				Original::SoundPlay("enemyDead");
+				//Original::SoundPlay("enemyDead");
+
+				deadAudioFlag = true;
 			}
 		}
 		for (int i = 0; i < sizeof(enemy9.dedTimer) / sizeof(int); i++)
 		{
 			if (enemy9.dedTimer[i / 8][i % 8] == kDedTimer - 1)
 			{
-				Original::SoundPlay("enemyDead");
+				//Original::SoundPlay("enemyDead");
+				deadAudioFlag = true;
 			}
 		}
 		for (int i = 0; i < sizeof(enemy10) / sizeof(testEnemy3); i++)
 		{
-			if (enemy10[i].easeT == 2&&gameTimer<6000)
+			if (enemy10[i].easeT == 2 && gameTimer < 6000)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			for (int j = 0; j < sizeof(enemy10[i].dedTimer) / sizeof(int); j++)
 			{
 				if (enemy10[i].dedTimer[j] == kDedTimer - 1)
 				{
-					Original::SoundPlay("enemyDead");
+					deadAudioFlag = true;
+					//Original::SoundPlay("enemyDead");
 				}
 			}
-			
+
 		}
 		for (int i = 0; i < sizeof(enemy11) / sizeof(testEnemy1); i++)
 		{
 			if (enemy11[i].easeT == 2 && gameTimer < 6000)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			for (int j = 0; j < sizeof(enemy11[i].dedTimer) / sizeof(int); j++)
 			{
 				if (enemy11[i].dedTimer[j] == kDedTimer - 1)
 				{
-					Original::SoundPlay("enemyDead");
+					deadAudioFlag = true;
+					//Original::SoundPlay("enemyDead");
 				}
 			}
 
@@ -5147,13 +5239,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy12[i].easeT == 2 && gameTimer < 6000)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			for (int j = 0; j < sizeof(enemy12[i].dedTimer) / sizeof(int); j++)
 			{
 				if (enemy12[i].dedTimer[j] == kDedTimer - 1)
 				{
-					Original::SoundPlay("enemyDead");
+					deadAudioFlag = true;
+					//Original::SoundPlay("enemyDead");
 				}
 			}
 
@@ -5162,15 +5256,121 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{
 			if (enemy13.easeT[i] == 2 && gameTimer < 6000)
 			{
-				Original::SoundPlay("enemySpawn");
+				SpownAudioFlag = true;
+				//Original::SoundPlay("enemySpawn");
 			}
 			if (enemy13.dedTimer[i] == kDedTimer - 1)
 			{
-				Original::SoundPlay("enemyDead");
+				//Original::SoundPlay("enemyDead");
+				deadAudioFlag = true;
 			}
 		}
 
-		#pragma endregion
+
+#pragma endregion
+		
+		//敵死亡
+		if (deadAudioFlag)
+		{
+			Novice::PlayAudio(audioHandleDead, 0, 0.1f);
+			deadAudioFlag = false;
+		}
+		//敵スポーン
+		if (SpownAudioFlag)
+		{
+			if (enemy13.easeT[0] > 0 && enemy13.easeT[59] < 100) {
+				Novice::PlayAudio(audioHandleSpown, 0, 0.05f);
+			}
+			else
+			{
+				Novice::PlayAudio(audioHandleSpown, 0, 0.2f);
+			}
+			SpownAudioFlag = false;
+
+		}
+		//ダッシュアタック
+		if (player.dashAttack && player.velocityRatio == 1)
+		{
+			Original::SoundPlay("playerDash");
+		}
+		//三角形の点設置
+		if (pointsetAudioFlag)
+		{
+			Novice::PlayAudio(audioHandlePointSet, 0, 0.2f);
+			pointsetAudioFlag = false;
+		}
+		//三角形攻撃時
+		if (TriangleAudioFlag)
+		{
+			Novice::PlayAudio(audioHandleTriangle, 0, 0.2f);
+			TriangleAudioFlag = false;
+
+		}
+		//エクセレント出た時
+		if (successAudioFlag)
+		{
+			Novice::PlayAudio(audioHandlesuccess, 0, 0.5f);
+			successAudioFlag = false;
+
+		}
+		//チュートリアルのイラストを表示する時
+		if (infoFontEaseT == 2 && !startNewGame)
+		{
+			Novice::PlayAudio(audioHandlTaskClear, 0, 0.5f);
+		}
+		//ゲームスタート時
+		if (gamestartEaseT == 2)
+		{
+			Novice::PlayAudio(audioHandlGameStart, 0, 0.5f);
+
+		}
+		//スコア(ゲージ)が加算されるとき
+		if (preScore != score)
+		{
+			Novice::PlayAudio(audioHandlScoreUP, 0, 0.5f);
+
+		}
+		//カウントダウン
+		if (bigNumEaseT == 2)
+		{
+			Novice::PlayAudio(audioHandlCountDown, 0, 0.5f);
+
+		}
+		//フィニッシュの文字
+		if (finishEaseT == 2)
+		{
+			Novice::PlayAudio(audioHandlFinish, 0, 0.5f);
+
+		}
+		//リザルトで文字が表示される時
+		if (resultEaseT[0] == 1 || resultEaseT[1] == 1 || resultEaseT[2] == 1 || resultEaseT[3] == 1)
+		{
+			Novice::PlayAudio(audioHandlScoreDisplay, 0, 0.5f);
+
+		}
+		//リザルトでYESNO選択する時
+		if (prechoice != choice)
+		{
+			Novice::PlayAudio(audioHandlYESNO, 0, 0.5f);
+
+		}
+		//リザルトでYESNO確定したとき
+		if (SelectAudioFlag)
+		{
+			Novice::PlayAudio(audioHandlSelect, 0, 0.5f);
+			SelectAudioFlag = false;
+		}
+		//フィーバー始まった時
+		if (ennergy.count==ennergy.max)
+		{
+			Novice::PlayAudio(audioHandlFeverStart, 0, 0.5f);
+		}
+		//フィーバー終わった時
+		if (FeverEndAudioFlag)
+		{
+			Novice::PlayAudio(audioHandlFeverEnd, 0, 0.5f);
+			FeverEndAudioFlag = false;
+		}
 		// フレームの終了
 		Novice::EndFrame();
 
