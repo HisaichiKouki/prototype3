@@ -4369,7 +4369,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		directionMove++;
 		if (directionMove >= 46)directionMove = 0;
-		Novice::ScreenPrintf(0, 20, "directionMove=%d", directionMove);
+		
 		plth.x = fabsf(player.velocity.x / 2);
 		plth.y = fabsf(player.velocity.y / 2);
 		Playerth += plth.x + plth.y;
@@ -4938,7 +4938,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				scoreObj.Draw(score, 1050 + int(1920 - resultEasePos[0]), 230, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 				scoreObj.Draw(int(count), 1050 + int(1920 - resultEasePos[1]), 380, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 
-				Novice::ScreenPrintf(0, 0, "resultBackPos[0]=%f", resultBackPos[0]);
+				
 
 				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[0]), 230, 532, 118, 1, 1, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
 				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[1]), 380, 532, 118, 1, 1, 0, 0, 0, 528, 118, killTexture, WHITE, "leftTop");
