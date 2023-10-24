@@ -5011,6 +5011,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (gameTimer == 0)scoreObj.Draw((6000 - gameTimer) / 60, 50, 50 + -200 + int(UIPosy), 0.6f, 0.6f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
 			//スコア
 			scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy - UIBackPos), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
+			Functions.DrawQuadPlus(1250, 45 - 200 +int(UIPosy - UIBackPos), 532, 118, 0.5f, 0.5f, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
 
 			break;
 
@@ -5481,8 +5482,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		Novice::SetAudioVolume(ResultsoundHandle, ResultBGMValume);
 
-		Novice::ScreenPrintf(0, 0, "ResultsoundHandle=%d ResultBGMValume=%0.3f ", ResultsoundHandle, ResultBGMValume);
-		Novice::ScreenPrintf(0, 20, "startNewGame=%d titleBackFlag=%d ",startNewGame, titleBackFlag);
+		//Novice::ScreenPrintf(0, 0, "ResultsoundHandle=%d ResultBGMValume=%0.3f ", ResultsoundHandle, ResultBGMValume);
+		//Novice::ScreenPrintf(0, 20, "startNewGame=%d titleBackFlag=%d ",startNewGame, titleBackFlag);
 
 		// フレームの終了
 		Novice::EndFrame();
