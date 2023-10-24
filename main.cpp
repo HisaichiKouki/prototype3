@@ -27,6 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.pos.x = 0;
 	player.pos.y = 0;
 	player.anchorRadius = 10;
+	int directionMove = 0;
 	bool triFlag = false;
 
 	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi");
@@ -602,6 +603,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (allReset)
 				{
+					directionMove = 0;
 					gaugeEaseT = 0;
 					gaugeEasePos = 0;
 					UIPosy = 0;
@@ -1311,6 +1313,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				else
 				{
 					gameTimer++;
+					//directionMove++;
 				}
 			}
 			break;
@@ -1351,6 +1354,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					directionMove = 0;
 					resultBackPos[0] = 0;
 					resultBackPos[1] = -1080;
 					for (int i = 0; i < 4; i++)
@@ -3763,7 +3767,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 				if (gameTimer <= 6000)gameTimer++;
-
+				//directionMove++;
 #pragma endregion
 			}
 			break;
@@ -3854,6 +3858,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (allReset)
 			{
+				directionMove = 0;
 				triFlag = false;
 				Playerth = 0;
 				gamestartEaseT = 0;
@@ -4345,20 +4350,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (player.preDirection.x != 0 || player.preDirection.y != 0)
 		{
 			if (player.flick) {
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x00ffffff, "center");
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 *(directionMove/2), 0, 310, 310, directionTexture, 0x00ffffff, "center");
 			}
 			else if (player.aim || player.triangulAttack)
 			{
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x33ff33ff, "center");
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 * (directionMove / 2), 0, 310, 310, directionTexture, 0x33ff33ff, "center");
 
 			}
 			else
 			{
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, WHITE, "center");
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 * (directionMove / 2), 0, 310, 310, directionTexture, WHITE, "center");
 
 			}
 		}
-
+		directionMove++;
+		if (directionMove >= 46)directionMove = 0;
+		Novice::ScreenPrintf(0, 20, "directionMove=%d", directionMove);
 		plth.x = fabsf(player.velocity.x / 2);
 		plth.y = fabsf(player.velocity.y / 2);
 		Playerth += plth.x + plth.y;
