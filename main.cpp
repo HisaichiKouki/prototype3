@@ -638,6 +638,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int resultBackTexture = Novice::LoadTexture("./Resources/images/resultBack.png");
 	int resultBackPos[2] = { 0,-1080 };
 
+	float yesnoEaseT = 0;
+	float yesnoEaseSize = 0;
+
+	float continueEaseT = 0;
+	float continueEasePos = 0;
+	float continueEaseChange = 1;
+
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
@@ -1448,6 +1455,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					yesnoEaseT = 0;
+					yesnoEaseSize = 0;
+
+					continueEaseT = 0;
+					continueEasePos = 0;
+					continueEaseChange = 1;
 					startNewGame = false;
 					titleBackFlag = false;
 					choice = 0;
@@ -4277,6 +4290,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 						if (prechoice != choice)
 						{
+							yesnoEaseT = 0;
 							choiceTimer = 5;
 						}
 
@@ -5014,11 +5028,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//スコア
 			scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy - UIBackPos), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 			Functions.DrawQuadPlus(1250, 45 - 200 + int(UIPosy - UIBackPos), 532, 118, 0.5f, 0.5f, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
-			Functions.DrawQuadPlus(985, 1160-int(UIPosy), 288, 48, 1.0f, 1.0f, 0, 0, 0, 288, 48, speedUpTexture, WHITE, "leftTop");
+			Functions.DrawQuadPlus(985, 1160 - int(UIPosy), 288, 48, 1.0f, 1.0f, 0, 0, 0, 288, 48, speedUpTexture, WHITE, "leftTop");
 
 			break;
 
 		case kTypeGameResult:
+			if (yesnoEaseT < 100)yesnoEaseT += 10;
+			yesnoEaseSize = easeOutCubic(yesnoEaseT / 100) * 0.2f;
+			continueEaseT += continueEaseChange*2;
+			if (continueEaseT > 100 || continueEaseT < 0)continueEaseChange *= -1;
+			continueEasePos = easeInExpo(continueEaseT / 100) * 50;
 			for (int i = 0; i < 2; i++)
 			{
 				if (resultBackPos[i] >= 1080)resultBackPos[i] = -1080;
@@ -5064,17 +5083,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[0]), 230, 532, 118, 1, 1, 0, 0, 0, 528, 118, scoreTexture, WHITE, "leftTop");
 				Functions.DrawQuadPlus(420 + int(1920 - resultEasePos[1]), 380, 532, 118, 1, 1, 0, 0, 0, 528, 118, killTexture, WHITE, "leftTop");
-				Functions.DrawQuadPlus(960 + int(1920 - resultEasePos[2]), 720, 1056, 128, 1, 1, 0, 0, 0, 1056, 128, continueTexture, WHITE, "center");
+				Functions.DrawQuadPlus(960 + int(1920 - resultEasePos[2]), 650+ int(continueEasePos), 1056, 128, 1, 1, 0, 0, 0, 1056, 128, continueTexture, WHITE, "center");
 
 				if (choice == 0)
 				{
-					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, yesTexture, 0xff6666ff, "center");
+					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1 + yesnoEaseSize, 1 + yesnoEaseSize, 0, 0, 0, 320, 96, yesTexture, 0xff6666ff, "center");
 					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, noTexture, WHITE, "center");
 
 				}
 				else if (choice == 1)
 				{
-					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, noTexture, 0x6666ffff, "center");
+					Functions.DrawQuadPlus(960 + 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1 + yesnoEaseSize, 1 + yesnoEaseSize, 0, 0, 0, 320, 96, noTexture, 0x6666ffff, "center");
 					Functions.DrawQuadPlus(960 - 200 + int(1920 - resultEasePos[3]), 880, 320, 96, 1, 1, 0, 0, 0, 320, 96, yesTexture, WHITE, "center");
 
 				}
@@ -5332,7 +5351,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			else
 			{
-				
+
 			}*/
 			Novice::PlayAudio(audioHandleSpown, 0, 0.2f);
 			SpownAudioFlag = false;
