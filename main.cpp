@@ -5,6 +5,7 @@
 #include "collision.h"
 #include "Easing.h"
 #include "randPlus.h"
+#include<Xinput.h>
 
 
 const char kWindowTitle[] = "LC1A_20_ヒサイチ_コウキ";
@@ -18,6 +19,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
 
+	WORD vibeVolume = 0;
 	PlayerData player{};
 	player.radius = { 40,40 };
 	player.shotSpeed = 60;
@@ -25,6 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	player.pos.x = 0;
 	player.pos.y = 0;
 	player.anchorRadius = 10;
+	int directionMove = 0;
 	bool triFlag = false;
 
 	Original::LoadAudio("./Resources/Sounds/boom.wav", "enemyDead", 0.3f);
@@ -572,7 +575,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///                                                            ///
 		/// --------------------↓更新処理ここから-------------------- ///
 		///                                                            ///       
-
+		XINPUT_VIBRATION vibration;
+		vibeVolume = 0;
 
 
 		switch (game)
@@ -601,6 +605,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (allReset)
 				{
+					directionMove = 0;
 					gaugeEaseT = 0;
 					gaugeEasePos = 0;
 					UIPosy = 0;
@@ -1312,6 +1317,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				else
 				{
 					gameTimer++;
+					//directionMove++;
 				}
 			}
 			break;
@@ -1352,6 +1358,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 				if (allReset)
 				{
+					directionMove = 0;
 					resultBackPos[0] = 0;
 					resultBackPos[1] = -1080;
 					for (int i = 0; i < 4; i++)
@@ -3764,7 +3771,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				}
 
 				if (gameTimer <= 6000)gameTimer++;
-
+				//directionMove++;
 #pragma endregion
 			}
 			break;
@@ -3855,6 +3862,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (allReset)
 			{
+				directionMove = 0;
 				triFlag = false;
 				Playerth = 0;
 				gamestartEaseT = 0;
@@ -4346,20 +4354,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (player.preDirection.x != 0 || player.preDirection.y != 0)
 		{
 			if (player.flick) {
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x00ffffff, "center");
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 *(directionMove/2), 0, 310, 310, directionTexture, 0x00ffffff, "center");
 			}
 			else if (player.aim || player.triangulAttack)
 			{
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, 0x33ff33ff, "center");
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 * (directionMove / 2), 0, 310, 310, directionTexture, 0x33ff33ff, "center");
 
 			}
 			else
 			{
-				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(512 / screenSize), int(512 / screenSize), 1, 1, directionTheta, 0, 0, 512, 512, directionTexture, WHITE, "center");
+				Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(310 / screenSize), int(310 / screenSize), 1, 1, directionTheta, 310 * (directionMove / 2), 0, 310, 310, directionTexture, WHITE, "center");
 
 			}
 		}
-
+		directionMove++;
+		if (directionMove >= 46)directionMove = 0;
+		Novice::ScreenPrintf(0, 20, "directionMove=%d", directionMove);
 		plth.x = fabsf(player.velocity.x / 2);
 		plth.y = fabsf(player.velocity.y / 2);
 		Playerth += plth.x + plth.y;
@@ -4755,6 +4765,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), int((enemy1.radius * 2 - (kDedTimer - enemy1.dedTimer[i]) * 3) / screenSize), 1, 1, float(float(gameTimer * 1 % 360) / 180 * 3.1415f), 0, 0, enemyTextureSize, enemyTextureSize, enemyTexture[0], BLUE, "center");
 						Functions.DrawQuadPlus(int(enemy1.relativePos[i].x / screenSize + scroll.x), int(enemy1.relativePos[i].y / screenSize + scroll.y), int((256) / screenSize), int((256) / screenSize), 1, 1, float(float(gameTimer * 5 % 360) / 180 * 3.1415f), 256 * ((kDedTimer - enemy1.dedTimer[i]) / 3), 0, 256, 256, enemyDeadTexture, WHITE, "center");
+
+						if (enemy1.dedTimer[i] > 15)vibeVolume = 30000;
 					}
 				}
 			}
@@ -4937,6 +4949,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//暗転用
 		Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
+
+
+		//コントローラーの振動
+
+		if (player.velocityRatio >= 0.8f)
+		{
+			vibeVolume = 7000;
+			if (ennergy.fever)vibeVolume = 15000;
+		}
+
+		if (bigNumEaseT > 0 && bigNumEaseT < 100.0f)
+		{
+
+
+			vibeVolume = WORD(4000 * (bigNumCount+1));
+
+
+
+		}
+
+		XInputSetState(0, &vibration);
+
+		vibration.wLeftMotorSpeed = vibeVolume;
+		vibration.wRightMotorSpeed = vibeVolume;
+
 
 		///                                                            ///
 		/// --------------------↑描画処理ここまで-------------------- ///
