@@ -82,6 +82,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Original::LoadAudio("./Resources/Sounds/spown.mp3", "enemySpawn", 0.1f);
 	Original::LoadAudio("./Resources/Sounds/dash.mp3", "playerDash", 0.1f);
 
+
+	int excellentTexture[5]{};
+
+	excellentTexture[0] = Novice::LoadTexture("./Resources/Images/excellent_1.png");
+	excellentTexture[1] = Novice::LoadTexture("./Resources/Images/excellent_2.png");
+	excellentTexture[2] = Novice::LoadTexture("./Resources/Images/excellent_3.png");
+	excellentTexture[3] = Novice::LoadTexture("./Resources/Images/excellent_4.png");
+	excellentTexture[4] = Novice::LoadTexture("./Resources/Images/excellent_5.png");
+
+
 	int scoreNumsHandle[10] = {
 		Novice::LoadTexture("./Resources/Images/number/num_0.png"),
 		Novice::LoadTexture("./Resources/Images/number/num_1.png"),
@@ -147,6 +157,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enemyTexture[3] = Novice::LoadTexture("./Resources/enemy/enemy_3.png");
 	enemyTexture[4] = Novice::LoadTexture("./Resources/enemy/enemy_2.png");
 	enemyTexture[5] = Novice::LoadTexture("./Resources/enemy/enemy_1.png");
+
+	int quickNum = -1;
 
 	int enemyTextureSize = 128;
 
@@ -1808,7 +1820,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					if (quickTimer == 0)
 					{
 						successAudioFlag = true;
-						quickTimer = 350;
+						quickTimer = 352;
 					}
 
 				}
@@ -3374,6 +3386,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								{
 									enemy2.hostIsAlive = false;
 									quickFlag = true;
+									quickNum = 4;
 
 								}
 							}
@@ -3452,6 +3465,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								{
 									enemy7.hostIsAlive = false;
 									quickFlag = true;
+									quickNum = 2;
 								}
 							}
 						}
@@ -3490,6 +3504,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						enemy8.hostIsAlive = false;
 						quickFlag = true;
+						quickNum = 3;
 					}
 				}
 				if (enemy9.hostIsAlive)
@@ -3520,6 +3535,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								{
 									enemy9.hostIsAlive = false;
 									quickFlag = true;
+									quickNum = 1;
 								}
 							}
 						}
@@ -3695,6 +3711,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					{
 						enemy13.hostIsAlive = false;
 						quickFlag = true;
+						quickNum = 0;
 					}
 				}
 				if (!enemy2.hostIsAlive)
@@ -4447,6 +4464,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		plth.y = fabsf(player.velocity.y / 2);
 		Playerth += plth.x + plth.y;
 
+		//プレイヤー
 		if (player.flick) {
 			Functions.DrawQuadPlus(int(player.pos.x / screenSize + scroll.x), int(player.pos.y / screenSize + scroll.y), int(player.radius.x * 2 / screenSize), int(player.radius.y * 2 / screenSize), 1.0f, 1.0f, (Playerth / 180.0f) * 3.1415f, 0, 0, 64, 64, playerTexture, 0x00ffffff, "center");
 		}
@@ -4655,9 +4673,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			if (player.prepos[i].x != 0)Functions.DrawQuadPlus(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius * 2 / screenSize), int(player.anchorRadius * 2 / screenSize), 1, 1, ((gameTimer * 3 + 1) % 360 / 180.0f) * 3.1415f, 0, 0, 1, 1, kWhiteTexture, 0x00ff00ff, "center");
 			//if (player.prepos[i].x != 0)Novice::DrawEllipse(int(player.prepos[i].x / screenSize + scroll.x), int(player.prepos[i].y / screenSize + scroll.y), int(player.anchorRadius / screenSize), int(player.anchorRadius / screenSize), 0, 0x00ff00ff, kFillModeSolid);
 		}
+
+
+		//エクセレント文字を
+		
+		if (quickFlag)
+		{
+			Functions.DrawQuadPlus(784, 660, quickTimer, 48, 1, 1, 0, 0, 0, quickTimer, 48, excellentTexture[quickNum], WHITE, "leftTop");
+		}
 		//フィーバーゲージ仮
-		//Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), 500, enemyTextureSize, 0, 0x333333ff, kFillModeSolid);//j仮ゲージ
-		//Novice::DrawBox(1400 + int(shakeGaugePos.x), 950 + int(shakeGaugePos.y), int(500 * (ennergy.count / ennergy.max)), 100, 0, 0xffff00ff, kFillModeSolid);
+		
 
 		//後ろ
 		Novice::DrawQuad(gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y), gaugex + int(shakeGaugePos.x), gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, gaugex + int(shakeGaugePos.x) + gaugeWidth, gaugey - int(gaugeEasePos) + int(shakeGaugePos.y) + gaugeHeidth, 0, 0, gaugeWidth, gaugeHeidth, gaugeBackTexture, WHITE);
