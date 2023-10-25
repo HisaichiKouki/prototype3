@@ -18,8 +18,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
-	Novice::SetWindowMode(kFullscreen);
-	Novice::SetMouseCursorVisibility(0);
+	//Novice::SetWindowMode(kFullscreen);
+	//Novice::SetMouseCursorVisibility(0);
 
 	WORD vibeVolume = 0;
 	PlayerData player{};
@@ -99,6 +99,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//エクセレントでスポーンしたとき
 	int audioHandlExcellentSpown = Novice::LoadAudio("./Resources/Sounds/excellentSpown.mp3");
 	bool ExcellentSpownFlag = false;
+
+	//メーターが溜まっていく音(1.5秒が望ましい
+	int audioHandlmeter = Novice::LoadAudio("./Resources/Sounds/success.wav");
+//	bool meteraudioFlag = false;
+		//失敗音
+	int audioHandlfailure = Novice::LoadAudio("./Resources/Sounds/powerUp.wav");
+	//	bool meteraudioFlag = false;
+		//成功
+	int audioHandlclear= Novice::LoadAudio("./Resources/Sounds/countdown.wav");
+	//	bool meteraudioFlag = false;
+		//大成功
+	int audioHandlgreat= Novice::LoadAudio("./Resources/Sounds/success.wav");
+	//	bool meteraudioFlag = false;
+
 
 	int playerWalk = Novice::LoadAudio("./Resources/Sounds/playerWalk.mp3");
 	float playerWalkValume = 0;
@@ -615,12 +629,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	informationTexture[1] = Novice::LoadTexture("./Resources/images/information_2.png");
 	informationTexture[2] = Novice::LoadTexture("./Resources/images/information_3.png");
 
-	int infoFont[5]{};
+	int infoFont[6]{};
 	infoFont[0] = Novice::LoadTexture("./Resources/font/info_font_1.png");
 	infoFont[1] = Novice::LoadTexture("./Resources/font/info_font_2.png");
 	infoFont[2] = Novice::LoadTexture("./Resources/font/info_font_3.png");
 	infoFont[3] = Novice::LoadTexture("./Resources/font/info_font_4.png");
 	infoFont[4] = Novice::LoadTexture("./Resources/font/info_font_5.png");
+	infoFont[5] = Novice::LoadTexture("./Resources/font/info_font_6.png");
 
 	float informationEaseT = 0;
 	float informationEase = 0;
@@ -669,6 +684,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float titleEasePos = 0;
 
 	int exitTexture = Novice::LoadTexture("./Resources/Images/exit.png");
+
+
+	int tankBack = Novice::LoadTexture("./Resources/Images/tank_back.png");
+	int tankFront = Novice::LoadTexture("./Resources/Images/tank_front.png");
+	
+	int meterTimer = 0;
+	float meterRaito = 0;//スコア/20000でメーターの量が決まる
+	float meterEaseT = 0;;
+	float meterEase = 0;
+
+	int scoreDecision = 0;//0失敗　1成功　2 大成功
+
+	int decisionTexuter[3]{};
+	decisionTexuter[0] = Novice::LoadTexture("./Resources/Images/failure.png");
+	decisionTexuter[1]= Novice::LoadTexture("./Resources/Images/clear.png");
+	decisionTexuter[2]= Novice::LoadTexture("./Resources/Images/great.png");
+
+	int deciTimer = 0;
+
+	float deciEaseT = 0;
+	float deciSize = 0;
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -1496,6 +1532,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region Game
 					if (allReset)
 					{
+						meterTimer = 0;
+						meterRaito = 0;
+						deciTimer = 0;
+						deciEaseT = 0;
+						deciSize = 0;
+						meterEaseT = 0;;
+						meterEase = 0;
 						scoreEaseT = 0;
 						scorePos = 0;
 						scoreEaseChange = -1;
@@ -5030,7 +5073,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				else if (titleCount == 2)
 				{
 					//Novice::ScreenPrintf(700, 540, "Triangle");
-					Functions.DrawQuadPlus(1500, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[2], WHITE, "center");
+					Functions.DrawQuadPlus(1350, 500, 192, 192, 1.2f * informationEase, 1.2f * informationEase, 0, 0, 0, 192, 192, informationTexture[2], WHITE, "center");
 					informationEase = easeOutElastic(informationEaseT / 100);
 					if (informationEaseT < 100)informationEaseT += 2;
 					Functions.DrawQuadPlus(1500, 670, 690, 32, 1.0f * infoFontEase, 1.0f * infoFontEase, 0, 0, 0, 690, 32, infoFont[2], WHITE, "center");
@@ -5044,6 +5087,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				{
 					//Novice::ScreenPrintf(700, 540, "kill to gamestart");
 					Functions.DrawQuadPlus(1500, 670, 690, 32, 1.5f * infoFontEase, 1.5f * infoFontEase, 0, 0, 0, 690, 32, infoFont[3], WHITE, "center");
+					Functions.DrawQuadPlus(1500, 600, 640, 32, 1.2f * infoFontEase, 1.2f * infoFontEase, 0, 0, 0, 640, 32, infoFont[5], WHITE, "center");
 
 					if (!startNewGame)
 					{
@@ -5089,19 +5133,73 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				break;
 
 			case kTypeGameResult:
-				if (yesnoEaseT < 100)yesnoEaseT += 10;
-				yesnoEaseSize = easeOutCubic(yesnoEaseT / 100) * 0.2f;
-				continueEaseT += continueEaseChange * 2;
-				if (continueEaseT > 100 || continueEaseT < 0)continueEaseChange *= -1;
-				continueEasePos = easeInExpo(continueEaseT / 100) * 50;
-				for (int i = 0; i < 2; i++)
-				{
-					if (resultBackPos[i] >= 1080)resultBackPos[i] = -1080;
-					resultBackPos[i]++;
-				}
+
+				
+				//score = 21000;
+				
 				if (blackEaseT <= 50)
 				{
+					if (score < 10000)
+					{
+						scoreDecision = 0;
+					}
+					else if (score < 20000)
+					{
+						scoreDecision = 1;
+					}
+					else
+					{
+						scoreDecision = 2;
+					}
 
+					if (score < 20000)meterRaito = (float)score / 20000;
+					if (score >= 20000)meterRaito = 1.0f;
+				
+					//Novice::DrawBox(960 - 232, 860, 468, -600, 0, 0xff000077, kFillModeSolid);
+
+					if (meterEaseT < 100)meterEaseT++;
+					meterEase = easeOutQuart(meterEaseT / 100) * meterRaito;
+
+
+					//メーターのイージングが終わったら文字
+					if (meterEaseT >= 100)
+					{
+						meterTimer++;
+
+						if (meterTimer>=10)
+						{
+							if (deciEaseT < 100)deciEaseT += 1.0f;
+							deciSize = easeOutBack(deciEaseT / 100);
+						}
+					
+
+					}
+
+
+				}
+				//文字のイージングが終わったら、スコアとか出てくる
+				if (deciEaseT >= 100&& deciTimer<60)deciTimer++;
+			
+
+				//文字のイージングが終わったら、スコアとか出てくる
+
+				if (deciTimer>=30&& scoreDecision<2|| deciTimer >= 60 && scoreDecision == 2)
+				{
+					if (yesnoEaseT < 100)yesnoEaseT += 10;
+					yesnoEaseSize = easeOutCubic(yesnoEaseT / 100) * 0.2f;
+					if (resultEaseT[2] >= 100)
+					{
+						continueEaseT += continueEaseChange * 2;
+
+						if (continueEaseT > 100 || continueEaseT < 0)continueEaseChange *= -1;
+						continueEasePos = easeInExpo(continueEaseT / 100) * 50;
+					}
+					
+					for (int i = 0; i < 2; i++)
+					{
+						if (resultBackPos[i] >= 1080)resultBackPos[i] = -1080;
+						resultBackPos[i]++;
+					}
 					for (int i = 0; i < 4; i++)
 					{
 						resultEasePos[i] = easeOutQuart(resultEaseT[i] / 100) * 1920;
@@ -5115,7 +5213,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (resultEaseT[0] < 100)resultEaseT[0]++;
 
-
 				}
 				dashCount = int(dash.count);
 				trieCount = int(triangle.count);
@@ -5125,12 +5222,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				scoreObj.Draw(score, 1550, 50 - 200 + int(UIPosy), 0.5f, 0.5f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 				if (!startNewGame)
 				{
-					//Novice::DrawBox(0, 0, 1920, 1080, 0, 0x444444ff, kFillModeSolid);
+
+					
+					//リザルト背景
+
 					for (int i = 0; i < 2; i++)
 					{
 						Functions.DrawQuadPlus(0, resultBackPos[i], 1920, 1080, 1, 1, 0, 0, 0, 1920, 1080, resultBackTexture, 0x999999ff, "leftTop");
 
 					}
+
+					//タンク
+					Functions.DrawQuadPlus(960 - (int)resultEasePos[0], 540, 608, 800, 1, 1, 0, 0, 0, 608, 800, tankBack, WHITE, "center");
+					Functions.DrawQuadPlus(960 - (int)resultEasePos[0] - 232, 845, 468, -600, 1, meterEase, 0, 0, 0, 1, 1, kWhiteTexture, 0xff33aa77, "leftTop");
+					Functions.DrawQuadPlus(960 - (int)resultEasePos[0], 540, 608, 800, 1, 1, 0, 0, 0, 608, 800, tankFront, WHITE, "center");
+
+					//文字
+					Functions.DrawQuadPlus(960 - (int)resultEasePos[0], 540, 1280, 720, deciSize, deciSize, 0, 0, 0, 1280, 720, decisionTexuter[scoreDecision], WHITE, "center");
+
+
+
+					
 					//スコア
 					scoreObj.Draw(score, 1050 + int(1920 - resultEasePos[0]), 230, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_FILLED_BY_ZERO);
 					scoreObj.Draw(int(count), 1050 + int(1920 - resultEasePos[1]), 380, 0.7f, 0.7f, 0, ScoreObject::DPATTERN_ONLY_DIGIT);
@@ -5460,7 +5572,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			//スコア(ゲージ)が加算されるとき
-			if (preScore != score && gameTimer > 0)
+			if (preScore != score && gameTimer > 0&&game==1)
 			{
 				scoreEaseChange = 1;
 				Novice::PlayAudio(audioHandlScoreUP, 0, 0.5f);
@@ -5524,7 +5636,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			if (game == 0 && !startNewGame || game == 1 && gameTimer > 0 && gameTimer < 6000)
 			{
-				if (length >= dedZone)//&& player.aimTimer <= 5
+				if (length >= dedZone)
 				{
 
 					if (player.pos.x != playerPrePos[0].x || player.pos.y != playerPrePos[0].y)playerWalkValume = 0.05f;
@@ -5533,7 +5645,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			Novice::SetAudioVolume(playHandleWalk, playerWalkValume);
 
-			//Novice::ScreenPrintf(0, 0, "playerWalkValume=%0.3f playerWalk=%d", playerWalkValume, playerWalk);
+			
 
 			//BGM
 
@@ -5597,7 +5709,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			Novice::SetAudioVolume(ResultsoundHandle, ResultBGMValume);
 
+			if (meterEaseT==2)
+			{
+				Novice::PlayAudio(audioHandlmeter, 0, 0.5f);
+			}if (deciEaseT==1)
+			{
+				if (scoreDecision == 0)
+				{
+					Novice::PlayAudio(audioHandlfailure, 0, 0.2f);
+				}
+				else if (scoreDecision == 1)
+				{
+					Novice::PlayAudio(audioHandlclear, 0, 0.2f);
+				}else if (scoreDecision == 2)
+				{
+					Novice::PlayAudio(audioHandlgreat, 0, 0.2f);
+				}
+			}
+			
+
 		}
+
+
+
 
 		//Novice::ScreenPrintf(0, 0, "ResultsoundHandle=%d ResultBGMValume=%0.3f ", ResultsoundHandle, ResultBGMValume);
 		//Novice::ScreenPrintf(0, 20, "startNewGame=%d titleBackFlag=%d ",startNewGame, titleBackFlag);
