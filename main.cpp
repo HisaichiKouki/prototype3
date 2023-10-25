@@ -18,7 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
-	//Novice::SetWindowMode(kFullscreen);
+	Novice::SetWindowMode(kFullscreen);
 
 
 	WORD vibeVolume = 0;
@@ -559,7 +559,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameResult;
+	game = kTypeGameTitle;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -2622,11 +2622,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 				// キー入力（デバッグ) ここから ### MustDelete
 
-					if (keys[DIK_SPACE] && !preKeys[DIK_SPACE])
+					/*if (keys[DIK_SPACE] && !preKeys[DIK_SPACE])
 					{
 						Functions.ToggleDebugMode();
 						Original::SoundPlay("pi");
-					}
+					}*/
 
 					// キー入力（デバッグ）ここまで
 
@@ -3918,10 +3918,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						}
 					}
 
-					if (keys[DIK_T] && !preKeys[DIK_T])
+					/*if (keys[DIK_T] && !preKeys[DIK_T])
 					{
 						gameTimer += 600;
-					}
+					}*/
 
 					if (gameTimer > 5700 && UIBackEaseT < 100)
 					{
@@ -5517,7 +5517,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			}
 			Novice::SetAudioVolume(playHandleWalk, playerWalkValume);
 
-			Novice::ScreenPrintf(0, 0, "playerWalkValume=%0.3f playerWalk=%d", playerWalkValume, playerWalk);
+			//Novice::ScreenPrintf(0, 0, "playerWalkValume=%0.3f playerWalk=%d", playerWalkValume, playerWalk);
 
 			//BGM
 
