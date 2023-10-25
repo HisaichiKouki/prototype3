@@ -20,6 +20,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, 1920, 1080);
 	//Novice::SetWindowMode(kFullscreen);
 
+
 	WORD vibeVolume = 0;
 	PlayerData player{};
 	player.radius = { 40,40 };
