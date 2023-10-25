@@ -101,16 +101,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	bool ExcellentSpownFlag = false;
 
 	//メーターが溜まっていく音(1.5秒が望ましい
-	int audioHandlmeter = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlmeter = Novice::LoadAudio("./Resources/Sounds/enegy.mp3");
 //	bool meteraudioFlag = false;
 		//失敗音
-	int audioHandlfailure = Novice::LoadAudio("./Resources/Sounds/powerUp.wav");
+	int audioHandlfailure = Novice::LoadAudio("./Resources/Sounds/make.mp3");
 	//	bool meteraudioFlag = false;
 		//成功
-	int audioHandlclear= Novice::LoadAudio("./Resources/Sounds/countdown.wav");
+	int audioHandlclear= Novice::LoadAudio("./Resources/Sounds/excellent.mp3");
 	//	bool meteraudioFlag = false;
 		//大成功
-	int audioHandlgreat= Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlgreat= Novice::LoadAudio("./Resources/Sounds/great.mp3");
 	//	bool meteraudioFlag = false;
 
 
@@ -573,7 +573,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameTitle;
+	game = kTypeGameResult;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -5135,7 +5135,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			case kTypeGameResult:
 
 				
-				//score = 21000;
+				
 				
 				if (blackEaseT <= 50)
 				{
@@ -5711,7 +5711,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			if (meterEaseT==2)
 			{
-				Novice::PlayAudio(audioHandlmeter, 0, 0.5f);
+				Novice::PlayAudio(audioHandlmeter, 0, 0.15f);
 			}if (deciEaseT==1)
 			{
 				if (scoreDecision == 0)
