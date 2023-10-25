@@ -19,7 +19,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
 	Novice::SetWindowMode(kFullscreen);
-
+	Novice::SetMouseCursorVisibility(0);
 
 	WORD vibeVolume = 0;
 	PlayerData player{};
@@ -663,6 +663,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	int contorollerTexture = Novice::LoadTexture("./Resources/Images/contoroller.png");
 	int connectTexture = Novice::LoadTexture("./Resources/Images/connect.png");
+
+	int titleTexture = Novice::LoadTexture("./Resources/Images/title.png");
+	float titleEaseT = 0;
+	float titleEasePos = 0;
+
+	int exitTexture= Novice::LoadTexture("./Resources/Images/exit.png"); 
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -4419,7 +4425,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							ennergy.count = 0;
 							game = 0;
 							allReset = true;
-
+							titleEaseT = 0;
+							titleEasePos = 0;
 						}
 					}
 				}
@@ -5172,6 +5179,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			// スコア (大きさ調整は [### ScoreClass] で検索)
 
 
+			//ゲーム名
+			Functions.DrawQuadPlus(50, 50- int(titleEasePos), 786, 160, 1,1, 0, 0, 0, 786, 160, titleTexture, WHITE, "leftTop");
+			Functions.DrawQuadPlus(1870- 281, 1030- 58 + int(titleEasePos), 281, 58, 1, 1, 0, 0, 0, 281, 58, exitTexture, WHITE, "leftTop");
+			if (startNewGame)
+			{
+				if(titleEaseT<100)titleEaseT += 3;
+				titleEasePos = easeInBack(titleEaseT / 100) * 200;
+			}
 
 				//暗転用
 			Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
