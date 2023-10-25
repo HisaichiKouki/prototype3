@@ -668,7 +668,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	float titleEaseT = 0;
 	float titleEasePos = 0;
 
-	int exitTexture= Novice::LoadTexture("./Resources/Images/exit.png"); 
+	int exitTexture = Novice::LoadTexture("./Resources/Images/exit.png");
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
@@ -1069,33 +1069,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 					//攻撃終わりにAボタンを押した時
-					if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
+					if (player.preDirection.x != 0 || player.preDirection.y != 0)
 					{
-						//移動入力がされている時
-						pointsetAudioFlag = true;
-						//点がプレイヤーの位置に番号順で設置される
-						player.prepos[player.count] = player.pos;
-						//点の座標を番号順に記録
-						attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
-						//プレイヤーの速度を等倍に
-						player.velocityRatio = 1;
-						player.aim = true;
-						//点を出したら次の点を出すためにカウントを足す
-						player.count++;
-						if (player.count >= 3)
+						if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
 						{
-							TriangleAudioFlag = true;
-							//三点設置したら設置フェーズをおわる
-							player.count = 0;
-							player.aim = false;
-							player.aimTimer = 30;//攻撃時間を代入
-							player.triangulAttack = true;//三角形攻撃を有効に
-							triFlag = false;
+							//移動入力がされている時
+							pointsetAudioFlag = true;
+							//点がプレイヤーの位置に番号順で設置される
+							player.prepos[player.count] = player.pos;
+							//点の座標を番号順に記録
+							attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
+							//プレイヤーの速度を等倍に
+							player.velocityRatio = 1;
+							player.aim = true;
+							//点を出したら次の点を出すためにカウントを足す
+							player.count++;
+							if (player.count >= 3)
+							{
+								TriangleAudioFlag = true;
+								//三点設置したら設置フェーズをおわる
+								player.count = 0;
+								player.aim = false;
+								player.aimTimer = 30;//攻撃時間を代入
+								player.triangulAttack = true;//三角形攻撃を有効に
+								triFlag = false;
 
+							}
 						}
-
-
-
 					}
 
 					//三角形を出した後の攻撃時間
@@ -2465,32 +2465,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 						//攻撃終わりにAボタンを押した時
-						if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
+						if (player.preDirection.x != 0 || player.preDirection.y != 0)
 						{
-							//移動入力がされている時
-							pointsetAudioFlag = true;
-							//点がプレイヤーの位置に番号順で設置される
-							player.prepos[player.count] = player.pos;
-							//点の座標を番号順に記録
-							attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
-							//プレイヤーの速度を等倍に
-							player.velocityRatio = 1;
-							player.aim = true;
-							//点を出したら次の点を出すためにカウントを足す
-							player.count++;
-							if (player.count >= 3)
+							if (player.trigerA && player.aimTimer == 0 && !player.dashAttack || triFlag)
 							{
-								TriangleAudioFlag = true;
-								//三点設置したら設置フェーズをおわる
-								player.count = 0;
-								player.aim = false;
-								player.aimTimer = 30;//攻撃時間を代入
-								player.triangulAttack = true;//三角形攻撃を有効に
-								triFlag = false;
+								//移動入力がされている時
+								pointsetAudioFlag = true;
+								//点がプレイヤーの位置に番号順で設置される
+								player.prepos[player.count] = player.pos;
+								//点の座標を番号順に記録
+								attAreaObj.SetDashPoint(player.prepos[player.count].x, player.prepos[player.count].y, player.count);
+								//プレイヤーの速度を等倍に
+								player.velocityRatio = 1;
+								player.aim = true;
+								//点を出したら次の点を出すためにカウントを足す
+								player.count++;
+								if (player.count >= 3)
+								{
+									TriangleAudioFlag = true;
+									//三点設置したら設置フェーズをおわる
+									player.count = 0;
+									player.aim = false;
+									player.aimTimer = 30;//攻撃時間を代入
+									player.triangulAttack = true;//三角形攻撃を有効に
+									triFlag = false;
+
+								}
 							}
-
-
-
 						}
 					}
 					//三角形を出した後の攻撃時間
@@ -5180,15 +5181,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			//ゲーム名
-			Functions.DrawQuadPlus(50, 50- int(titleEasePos), 786, 160, 1,1, 0, 0, 0, 786, 160, titleTexture, WHITE, "leftTop");
-			Functions.DrawQuadPlus(1870- 281, 1030- 58 + int(titleEasePos), 281, 58, 1, 1, 0, 0, 0, 281, 58, exitTexture, WHITE, "leftTop");
+			Functions.DrawQuadPlus(50, 50 - int(titleEasePos), 786, 160, 1, 1, 0, 0, 0, 786, 160, titleTexture, WHITE, "leftTop");
+			Functions.DrawQuadPlus(1870 - 281, 1030 - 58 + int(titleEasePos), 281, 58, 1, 1, 0, 0, 0, 281, 58, exitTexture, WHITE, "leftTop");
 			if (startNewGame)
 			{
-				if(titleEaseT<100)titleEaseT += 3;
+				if (titleEaseT < 100)titleEaseT += 3;
 				titleEasePos = easeInBack(titleEaseT / 100) * 200;
 			}
 
-				//暗転用
+			//暗転用
 			Novice::DrawBox(0, 0, 1920, 1080, 0, blackColor + blackColor2, kFillModeSolid);
 
 
@@ -5526,7 +5527,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				if (length >= dedZone)//&& player.aimTimer <= 5
 				{
 
-					if (player.pos.x!=playerPrePos[0].x|| player.pos.y != playerPrePos[0].y)playerWalkValume = 0.05f;
+					if (player.pos.x != playerPrePos[0].x || player.pos.y != playerPrePos[0].y)playerWalkValume = 0.05f;
 
 				}
 			}
