@@ -68,6 +68,9 @@
     <ClCompile Include="Source\Score.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlaySoundEffect.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -170,8 +173,16 @@
     <ClInclude Include="Header\Score.h">
       <Filter>Headers\Class</Filter>
     </ClInclude>
+    <ClInclude Include="Header\PlaySoundEffect.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="LineJumpCodes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="prototype3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
 </Project>

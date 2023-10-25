@@ -169,6 +169,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="Header\Various.h" />
     <ClInclude Include="MatrixCalc.h" />
     <ClInclude Include="randPlus.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="VectorPlus.h" />
     <ClInclude Include="collision.h" />
   </ItemGroup>
@@ -176,6 +177,12 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <Text Include="LineJumpCodes.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="prototype3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
