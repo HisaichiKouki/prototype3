@@ -5135,7 +5135,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			case kTypeGameResult:
 
 				
-				
+				//score = 10000;
 				
 				if (blackEaseT <= 50)
 				{
@@ -5157,12 +5157,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				
 					//Novice::DrawBox(960 - 232, 860, 468, -600, 0, 0xff000077, kFillModeSolid);
 
-					if (meterEaseT < 100)meterEaseT++;
-					meterEase = easeInOutQuad(meterEaseT / 100) * meterRaito;
+					if (meterEaseT < 200)meterEaseT++;
+					meterEase = easeOutCubic(meterEaseT / 200) * meterRaito;
 
 
 					//メーターのイージングが終わったら文字
-					if (meterEaseT >= 100)
+					if (meterEaseT >= 200)
 					{
 						meterTimer++;
 
