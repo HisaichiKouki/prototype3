@@ -52,11 +52,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//敵リスポーン
 	int audioHandleSpown = Novice::LoadAudio("./Resources/Sounds/spown.mp3");
 	bool SpownAudioFlag = false;
+	//ダッシュ
+	int audioHandleDash = Novice::LoadAudio("./Resources/Sounds/dash.wav");
+	bool dashAudioFlag = false;
 	//三角形の点設置
 	int audioHandlePointSet = Novice::LoadAudio("./Resources/Sounds/pointSet.mp3");
 	bool pointsetAudioFlag = false;
 	//三角攻撃時
-	int audioHandleTriangle = Novice::LoadAudio("./Resources/Sounds/triangle.mp3");
+	int audioHandleTriangle = Novice::LoadAudio("./Resources/Sounds/triangle.wav");
 	bool TriangleAudioFlag = false;
 	//エクセレント出した時
 	int audioHandlesuccess = Novice::LoadAudio("./Resources/Sounds/success.wav");
@@ -96,7 +99,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Original::LoadAudio("./Resources/Sounds/boom.wav", "enemyDead", 0.03f);
 	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi", 0.3f);
 	Original::LoadAudio("./Resources/Sounds/spown.mp3", "enemySpawn", 0.1f);
-	Original::LoadAudio("./Resources/Sounds/dash.mp3", "playerDash", 0.1f);
+	Original::LoadAudio("./Resources/Sounds/dash.wav", "playerDash", 0.1f);
 
 
 	int excellentTexture[5]{};
@@ -547,7 +550,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameResult;
+	game = kTypeGameTitle;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -1152,6 +1155,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 							player.dashAttack = true;
 							//速度を等倍に
 							player.velocityRatio = 1;
+							dashAudioFlag = true;
 						}
 					}
 
@@ -2544,6 +2548,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 								player.dashAttack = true;
 								//速度を等倍に
 								player.velocityRatio = 1;
+								dashAudioFlag = true;
 							}
 						}
 					}
@@ -5371,7 +5376,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//敵死亡
 			if (deadAudioFlag)
 			{
-				Novice::PlayAudio(audioHandleDead, 0, 0.1f);
+				Novice::PlayAudio(audioHandleDead, 0, 0.2f);
 				deadAudioFlag = false;
 			}
 			//敵スポーン
@@ -5389,9 +5394,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			//ダッシュアタック
-			if (player.dashAttack && player.velocityRatio == 1)
+			if (dashAudioFlag)
 			{
-				Original::SoundPlay("playerDash");
+				Novice::PlayAudio(audioHandleDash, 0, 0.15f);
+				dashAudioFlag = false;
 			}
 			//三角形の点設置
 			if (pointsetAudioFlag)
@@ -5402,7 +5408,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//三角形攻撃時
 			if (TriangleAudioFlag)
 			{
-				Novice::PlayAudio(audioHandleTriangle, 0, 0.2f);
+				Novice::PlayAudio(audioHandleTriangle, 0, 0.25f);
 				TriangleAudioFlag = false;
 
 			}
