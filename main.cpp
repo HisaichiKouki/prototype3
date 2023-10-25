@@ -18,8 +18,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ライブラリの初期化
 	Novice::Initialize(kWindowTitle, 1920, 1080);
-	//Novice::SetWindowMode(kFullscreen);
-	//Novice::SetMouseCursorVisibility(0);
+	Novice::SetWindowMode(kFullscreen);
+	Novice::SetMouseCursorVisibility(0);
 
 	WORD vibeVolume = 0;
 	PlayerData player{};
@@ -573,7 +573,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameResult;
+	game = kTypeGameTitle;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -5158,7 +5158,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					//Novice::DrawBox(960 - 232, 860, 468, -600, 0, 0xff000077, kFillModeSolid);
 
 					if (meterEaseT < 100)meterEaseT++;
-					meterEase = easeOutQuart(meterEaseT / 100) * meterRaito;
+					meterEase = easeInOutQuad(meterEaseT / 100) * meterRaito;
 
 
 					//メーターのイージングが終わったら文字
