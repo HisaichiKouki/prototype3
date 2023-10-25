@@ -20,6 +20,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, 1920, 1080);
 	//Novice::SetWindowMode(kFullscreen);
 
+
 	WORD vibeVolume = 0;
 	PlayerData player{};
 	player.radius = { 40,40 };
@@ -49,6 +50,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//敵死亡
 	int audioHandleDead = Novice::LoadAudio("./Resources/Sounds/boom.wav");
 	bool deadAudioFlag = false;
+	int audioHandleHitsound = Novice::LoadAudio("./Resources/Sounds/hitsound 2.wav");
 	//敵リスポーン
 	int audioHandleSpown = Novice::LoadAudio("./Resources/Sounds/spown.mp3");
 	bool SpownAudioFlag = false;
@@ -56,45 +58,52 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	int audioHandleDash = Novice::LoadAudio("./Resources/Sounds/dash.wav");
 	bool dashAudioFlag = false;
 	//三角形の点設置
-	int audioHandlePointSet = Novice::LoadAudio("./Resources/Sounds/pointSet.mp3");
+	int audioHandlePointSet = Novice::LoadAudio("./Resources/Sounds/pointSet.wav");
 	bool pointsetAudioFlag = false;
 	//三角攻撃時
 	int audioHandleTriangle = Novice::LoadAudio("./Resources/Sounds/triangle.wav");
 	bool TriangleAudioFlag = false;
 	//エクセレント出した時
-	int audioHandlesuccess = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlesuccess = Novice::LoadAudio("./Resources/Sounds/excellent.mp3");
 	bool successAudioFlag = false;
 	//チュートリアルのイラスト表示
 	int audioHandlTaskClear = Novice::LoadAudio("./Resources/Sounds/success.wav");
 	//bool TaskClearAudioFlag = false;
 	//ゲームスタート
-	int audioHandlGameStart = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlGameStart = Novice::LoadAudio("./Resources/Sounds/gamestart.mp3");
 	//bool TaskClearAudioFlag = false;
 	//スコア(ゲージ)増えた時
-	int audioHandlScoreUP = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlScoreUP = Novice::LoadAudio("./Resources/Sounds/scoreUp.wav");
 	//bool TaskClearAudioFlag = false;
 	//カウントダウン
-	int audioHandlCountDown = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlCountDown = Novice::LoadAudio("./Resources/Sounds/countdown.wav");
 	//	bool CountDownAudioFlag = false;
 	//フィニッシュの時
-	int audioHandlFinish = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlFinish = Novice::LoadAudio("./Resources/Sounds/finish.mp3");
 	//	bool CountDownAudioFlag = false;
 	//リザルトで文字を表示する時
-	int audioHandlScoreDisplay = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlScoreDisplay = Novice::LoadAudio("./Resources/Sounds/scoreDisplay.mp3");
 	//	bool CountDownAudioFlag = false;
 	//リザルトでYESNO選択してる時
-	int audioHandlYESNO = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlYESNO = Novice::LoadAudio("./Resources/Sounds/good.mp3");
 	//	bool CountDownAudioFlag = false;
 	//YESNO確定したとき
-	int audioHandlSelect = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlSelect = Novice::LoadAudio("./Resources/Sounds/Confirm.mp3");
 	bool SelectAudioFlag = false;
 	//フィーバー始まり
-	int audioHandlFeverStart = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlFeverStart = Novice::LoadAudio("./Resources/Sounds/powerUp.wav");
 	//	bool FeverStartAudioFlag = false;
 		//フィーバー終わり
-	int audioHandlFeverEnd = Novice::LoadAudio("./Resources/Sounds/success.wav");
+	int audioHandlFeverEnd = Novice::LoadAudio("./Resources/Sounds/powerDown.wav");
 	bool FeverEndAudioFlag = false;
+	//エクセレントでスポーンしたとき
+	int audioHandlExcellentSpown = Novice::LoadAudio("./Resources/Sounds/excellentSpown.mp3");
+	bool ExcellentSpownFlag = false;
 
+	int playerWalk = Novice::LoadAudio("./Resources/Sounds/playerWalk.mp3");
+	float playerWalkValume = 0;
+	//bool playerWalkFlag = false;
+	int playHandleWalk = -1;
 
 	Original::LoadAudio("./Resources/Sounds/boom.wav", "enemyDead", 0.03f);
 	Original::LoadAudio("./Resources/Sounds/pi.wav", "pi", 0.3f);
@@ -550,7 +559,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	// デバッグ用 ### MustDelete
-	game = kTypeGameTitle;
+	game = kTypeGameResult;
 
 	// クラス変数の宣言
 	Func Functions;
@@ -1395,11 +1404,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 					if (startNewGame)
 					{
+						playerWalkValume = 0;
 						if (gamestartEaseT >= 100)
 
 						{
 							Playerth = 0;
-
+							preScore = 0;
+							score = 0;
 							game = 1;
 							setScreenEaseTChange = -1;
 							player.preDirection = { 0,0 };
@@ -1447,6 +1458,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 				if (startNewGame)
 				{
+					playerWalkValume = 0;
 					if (gamestartEaseT2 >= 100)
 
 					{
@@ -1889,7 +1901,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 						if (quickTimer == 0 && quickFlag)
 						{
 							quickFlag = false;
-
+							ExcellentSpownFlag = true;
 							for (int i = 0; i < 10; i++)
 							{
 								randSpown = RandomNum(i + 1 + i * 3) % variation;
@@ -5376,7 +5388,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//敵死亡
 			if (deadAudioFlag)
 			{
-				Novice::PlayAudio(audioHandleDead, 0, 0.2f);
+				Novice::PlayAudio(audioHandleHitsound, 0, 0.2f);
+				Novice::PlayAudio(audioHandleDead, 0, 0.1f);
 				deadAudioFlag = false;
 			}
 			//敵スポーン
@@ -5408,14 +5421,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//三角形攻撃時
 			if (TriangleAudioFlag)
 			{
-				Novice::PlayAudio(audioHandleTriangle, 0, 0.25f);
+				Novice::PlayAudio(audioHandleTriangle, 0, 0.2f);
 				TriangleAudioFlag = false;
 
 			}
 			//エクセレント出た時
 			if (successAudioFlag)
 			{
-				Novice::PlayAudio(audioHandlesuccess, 0, 0.5f);
+				Novice::PlayAudio(audioHandlesuccess, 0, 0.3f);
 				successAudioFlag = false;
 
 			}
@@ -5431,7 +5444,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			}
 			//スコア(ゲージ)が加算されるとき
-			if (preScore != score)
+			if (preScore != score && gameTimer > 0)
 			{
 				scoreEaseChange = 1;
 				Novice::PlayAudio(audioHandlScoreUP, 0, 0.5f);
@@ -5452,34 +5465,59 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//リザルトで文字が表示される時
 			if (resultEaseT[0] == 1 || resultEaseT[1] == 1 || resultEaseT[2] == 1 || resultEaseT[3] == 1)
 			{
-				Novice::PlayAudio(audioHandlScoreDisplay, 0, 0.5f);
+				Novice::PlayAudio(audioHandlScoreDisplay, 0, 0.3f);
 
 			}
 			//リザルトでYESNO選択する時
 			if (prechoice != choice)
 			{
-				Novice::PlayAudio(audioHandlYESNO, 0, 0.5f);
+				Novice::PlayAudio(audioHandlYESNO, 0, 0.15f);
 
 			}
 			//リザルトでYESNO確定したとき
 			if (SelectAudioFlag)
 			{
-				Novice::PlayAudio(audioHandlSelect, 0, 0.5f);
+				if (choice == 1)Novice::PlayAudio(audioHandlSelect, 0, 0.1f);
 				SelectAudioFlag = false;
 			}
 			//フィーバー始まった時
-			if (ennergy.count == ennergy.max)
+			if (ennergy.count == ennergy.max && gameTimer < 6000)
 			{
-				Novice::PlayAudio(audioHandlFeverStart, 0, 0.5f);
+				Novice::PlayAudio(audioHandlFeverStart, 0, 0.3f);
 			}
 			//フィーバー終わった時
 			if (FeverEndAudioFlag)
 			{
-				Novice::PlayAudio(audioHandlFeverEnd, 0, 0.5f);
+				Novice::PlayAudio(audioHandlFeverEnd, 0, 0.3f);
 				FeverEndAudioFlag = false;
 			}
+			//excellentspown
+			if (ExcellentSpownFlag)
+			{
+				Novice::PlayAudio(audioHandlExcellentSpown, 0, 0.3f);
+				ExcellentSpownFlag = false;
 
 
+			}
+
+			//プレイヤー移動音
+			playerWalkValume = 0;
+			if (playHandleWalk == -1)
+			{
+				playHandleWalk = Novice::PlayAudio(playerWalk, 1, 0.3f);
+			}
+			if (game == 0 && !startNewGame || game == 1 && gameTimer > 0 && gameTimer < 6000)
+			{
+				if (length >= dedZone)//&& player.aimTimer <= 5
+				{
+
+					if (player.pos.x!=playerPrePos[0].x|| player.pos.y != playerPrePos[0].y)playerWalkValume = 0.05f;
+
+				}
+			}
+			Novice::SetAudioVolume(playHandleWalk, playerWalkValume);
+
+			Novice::ScreenPrintf(0, 0, "playerWalkValume=%0.3f playerWalk=%d", playerWalkValume, playerWalk);
 
 			//BGM
 
